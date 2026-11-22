@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>juwade｜硬件可靠性研究者 — 辐射软防护 · FPGA 单粒子效应</title>
+<meta name="description" content="硬件可靠性研究者：SRAM FPGA 单粒子效应（SEU）机理、ECC/TMR 缓解架构、擦洗调度与在轨辐射环境评估。选一颗卫星，直接看辐射参数。">
+<link rel="icon" type="image/png" href="img/avatar.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="juwade｜硬件可靠性研究者 — 辐射软防护">
+<meta property="og:description" content="SRAM FPGA 单粒子效应与缓解设计研究：17 颗公开卫星辐射参数速查、几何打击仿真、STK 实时集成。选轨道，看辐射强度。">
+<meta property="og:image" content="https://site-pttrfdmj.devinapps.com/img/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="juwade｜硬件可靠性研究者 — 辐射软防护">
+<meta name="twitter:description" content="选轨道，看辐射强度：17 颗公开卫星 × IGRF-13 → GCR → SEU 率，全链路可复算。">
+<meta name="twitter:image" content="https://site-pttrfdmj.devinapps.com/img/hero.jpg">
+<style>
+  :root { --ink:#1d2530; --mut:#64748b; --line:#e7ecf2; --acc:#0d7d8c; --acc2:#c2410c; --bg:#fafbfc; --card:#fff; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font:15.5px/1.75 "Segoe UI","Microsoft YaHei","PingFang SC",sans-serif; }
+  a { color:var(--acc); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+
+  /* 顶栏 */
+  header { background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  .bar { max-width:1240px; margin:0 auto; padding:0 22px; height:54px; display:flex; align-items:center; gap:18px; }
+  .mark { width:26px; height:26px; flex:none; }
+  .mark circle { fill:none; stroke:var(--acc); }
+  .mark ellipse { fill:none; stroke:var(--acc); opacity:.55; }
+  .mark .n { fill:var(--acc2); }
+  .name { font-weight:700; font-size:16.5px; letter-spacing:.02em; }
+  .name small { color:var(--mut); font-weight:400; font-size:12.5px; margin-left:8px; }
+  .bar nav { margin-left:auto; display:flex; gap:16px; font-size:13.5px; }
+  .bar nav a { color:var(--mut); }
+  .bar nav a:hover { color:var(--acc); text-decoration:none; }
+
+  /* Hero */
+  .hero { max-width:1240px; margin:0 auto; padding:40px 22px 26px; }
+  .hero h1 { font-size:30px; letter-spacing:.02em; line-height:1.35; }
+  .hero h1 em { font-style:normal; color:var(--acc); }
+  .hero p { color:var(--mut); margin-top:12px; font-size:14.5px; max-width:640px; }
+  .tags { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+  .tags span { font-size:12px; color:var(--acc); background:rgba(13,125,140,.07); border:1px solid rgba(13,125,140,.18); padding:2px 10px; border-radius:999px; }
+  /* 个人落地页头部（da7tech 风格） */
+  .me { display:flex; gap:28px; align-items:center; }
+  .ava { width:136px; height:136px; border-radius:50%; border:3px solid rgba(69,200,255,.4); box-shadow:0 0 36px rgba(69,200,255,.28); flex:none; }
+  .me h1 { font-size:34px; letter-spacing:.01em; line-height:1.2; }
+  .me h1 .en { display:block; font-size:13px; font-weight:600; color:var(--acc); letter-spacing:.16em; margin-top:6px; text-transform:uppercase; }
+  .role { font-size:15.5px; font-weight:600; color:var(--ink); margin-top:12px; }
+  .bio { font-size:13.5px; }
+  .btns { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; align-items:center; }
+  .btn { font-size:13px; padding:8px 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-weight:600; }
+  .btn:hover { border-color:var(--acc); color:var(--acc); text-decoration:none; }
+  .btn.pri { background:var(--acc); border-color:var(--acc); color:#fff; }
+  .btn.pri:hover { color:#fff; filter:brightness(1.08); }
+  .open { font-size:12.5px; color:var(--mut); display:inline-flex; align-items:center; gap:7px; margin-left:2px; }
+  .open i { width:8px; height:8px; border-radius:50%; background:#2ecc71; box-shadow:0 0 9px #2ecc71; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:26px; }
+  .st { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .st b { font-size:22px; color:var(--acc); font-variant-numeric:tabular-nums; }
+  .st span { display:block; font-size:12px; color:var(--mut); margin-top:5px; line-height:1.45; }
+  /* 方向清单 */
+  .dir { display:flex; gap:14px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .dir + .dir { margin-top:10px; }
+  .dir .n { flex:none; width:30px; height:30px; border-radius:8px; background:rgba(13,125,140,.1); color:var(--acc); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:14px; }
+  .dir h3 { font-size:15px; }
+  .dir p { color:var(--mut); font-size:13px; margin-top:4px; }
+  .banner { margin-top:22px; border-radius:14px; overflow:hidden; border:1px solid var(--line); box-shadow:0 6px 28px rgba(20,40,60,.10); }
+  .banner img { width:100%; display:block; }
+  .banner figcaption { font-size:11.5px; color:#8fa0ae; background:var(--card); padding:6px 14px; }
+
+  /* 通用区块 */
+  main { max-width:1240px; margin:0 auto; padding:0 22px 40px; }
+  .sec { font-size:12px; letter-spacing:.18em; color:var(--mut); margin:34px 0 4px; }
+
+  /* 精选（带图） */
+  .feat { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; }
+  .fart { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    transition:box-shadow .15s,border-color .15s; }
+  .fart:hover { border-color:#cdd8e2; box-shadow:0 4px 18px rgba(30,50,70,.09); }
+  .fart img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+  .fart .body { padding:14px 18px 16px; }
+  .fart h2 { font-size:16px; margin-top:6px; line-height:1.5; }
+  .fart h2 a { color:var(--ink); }
+  .fart h2 a:hover { color:var(--acc); text-decoration:none; }
+  .fart p { color:var(--mut); font-size:13px; margin-top:7px; }
+  .demo { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#0a1523; }
+  .demo-cap { margin-top:9px; padding:8px 12px; border-radius:8px; background:rgba(13,125,140,.07); border:1px solid rgba(13,125,140,.18); font-size:12.5px; color:#0b6d79; min-height:36px; line-height:1.5; }
+  .demo-cap b { color:#084e57; }
+
+  /* 文章流 */
+  article { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 22px; margin:12px 0;
+    transition:box-shadow .15s, border-color .15s; }
+  article:hover { border-color:#cdd8e2; box-shadow:0 2px 14px rgba(30,50,70,.06); }
+  .meta { font-size:12.5px; color:var(--mut); display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .meta .cat { color:var(--acc); font-weight:600; }
+  .meta .cat::before { content:"·"; margin-right:8px; color:#b6c2cd; font-weight:400; }
+  article h2 { font-size:17px; margin-top:6px; line-height:1.5; }
+  article h2 a { color:var(--ink); }
+  article h2 a:hover { color:var(--acc); text-decoration:none; }
+  article p { color:var(--mut); font-size:14px; margin-top:8px; }
+
+  /* 动态 */
+  .news { background:var(--card); border:1px solid var(--line); border-radius:12px; margin-top:12px; }
+  .news li { list-style:none; padding:14px 22px; border-bottom:1px solid var(--line); display:flex; gap:16px; }
+  .news li:last-child { border-bottom:none; }
+  .news .d { flex:none; width:96px; font-size:12.5px; color:var(--acc2); font-weight:600; padding-top:2px; }
+  .news .t { font-size:14px; line-height:1.6; }
+  .news .t small { color:var(--mut); font-size:12px; margin-left:6px; }
+  .news .t p { color:var(--mut); font-size:12.5px; margin-top:3px; }
+
+  /* 表格 */
+  .tbl { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:12px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { background:#f1f5f9; color:#475569; font-weight:600; text-align:left; padding:9px 14px; border-bottom:1px solid var(--line); font-size:12px; }
+  td { padding:9px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  td.num { font-variant-numeric:tabular-nums; white-space:nowrap; }
+  td.dom { font-weight:600; }
+  .tbl .cap { font-size:12px; color:var(--mut); padding:8px 14px 10px; border-top:1px solid var(--line); background:#fafcfe; }
+  .tblwrap + .tblwrap { margin-top:18px; }
+  .tname { font-size:14px; font-weight:600; margin-top:16px; margin-bottom:2px; }
+  .tname small { font-weight:400; color:var(--mut); font-size:12px; margin-left:8px; }
+
+  /* 项目 */
+  .proj { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:12px; margin-top:12px; }
+  .pcard { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .pcard h3 { font-size:15px; display:flex; align-items:center; gap:7px; }
+  .pcard h3::before { content:""; width:8px; height:8px; border-radius:2px; background:var(--acc); flex:none; }
+  .pcard p { color:var(--mut); font-size:12.5px; margin-top:7px; }
+  .pcard .lk { font-size:12.5px; margin-top:9px; }
+
+  /* 资源/关于 */
+  .links-card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:6px 0; margin-top:12px; }
+  .links-card a { display:flex; justify-content:space-between; padding:10px 22px; font-size:14px; color:var(--ink); }
+  .links-card a:hover { background:#f4f8fa; text-decoration:none; }
+  .links-card a span { color:var(--mut); font-size:12px; }
+  .links-card a + a { border-top:1px solid var(--line); }
+  .about { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; margin-top:12px; }
+  .about p { color:var(--mut); font-size:14px; }
+  .about .links { margin-top:10px; display:flex; gap:14px; font-size:13.5px; flex-wrap:wrap; }
+
+  /* 轨道速查工具 · 任务控制台 */
+  .tool { background:linear-gradient(165deg,#0a1523 0%,#0e2338 55%,#0b1a2c 100%); border:1px solid #1d4264; border-radius:14px; margin-top:12px; overflow:hidden; color:#d7e6f2; box-shadow:0 10px 44px rgba(8,22,42,.38); }
+  .tool .head { padding:16px 20px 0; }
+  .tool .head h3 { font-size:16px; color:#eaf4fc; letter-spacing:.03em; }
+  .tool .head h3::before { content:"●"; color:#45c8ff; margin-right:8px; font-size:10px; vertical-align:2px; text-shadow:0 0 9px #45c8ff; }
+  .tool .head p { color:#8fa8bd; font-size:12.5px; margin-top:4px; }
+  .tool .head b { color:#ffd9a0; }
+  .chips { display:flex; flex-wrap:wrap; gap:7px; padding:14px 20px 10px; }
+  .chips .gl { width:100%; font-size:11px; color:#5f7d95; letter-spacing:.14em; margin-top:4px; }
+  .chip { font-size:13px; padding:4px 12px; border-radius:999px; border:1px solid #27506e; background:rgba(18,48,76,.55); color:#b9d2e6; cursor:pointer; }
+  .chip:hover { border-color:#45c8ff; color:#45c8ff; }
+  .chip.on { background:#45c8ff; border-color:#45c8ff; color:#052b40; font-weight:600; box-shadow:0 0 14px rgba(69,200,255,.45); }
+  .stage { padding:2px 20px 0; }
+  .vseg { display:flex; gap:6px; align-items:center; padding:6px 0 10px; }
+  .vseg button { font-size:12px; padding:3px 14px; border-radius:999px; border:1px solid #27506e; background:rgba(18,48,76,.55); color:#b9d2e6; cursor:pointer; }
+  .vseg button:hover { border-color:#45c8ff; color:#45c8ff; }
+  .vseg button.on { background:#45c8ff; border-color:#45c8ff; color:#052b40; font-weight:600; box-shadow:0 0 12px rgba(69,200,255,.45); }
+  .vseg .vhint { margin-left:auto; font-size:11px; color:#54708a; letter-spacing:.05em; }
+  #map { width:100%; display:block; border-radius:10px; border:1px solid #1d4264; background:#08121f; }
+  #globe { width:100%; height:460px; border-radius:10px; border:1px solid #1d4264; background:#040a14; overflow:hidden; cursor:grab; }
+  #globe:active { cursor:grabbing; }
+  #globe canvas { display:block; }
+  .hud { display:flex; flex-wrap:wrap; gap:6px 26px; align-items:center; padding:12px 20px; border-bottom:1px solid #16304a; }
+  .hi { display:flex; flex-direction:column; min-width:78px; }
+  .hk { font-size:10.5px; letter-spacing:.12em; color:#6f92ab; }
+  .hv { font-size:14.5px; font-weight:600; color:#eaf4fc; font-variant-numeric:tabular-nums; margin-top:2px; }
+  .hv.big { font-size:23px; color:#45c8ff; text-shadow:0 0 14px rgba(69,200,255,.55); }
+  .hu { font-size:10.5px; color:#6f92ab; margin-top:1px; }
+  .hi.ctrl { margin-left:auto; flex-direction:row; align-items:center; gap:8px; }
+  .hi.ctrl button { font-size:12px; padding:4px 12px; border-radius:6px; border:1px solid #27506e; background:rgba(18,48,76,.55); color:#b9d2e6; cursor:pointer; }
+  .hi.ctrl button:hover { border-color:#45c8ff; color:#45c8ff; }
+  .hi.ctrl .tm { font-size:13px; color:#45c8ff; font-variant-numeric:tabular-nums; font-weight:600; }
+  .spark { width:100%; height:96px; display:block; background:#081120; border-bottom:1px solid #16304a; }
+  .detail { padding:12px 20px 16px; font-size:13px; }
+  .detail .nm { font-size:15px; font-weight:700; color:#eaf4fc; }
+  .detail .nt { color:#8fa8bd; font-size:12px; margin-top:2px; }
+  .detail table { margin-top:10px; font-size:12.5px; width:100%; border-collapse:collapse; }
+  .detail td { padding:5px 8px; border-bottom:1px solid #12283e; vertical-align:top; }
+  .detail td:first-child { color:#6f92ab; white-space:nowrap; width:1%; }
+  .detail td:last-child, .detail td.num { font-variant-numeric:tabular-nums; color:#d7e6f2; }
+  .detail .num { text-align:right; }
+  .prov { font-size:11px; color:#54708a; margin-top:10px; line-height:1.5; }
+  .sliders { border-top:1px solid #16304a; padding:14px 20px 18px; }
+  .sliders .lab { font-size:12.5px; color:#8fa8bd; }
+  .sliders .lab b { color:#eaf4fc; }
+  .sliders .row { display:flex; align-items:center; gap:12px; margin-top:8px; }
+  .sliders label { width:74px; font-size:12.5px; color:#8fa8bd; flex:none; }
+  .sliders input[type=range] { flex:1; accent-color:#45c8ff; }
+  .sliders .val { width:110px; font-size:12.5px; text-align:right; font-variant-numeric:tabular-nums; flex:none; color:#d7e6f2; }
+  .custom-out { display:flex; gap:22px; flex-wrap:wrap; margin-top:12px; font-size:13px; color:#8fa8bd; }
+  .custom-out b { display:block; font-size:17px; color:#eaf4fc; font-variant-numeric:tabular-nums; }
+  .custom-out .warn { flex-basis:100%; font-size:11.5px; color:#54708a; }
+
+  footer { border-top:1px solid var(--line); margin-top:36px; }
+  .foot { max-width:1240px; margin:0 auto; padding:20px 22px 34px; color:#9aa8b6; font-size:12px; display:flex; gap:14px; flex-wrap:wrap; }
+  @media (max-width:640px){ .hero{padding:30px 22px 20px} .hero h1{font-size:24px} .me{flex-direction:column;text-align:center;gap:16px} .me .btns{justify-content:center} .stats{grid-template-columns:repeat(2,1fr)} .ava{width:110px;height:110px} .bar nav{gap:10px;font-size:12.5px}
+    .feat{grid-template-columns:1fr} .news .d{width:80px} .news li{gap:10px;padding:12px 16px}
+    th,td{padding:7px 9px;font-size:12px} .tbl{overflow-x:auto} .hi{min-width:64px} .hi.ctrl{margin-left:0} }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <svg class="mark" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><circle class="n" cx="12" cy="12" r="1.4"/><ellipse cx="12" cy="12" rx="10.4" ry="4.2" transform="rotate(-28 12 12)"/><ellipse cx="12" cy="12" rx="10.4" ry="4.2" transform="rotate(28 12 12)"/></svg>
+    <div class="name">juwade<small>辐射软防护</small></div>
+    <nav><a href="#dirs">方向</a><a href="#tool">轨道速查</a><a href="#posts">笔记</a><a href="#news">动态</a><a href="#data">数据</a><a href="#projects">项目</a><a href="#about">关于</a></nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="me">
+    <img class="ava" src="img/avatar.png" alt="juwade 头像">
+    <div>
+      <h1>juwade<span class="en">Hardware Reliability Researcher</span></h1>
+      <p class="role">硬件可靠性研究者 · SRAM FPGA 辐射软防护</p>
+      <p class="bio">研究空间辐射环境下 SRAM FPGA 的单粒子软错误：位级翻转机理、ECC/TMR 缓解架构、擦洗调度与在轨辐射环境评估——数字可复算、来源可标注。</p>
+      <div class="btns">
+        <a class="btn pri" href="https://github.com/juwadeLone" target="_blank" rel="noopener">GitHub · juwadeLone</a>
+        <a class="btn" href="https://x.com/juwadeLone" target="_blank" rel="noopener">X · @juwadeLone</a>
+        <a class="btn" href="mailto:1906233797@qq.com">邮箱联系</a>
+        <span class="open"><i></i>合作与交流欢迎联系</span>
+      </div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="st"><b>17</b><span>公开卫星辐射参数 · 选星即查</span></div>
+    <div class="st"><b>46.16</b><span>MEO 冻结基线 SEU 率 /天 · 逐位可复现</span></div>
+    <div class="st"><b>3</b><span>三域 Weibull 建模（CRAM / BRAM / FF）</span></div>
+    <div class="st"><b>125</b><span>平台回归测试全部通过</span></div>
+  </div>
+  <div class="tags"><span>SEU / MCU</span><span>ECC · TMR · 擦洗</span><span>在轨辐射环境</span><span>Xilinx 7 系列</span><span>故障注入验证</span></div>
+  <figure class="banner"><img src="img/hero.jpg" alt="地球磁场、范艾伦辐射带与卫星示意图"><figcaption>地球偶极磁场束缚带电粒子形成内外辐射带；低轨卫星在内带南大西洋异常区（SAA）内承受最强捕获质子通量。</figcaption></figure>
+</div>
+
+<main>
+  <div class="sec" id="dirs">方向 · Directions</div>
+  <div class="dir"><span class="n">1</span><div><h3>在轨辐射环境评估</h3><p>IGRF-13 地磁截止 → GCR / 捕获带环境 → 任务级 SEU 率；每个数字逐字段标注来源与假设。</p></div></div>
+  <div class="dir"><span class="n">2</span><div><h3>SEU 打击与翻转仿真</h3><p>LET / 入射角 / 落点 → 版图位图翻转分布与 SEU/MCU/Masked 分类——把"哪里脆弱"变成几何问题。</p></div></div>
+  <div class="dir"><span class="n">3</span><div><h3>容错架构与擦洗调度</h3><p>ECC / TMR / 分级恢复边界，scrub 调度与轨道 SEU 率联合视角的缓解设计。</p></div></div>
+  <div class="dir"><span class="n">4</span><div><h3>STK × 平台实时集成</h3><p>STK Connect TCP 桥接：逐历元位置 → 截止刚度 / McIlwain L / SEU 率挂载 → 实时 JSON 与 3D 视角。</p></div></div>
+
+  <div class="sec" id="tool">轨道辐射速查 · 选一颗卫星看参数</div>
+  <div class="tool">
+    <div class="head">
+      <h3>公开卫星 × 轨道 → 辐射环境参数</h3>
+      <p>数据由本平台真实链路离线预计算：IGRF-13 偶极截止 → BO2020 GCR + O'Neill LIS → XC7VX690T 三域 Weibull。<b>全部为 GCR-only 模型级估计</b>；捕获带质子与 SAA 通量未计入（需 AE9/AP9）。</p>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="stage">
+      <div class="vseg"><button id="v3d" class="on">3D 地球</button><button id="v2d">2D 地图</button><span class="vhint">拖拽旋转 · 滚轮缩放 · 全部 17 星同飞</span></div>
+      <div id="globe"></div>
+      <canvas id="map" style="display:none"></canvas>
+    </div>
+    <div class="hud">
+      <div class="hi"><span class="hk">瞬时 SEU 率</span><span class="hv big" id="h-rate">—</span><span class="hu">/天 · GCR-only</span></div>
+      <div class="hi"><span class="hk">当前位置</span><span class="hv" id="h-pos">—</span><span class="hu" id="h-alt"></span></div>
+      <div class="hi"><span class="hk">环境判别</span><span class="hv" id="h-env">—</span></div>
+      <div class="hi"><span class="hk">截止刚度</span><span class="hv" id="h-rc">—</span><span class="hu">GV</span></div>
+      <div class="hi"><span class="hk">McIlwain L</span><span class="hv" id="h-l">—</span></div>
+      <div class="hi ctrl">
+        <button id="pp">暂停</button><button id="spd">速度 ×4</button>
+        <span class="tm" id="tm"></span>
+      </div>
+    </div>
+    <canvas class="spark" id="spark"></canvas>
+    <div class="detail" id="panel"></div>
+    <div class="sliders">
+      <div class="lab"><b>自定义圆轨道</b> · 高度 × 倾角 → 双线性插值自 322 单元预计算网格</div>
+      <div class="row"><label>高度</label><input type="range" id="sa" min="0" max="100" value="20"><span class="val" id="sav"></span></div>
+      <div class="row"><label>倾角</label><input type="range" id="si" min="0" max="110" step="0.5" value="51.6"><span class="val" id="siv"></span></div>
+      <div class="custom-out" id="cout"></div>
+    </div>
+  </div>
+
+  <div class="sec">精选笔记</div>
+  <div class="feat">
+    <div class="fart">
+      <canvas class="demo" id="demo-strike"></canvas>
+      <div class="body">
+        <div class="meta">2026-10-05<span class="cat">仿真平台</span><span class="cat" style="background:#fff3e0;color:#b45309;border-color:#ffd9a8">演示动画</span></div>
+        <h2><a href="https://github.com/juwadeLone/seu_platform" target="_blank" rel="noopener">几何打击仿真：从 LET/入射角到位图翻转的可视化</a></h2>
+        <p>把一次单粒子打击拆成可点选的参数：LET、倾角、方位、落点 → 版图位图上的翻转分布与 SEU/MCU 分类。让"为什么这颗芯片在这个角度最脆弱"变成一眼可查的几何问题。</p>
+        <div class="demo-cap" id="cap-strike"></div>
+      </div>
+    </div>
+    <div class="fart">
+      <canvas class="demo" id="demo-stk"></canvas>
+      <div class="body">
+        <div class="meta">2026-10-06<span class="cat">工程实践</span><span class="cat" style="background:#fff3e0;color:#b45309;border-color:#ffd9a8">演示动画</span></div>
+        <h2><a href="https://github.com/juwadeLone/seu_platform/pull/2" target="_blank" rel="noopener">把 STK 接进辐射评估：Connect 协议与逐历元参数挂载</a></h2>
+        <p>STK 出轨道、平台出辐射，中间只差一条 TCP 通道：逐秒拉取 Position，逐历元挂截止刚度、McIlwain L、环境判别与 GCR-only SEU 率——非冻结轨道一律标"模型级估计"。</p>
+        <div class="demo-cap" id="cap-stk"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" id="posts">研究笔记</div>
+  <article>
+    <div class="meta">发表于 2026-10-06<span class="cat">在轨环境</span></div>
+    <h2><a href="https://github.com/juwadeLone/seu_platform" target="_blank" rel="noopener">从 46.16 次/天谈起：一条可复算的轨道 SEU 率链路</a></h2>
+    <p>一个口号式数字如何做到逐位可复现：SPENVIS CREME96 真实 GCR 谱 → IGRF-13 偶极截止刚度 → Lee 2014 三域 Weibull 截面 → 任务期积分。冻结基线的意义不在"46.16"本身，而在于任何改动都能立刻回答"和基线差多少"。</p>
+  </article>
+  <article>
+    <div class="meta">发表于 2026-10-06<span class="cat">器件建模</span></div>
+    <h2><a href="https://github.com/juwadeLone/seu_platform" target="_blank" rel="noopener">XC7VX690T 三域 Weibull 模型：CRAM、BRAM、FF 分开算</a></h2>
+    <p>单组 Weibull 拟合整片截面会把 CRAM 主导的风险摊薄。按 Lee 2014 按域实测 σ 与官方位数（UG470/DS180/UG474）分域建模后，任务率、敏感区定位和 MCU 占比各自回到自己的量级上——完整参数见下方数据表。</p>
+  </article>
+  <article>
+    <div class="meta">发表于 2026-10-06<span class="cat">缓解架构</span></div>
+    <h2><a href="#">SubFFT/PFFT：在 FFT 流水线上做分级恢复边界</a></h2>
+    <p>1024 点、四通道、十级 radix-2 FFT 上，memory SECDED 与 arithmetic ECC 是连续且独立的恢复边界：同一 stage–phase interval 可在两个域中各容纳至多一个错误。"能恢复什么"由边界决定，不是口号决定——恢复电路本身无故障、错误落在声明的集合内，是论证的两块基石。</p>
+  </article>
+  <article>
+    <div class="meta">发表于 2026-10-04<span class="cat">工程实践</span></div>
+    <h2><a href="#">云端跑全工程 Verilog 仿真：Icarus + stub 补 Xilinx IP</a></h2>
+    <p>没有 Vivado 许可证也能做全工程回归：fp64_* IP 用自带 stub、xpm 用行为模型，73 个源文件编译+elaborate 冒烟，256×256 CS 成像链七级 pass 与 golden 逐位一致。testbench 自身的 off-by-one 与 RTL bug 必须分开记账。</p>
+  </article>
+  <article>
+    <div class="meta">发表于 2026-10-03<span class="cat">缓解架构</span></div>
+    <h2><a href="#">擦洗调度不是免费午餐：scrub rate 与 SEU 率的联合视角</a></h2>
+    <p>帧级擦洗的修复收益取决于错误驻留时间窗，而擦洗本身消耗配置带宽并引入新的失效面。把 scrub period 放进与轨道 SEU 率同一张账上，才算回答"多久擦一次"——否则只是在两个未知量之间做手势。</p>
+  </article>
+
+  <div class="sec" id="news">领域动态</div>
+  <ul class="news">
+    <li>
+      <span class="d">2026-06-24</span>
+      <div class="t"><a href="https://nanoxplore.com/press-realease/the-european-space-agency-selects-nanoxplore-to-lead-the-development-of-europes-future-7nm-space-grade-fpga-technologies/" target="_blank" rel="noopener">ESA 启动 ULISSE 计划：与 NanoXplore 共建欧洲 7nm 宇航级 FPGA（ULTRA7）</a><small>NanoXplore</small>
+        <p>ESA 迄今电子元件领域最大合同之一，面向在轨 AI 与自主处理的下一代抗辐射 FPGA 技术底座，CNES 与欧盟委员会配套支持。</p>
+      </div>
+    </li>
+    <li>
+      <span class="d">2026-01-27</span>
+      <div class="t"><a href="https://newsroom.st.com/media-center/press-item.html/t4748.html" target="_blank" rel="noopener">NanoXplore × ST：NG-ULTRA 成为首个通过 ESCC 9030 认证的宇航级 FPGA</a><small>ST Newsroom</small>
+        <p>欧洲首个设计-制造-封测全链路在欧盟境内的宇航级 SoC FPGA，瞄准 Galileo、Copernicus 及 IRIS² 星座的星载处理需求。</p>
+      </div>
+    </li>
+    <li>
+      <span class="d">2025-11-11</span>
+      <div class="t"><a href="https://swpc-drupal.woc.noaa.gov/sites/default/files/documents/2026-05/Minow-Joseph.pdf" target="_blank" rel="noopener">X5.1 耀斑 + GLE #77：本周期最强太阳质子事件，ESCAPADE 发射因 SPE 推迟一天</a><small>NOAA SWPC</small>
+        <p>&gt;500 MeV 质子流量创 GOES-16 上天（2016）以来最大增幅；任务团队首次以"太阳质子发射约束"保护星上航电——空间天气直接进入发射决策。</p>
+      </div>
+    </li>
+    <li>
+      <span class="d">2025-2026</span>
+      <div class="t"><a href="https://arxiv.org/pdf/2606.24687.pdf" target="_blank" rel="noopener">第 25 太阳周远超 2019 官方预报：LEO 大气密度实测达预测 2–3 倍</a><small>arXiv</small>
+        <p>累积阻力冲量超出预报不确定度 5–6σ，全 LEO 星座累计损失约 27.7 亿美元任务寿命——强太阳周对低轨辐射与寿命预算的双重影响。</p>
+      </div>
+    </li>
+  </ul>
+
+  <div class="sec" id="data">数据速查</div>
+  <div class="tblwrap">
+    <div class="tname">XC7VX690T 三域 Weibull 截面参数<small>重离子实测（Lee 2014, IEEE REDW）+ 官方位数</small></div>
+    <div class="tbl">
+      <table>
+        <tr><th>域</th><th>LET 阈值<br>(MeV·cm²/mg)</th><th>宽度 W</th><th>形状 s</th><th>σ_sat<br>(cm²/bit)</th><th>位数</th><th>位数来源</th></tr>
+        <tr><td class="dom">CRAM</td><td class="num">0.4</td><td class="num">338.5</td><td class="num">0.852</td><td class="num">3.34×10⁻⁸</td><td class="num">229,878,496</td><td>UG470 配置位流长度</td></tr>
+        <tr><td class="dom">BRAM</td><td class="num">0.1</td><td class="num">87.5</td><td class="num">0.893</td><td class="num">3.82×10⁻⁸</td><td class="num">54,190,080</td><td>DS180 52,920 Kb×1024</td></tr>
+        <tr><td class="dom">FF</td><td class="num">1.1</td><td class="num">271.3</td><td class="num">1.090</td><td class="num">1.47×10⁻⁷</td><td class="num">866,400</td><td>UG474/DS180 CLB FF 数</td></tr>
+      </table>
+      <div class="cap">σ_sat 为按位饱和截面；DSP（3,600 slices）因 Lee 2014 无重离子 Weibull 而未计入。来源：DOI 10.1109/REDW.2014.7004595 + UG470/DS180/UG474。</div>
+    </div>
+  </div>
+  <div class="tblwrap">
+    <div class="tname">任务 SEU 率基线<small>同模型同器件下的轨道对比</small></div>
+    <div class="tbl">
+      <table>
+        <tr><th>轨道</th><th>环境</th><th>地磁截止</th><th>整机 SEU 率</th><th>性质</th></tr>
+        <tr><td class="dom">MEO 20200 km / 55°</td><td class="num">GCR（SPENVIS CREME96 实测谱）</td><td class="num">0.04–0.86 GV</td><td class="num">46.160314073644855 /天</td><td>冻结基线（逐位可复现）</td></tr>
+        <tr><td class="dom">GEO（Lee 参照）</td><td class="num">GCR 太阳极小 + 100 mil Al</td><td class="num">≈0（无屏蔽）</td><td class="num">CRAM 1.0e-7 · BRAM 5.2e-7 · FF 9.0e-8 /bit·day</td><td>文献参照（GEO 近乎无地磁屏蔽）</td></tr>
+        <tr><td class="dom">任意轨道（STK 联动）</td><td class="num">GCR-only（BO2020+LIS）</td><td class="num">逐历元 IGRF-13</td><td class="num">模型级估计，标注 provenance</td><td>模型级（SAA/内带只标区域标志）</td></tr>
+      </table>
+      <div class="cap">冻结基线仅适用于 20200 km/55° MEO；其它轨道的数字是模型级估计而非冻结证据——来源与假设逐字段标注。</div>
+    </div>
+  </div>
+
+  <div class="sec" id="projects">项目</div>
+  <div class="proj">
+    <div class="pcard">
+      <h3>seu_platform</h3>
+      <p>SRAM FPGA 单粒子效应仿真平台：几何打击 / 轨道环境 / SAR 链路 / 效应总览 / 器件内部 / STK 实时，六模块一体的 Web 应用。</p>
+      <div class="lk"><a href="https://github.com/juwadeLone/seu_platform" target="_blank" rel="noopener">github.com/juwadeLone/seu_platform →</a></div>
+    </div>
+    <div class="pcard">
+      <h3>orbit_seu 链路</h3>
+      <p>轨道辐射环境评估：SPENVIS CREME96 真实谱 + BO2020/AE8·AP8 + IGRF-13 截止 + 分域 Weibull，冻结基线 46.160314073644855 /day。</p>
+      <div class="lk"><a href="https://github.com/juwadeLone/seu_platform/pull/1" target="_blank" rel="noopener">已 vendor 进平台 →</a></div>
+    </div>
+    <div class="pcard">
+      <h3>SubFFT / PFFT</h3>
+      <p>1024 点 FFT 容错架构研究：SECDED + arithmetic ECC 连续恢复边界，Yosys 资源评估 + Python 位级注入验证。</p>
+      <div class="lk"><a href="#">研究进行中（TCAS 方向）→</a></div>
+    </div>
+    <div class="pcard">
+      <h3>STK 实时链路</h3>
+      <p>STK Connect TCP 桥接：逐历元位置 → 截止刚度 / McIlwain L / 环境判别 / GCR-only SEU 率，含实时 3D 视角页面。</p>
+      <div class="lk"><a href="https://github.com/juwadeLone/seu_platform/pull/2" target="_blank" rel="noopener">PR #2 →</a></div>
+    </div>
+  </div>
+
+  <div class="sec">常用资源</div>
+  <div class="links-card">
+    <a href="https://radhome.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA NEPP 辐射效应主页<span>器件测试报告 · 重离子/质子数据</span></a>
+    <a href="https://www.spenvis.oma.be/" target="_blank" rel="noopener">SPENVIS 空间环境系统<span>CREME96 / AE8·AP8 / 轨道环境评估</span></a>
+    <a href="https://www.agi.com/" target="_blank" rel="noopener">AGI STK<span>轨道建模与星历 → 本平台 Connect 链路</span></a>
+    <a href="https://ngdc.noaa.gov/IAGA/vmod/igrf.html" target="_blank" rel="noopener">IGRF-13 国际地磁参考场<span>地磁截止刚度 · McIlwain L</span></a>
+    <a href="https://nsrec.com/" target="_blank" rel="noopener">IEEE NSREC / RADECS<span>抗辐射器件年会 · Data Workshop 累积数据</span></a>
+  </div>
+
+  <div class="sec" id="about">关于</div>
+  <div class="about">
+    <p>硬件可靠性研究者，关注 SRAM FPGA 在空间辐射环境下的软错误与缓解设计。做过的链路：RTL 故障注入 → 位图级打击仿真 → 器件截面建模 → 在轨任务率评估。本站笔记以工程可复算为准绳：数字给出配置、命令与 SHA，估计就标估计，证据就标冻结。</p>
+    <div class="links">
+      <a href="https://github.com/juwadeLone" target="_blank" rel="noopener">GitHub · juwadeLone</a>
+      <a href="https://github.com/juwadeLone/seu_platform" target="_blank" rel="noopener">seu_platform</a>
+      <a href="mailto:1906233797@qq.com">1906233797@qq.com</a>
+    </div>
+  </div>
+</main>
+
+<script src="lib/three.min.js"></script>
+<script>
+const DATA_URL='data/orbit_radiation.json';
+const CLS_ORDER=['LEO','SSO','MEO','IGSO','GEO','HEO'];
+const CLS_NAME={LEO:'低轨 LEO',SSO:'太阳同步 SSO',MEO:'中轨 MEO',IGSO:'倾斜同步 IGSO',GEO:'静止轨道 GEO',HEO:'大椭圆 HEO'};
+const TAGC={gcr_dominant:'#45c8ff',inner_belt_candidate:'#ffb454',saa_region_approx:'#ff7a7a'};
+const TAGN={gcr_dominant:'GCR 主导',inner_belt_candidate:'内带候选区',saa_region_approx:'SAA 区域(粗略)'};
+let D=null,cur=null,ti=0,lastTi=-1,playing=true,speed=1,T=0,lastT=0,view='3d',G=null;
+const earth=new Image();earth.src='img/earth.jpg';
+const CLSC={LEO:'#45c8ff',SSO:'#7ee8a2',MEO:'#ffd166',IGSO:'#c792ea',GEO:'#ff9d66',HEO:'#ff6b7a'};
+const WE=2*Math.PI/1436; // 地球自转 rad/模拟分钟（恒星日≈1436min）
+
+function fmt(x){if(x==null||!isFinite(x))return '—';const e=Math.floor(Math.log10(Math.abs(x)));const m=x/Math.pow(10,e);return m.toFixed(2)+'×10'+sup(e)}
+function sup(e){const s='⁰¹²³⁴⁵⁶⁷⁸⁹';let o='';for(const c of String(e))o+=c=='-'?'⁻':s[+c];return o}
+
+async function boot(){
+  D=await (await fetch(DATA_URL)).json();
+  const chips=document.getElementById('chips');
+  for(const c of CLS_ORDER){
+    const g=D.satellites.filter(s=>s.cls===c);if(!g.length)continue;
+    const lab=document.createElement('div');lab.className='gl';lab.textContent=CLS_NAME[c];chips.appendChild(lab);
+    for(const s of g){const b=document.createElement('button');b.className='chip';b.textContent=s.name;
+      b.onclick=()=>{cur=s.id;focusCam();renderPanel()};b.dataset.id=s.id;chips.appendChild(b);}
+  }
+  cur='iss';
+  if(init3D()){renderPanel();
+    document.getElementById('v3d').onclick=()=>setView('3d');
+    document.getElementById('v2d').onclick=()=>setView('2d');
+  } else {view='2d';setView('2d');renderPanel();} // 无 WebGL 时回退 2D
+  document.getElementById('pp').onclick=e=>{playing=!playing;e.target.textContent=playing?'暂停':'播放'};
+  document.getElementById('spd').onclick=e=>{speed=speed===1?4:speed===4?16:1;e.target.textContent='速度 ×'+speed};
+  const sa=document.getElementById('sa'),si=document.getElementById('si');
+  const upd=()=>customOut();sa.oninput=si.oninput=upd;upd();
+  requestAnimationFrame(tick);
+}
+
+/* ---------- 精选笔记演示动画 ---------- */
+function initDemos(){
+  const c1=document.getElementById('demo-strike'),c2=document.getElementById('demo-stk');
+  if(!c1||!c2)return;
+  c1.width=640;c1.height=360;c2.width=640;c2.height=360;
+  const CAP1=[
+    '<b>① 参数注入</b>：LET = 40 MeV·cm²/mg、入射角 60°、落点自引——粒子轨迹纵深随角度拉长',
+    '<b>② 电荷径迹</b>：能量沉积在轨迹邻域，邻近 SRAM 单元逐个翻转',
+    '<b>③ 分类判定</b>：孤立翻转记 SEU，相邻成团记 MCU，被 ECC 覆盖记 Masked',
+    '<b>④ 为什么做它</b>：同一器件换个角度就是另一张翻转图——打击仿真把“哪里脆弱”变成几何问题'
+  ];
+  const CAP2=[
+    '<b>① 轨道输入</b>：STK 驱动卫星动画，平台经 Connect TCP:5001 按历元拉 Position(18 实数)',
+    '<b>② 磁层挂载</b>：经纬高 → IGRF-13 偶极：截止刚度 Rc、McIlwain L、磁纬、SAA/内带判别',
+    '<b>③ 谱与截面</b>：BO2020 GCR + O\'Neill LIS (φ=600MV) → Lee 2014 三域 Weibull σ(LET)',
+    '<b>④ 输出</b>：逐历元 JSON：{lat,lon,alt} → {rc,l,rate}；非冻结轨道标注“模型级估计”'
+  ];
+  // 打击演示预计算：位图网格 + 径迹命中集
+  const GW=16,GH=10,cw=560/GW,ch=300/GH;
+  const x0=120,y0=330,x1=520,y1=40; // 60° 入射径迹
+  const hit=[]; // {cx,cy,tHit,cls}
+  for(let i=0;i<GW;i++)for(let j=0;j<GH;j++){
+    const px=40+i*cw+cw/2,py=20+j*ch+ch/2;
+    // 点到线段距离
+    const dx=x1-x0,dy=y1-y0,L2=dx*dx+dy*dy;
+    const t=Math.max(0,Math.min(1,((px-x0)*dx+(py-y0)*dy)/L2));
+    const qx=x0+t*dx,qy=y0+t*dy,d=Math.hypot(px-qx,py-qy);
+    if(d<cw*1.15)hit.push({i,j,t});
+  }
+  hit.sort((a,b)=>a.t-b.t);
+  // 分类：首点 SEU；与已翻转相邻的团记 MCU；边缘两个记 Masked
+  hit.forEach((h,k)=>{
+    const adj=hit.slice(0,k).some(o=>Math.abs(o.i-h.i)+Math.abs(o.j-h.j)===1);
+    h.cls=(k===0)?'seu':(adj||k>2&&Math.random()<.7)?'mcu':'seu';
+    if(k===hit.length-1||k===hit.length-3)h.cls='masked';
+  });
+  const LOOP1=14;
+  let satData=null;
+  function drawStrike(ts){
+    const ctx=c1.getContext('2d'),T1=(ts/1000)%LOOP1;
+    const W=640,H=360;
+    ctx.fillStyle='#0a1523';ctx.fillRect(0,0,W,H);
+    // 网格
+    ctx.strokeStyle='rgba(120,180,220,.14)';ctx.lineWidth=1;
+    for(let i=0;i<=GW;i++){ctx.beginPath();ctx.moveTo(40+i*cw,20);ctx.lineTo(40+i*cw,20+GH*ch);ctx.stroke();}
+    for(let j=0;j<=GH;j++){ctx.beginPath();ctx.moveTo(40,20+j*ch);ctx.lineTo(40+GW*cw,20+j*ch);ctx.stroke();}
+    ctx.fillStyle='#8fa8bd';ctx.font='600 15px sans-serif';
+    ctx.fillText('SRAM 位图 · 几何打击仿真（示意）',40,14);
+    const phase=T1<3?0:T1<6.5?1:T1<10?2:3; // 各阶段时长
+    const frac=phase===0?T1/3:phase===1?(T1-3)/3.5:phase===2?(T1-6.5)/3.5:1;
+    // 翻转单元
+    const nf=phase===0?0:Math.floor(frac*hit.length);
+    let seu=0,mcu=0,msk=0;
+    hit.forEach((h,k)=>{
+      if(k>=nf)return;
+      const px=40+h.i*cw,py=20+h.j*ch;
+      const col=h.cls==='seu'?'#ff6b6b':h.cls==='mcu'?'#ffb454':'#5a7a95';
+      if(h.cls==='seu')seu++;else if(h.cls==='mcu')mcu++;else msk++;
+      ctx.fillStyle=col+'55';ctx.fillRect(px+1,py+1,cw-2,ch-2);
+      if(phase>=2){ctx.fillStyle=col;ctx.fillRect(px+cw/4,py+ch/4,cw/2,ch/2);}
+    });
+    // 入射离子（阶段0-1绘制轨迹）
+    if(phase<2){
+      const ip=phase===0?frac:1;
+      const ix=x0+(x1-x0)*ip,iy=y0+(y1-y0)*ip;
+      ctx.strokeStyle='rgba(69,200,255,.85)';ctx.lineWidth=3;
+      ctx.setLineDash([10,7]);ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(ix,iy);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#eaf6ff';ctx.shadowColor='#45c8ff';ctx.shadowBlur=16;
+      ctx.beginPath();ctx.arc(ix,iy,6,0,7);ctx.fill();ctx.shadowBlur=0;
+      ctx.fillStyle='#45c8ff';ctx.font='600 13px sans-serif';
+      ctx.fillText('Fe 离子 · LET 40 · θ=60°',Math.min(ix+14,W-190),iy-12);
+    }
+    // 计数面板（阶段2起）
+    if(phase>=2){
+      ctx.fillStyle='rgba(8,17,30,.82)';ctx.fillRect(W-190,20,170,86);
+      ctx.strokeStyle='#27506e';ctx.strokeRect(W-190,20,170,86);
+      ctx.font='600 13px sans-serif';
+      ctx.fillStyle='#ff8a8a';ctx.fillText(`SEU（孤立）: ${seu}`,W-176,44);
+      ctx.fillStyle='#ffc173';ctx.fillText(`MCU（团簇）: ${mcu}`,W-176,64);
+      ctx.fillStyle='#8fb0c6';ctx.fillText(`Masked（ECC）: ${msk}`,W-176,84);
+      ctx.fillStyle='#5f7d95';ctx.fillText(`总翻转: ${nf}`,W-176,102);
+    }
+    // 阶段4 淡出重置
+    if(phase===3){ctx.fillStyle=`rgba(10,21,35,${frac*.85})`;ctx.fillRect(0,0,W,H);}
+    document.getElementById('cap-strike').innerHTML=CAP1[phase];
+  }
+  const LOOP2=16;
+  const BOXES=[
+    {x:30,y:150,w:170,h:54,t:'STK 动画窗口',s:'轨道场景驱动'},
+    {x:240,y:150,w:170,h:54,t:'Connect TCP :5001',s:'ConControl/Position'},
+    {x:450,y:150,w:160,h:54,t:'Position (18实数)',s:'lat · lon · alt'},
+    {x:450,y:250,w:160,h:54,t:'IGRF-13 偶极',s:'Rc · L · 磁纬 · SAA'},
+    {x:240,y:250,w:170,h:54,t:'BO2020 + LIS',s:'GCR 谱 φ=600MV'},
+    {x:30,y:250,w:170,h:54,t:'三域 Weibull',s:'σ(LET) → SEU 率'},
+  ];
+  const ARROWS=[ // 包路线：上排左→右，右端下折，下排右→左，左端收尾出 JSON
+    [200,177,240,177],[410,177,450,177],[530,204,530,250],[450,277,410,277],[240,277,200,277]
+  ];
+  function drawStk(ts){
+    const ctx=c2.getContext('2d'),T2=(ts/1000)%LOOP2;
+    const W=640,H=360;
+    ctx.fillStyle='#0a1523';ctx.fillRect(0,0,W,H);
+    // 顶部小轨道弧 + 卫星
+    ctx.strokeStyle='rgba(69,200,255,.35)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(320,150,120,Math.PI,2*Math.PI);ctx.stroke();
+    const ep=T2/LOOP2; // 历元进度
+    const ang=Math.PI+ep*Math.PI;
+    const sx=320+120*Math.cos(ang),sy=150+120*Math.sin(ang);
+    ctx.strokeStyle='rgba(255,180,80,.5)';ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.arc(320,150,120,Math.PI,ang);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#eaf6ff';ctx.shadowColor='#45c8ff';ctx.shadowBlur=14;
+    ctx.beginPath();ctx.arc(sx,sy,6,0,7);ctx.fill();ctx.shadowBlur=0;
+    ctx.fillStyle='#8fa8bd';ctx.font='600 13px sans-serif';
+    ctx.fillText('STK 场景 · 逐历元驱动',30,30);
+    // 管线框
+    const bidx=Math.min(5,Math.floor(ep*6)); // 当前高亮框 0-5
+    BOXES.forEach((b,i)=>{
+      const on=i===bidx;
+      ctx.fillStyle=on?'rgba(69,200,255,.16)':'rgba(18,48,76,.55)';
+      ctx.strokeStyle=on?'#45c8ff':'#27506e';ctx.lineWidth=on?2:1;
+      ctx.beginPath();ctx.roundRect(b.x,b.y,b.w,b.h,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle=on?'#eaf6ff':'#b9d2e6';ctx.font='600 13px sans-serif';
+      ctx.textAlign='center';ctx.fillText(b.t,b.x+b.w/2,b.y+22);
+      ctx.fillStyle='#6f92ab';ctx.font='11px sans-serif';ctx.fillText(b.s,b.x+b.w/2,b.y+40);
+      ctx.textAlign='left';
+    });
+    // 数据包沿线流动
+    const seg=Math.floor((ep*10)%5),sf=(ep*10)%1;
+    const [ax,ay,bx,by]=ARROWS[seg];
+    ctx.strokeStyle='rgba(69,200,255,.5)';ctx.lineWidth=1.5;
+    ARROWS.forEach(a=>{ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(a[2],a[3]);ctx.stroke();});
+    ctx.fillStyle='#45c8ff';ctx.shadowColor='#45c8ff';ctx.shadowBlur=10;
+    ctx.beginPath();ctx.arc(ax+(bx-ax)*sf,ay+(by-ay)*sf,4,0,7);ctx.fill();ctx.shadowBlur=0;
+    // 底部实时 JSON 行（用真实数据：ISS 轨迹逐点）
+    if(!satData&&D){const s=D.satellites.find(x=>x.id==='iss');satData=s?s.track:null;}
+    const k=satData?Math.floor(ep*satData.length)%satData.length:Math.floor(ep*192);
+    const p=satData?satData[k]:{lat:8.3,lon:-102.1,alt:420,rc:5.4,l:1.4,rate:2.1e-8};
+    ctx.fillStyle='rgba(8,17,30,.85)';ctx.fillRect(20,316,W-40,30);
+    ctx.strokeStyle='#27506e';ctx.strokeRect(20,316,W-40,30);
+    ctx.fillStyle='#7ee8a2';ctx.font='12px monospace';
+    ctx.fillText(`epoch ${String(k).padStart(3,'0')}  lat=${(p.lat>0?'+':'')}${(+p.lat).toFixed(1)}° lon=${(p.lon>0?'+':'')}${(+p.lon).toFixed(1)}° alt=${p.alt}km → Rc=${(+p.rc).toFixed(2)}GV L=${p.l==null?'≫3':(+p.l).toFixed(2)} rate=${fmt(p.rate)}/天`,30,335);
+    document.getElementById('cap-stk').innerHTML=CAP2[Math.min(3,Math.floor(ep*4))];
+  }
+  function demoTick(ts){drawStrike(ts);drawStk(ts);requestAnimationFrame(demoTick);}
+  requestAnimationFrame(demoTick);
+}
+function setView(v){view=v;
+  document.getElementById('v3d').classList.toggle('on',v==='3d');
+  document.getElementById('v2d').classList.toggle('on',v==='2d');
+  document.getElementById('globe').style.display=v==='3d'?'block':'none';
+  document.getElementById('map').style.display=v==='2d'?'block':'none';}
+function sliderAlt(){const t=document.getElementById('sa').value/100;
+  return Math.round(300*Math.pow(35786/300,t))}
+const X=(W,lon)=>(lon+180)/360*W, Y=(H,lat)=>(90-lat)/180*H;
+
+function tick(ts){
+  const dt=lastT?ts-lastT:0;lastT=ts;
+  const s=D&&D.satellites.find(x=>x.id===cur);
+  if(s&&s.track.length){
+    if(playing)T+=dt*0.012*speed; // ×1 ≈ 12 模拟分钟/秒，全部卫星共用时钟
+    ti=Math.floor(T/s.sim_min_per_pt)%s.track.length;
+    if(ti!==lastTi){lastTi=ti;renderPanel();}
+    if(view==='3d'&&G)render3D(dt);
+    else drawMap(s);
+    drawSpark(s);
+  }
+  requestAnimationFrame(tick);
+}
+
+function drawMap(s){
+  const cv=document.getElementById('map');
+  const W=cv.width=cv.clientWidth*2,H=cv.height=cv.clientWidth; // 2:1 等距圆柱投影
+  const ctx=cv.getContext('2d');
+  // 地球底图
+  if(earth.complete&&earth.naturalWidth){ctx.drawImage(earth,0,0,W,H);}
+  else{ctx.fillStyle='#0d1b2a';ctx.fillRect(0,0,W,H);}
+  ctx.fillStyle='rgba(10,25,45,.30)';ctx.fillRect(0,0,W,H); // 压暗衬出发光轨迹
+  // 经纬网格
+  ctx.strokeStyle='rgba(120,180,220,.10)';ctx.lineWidth=1;
+  for(let lo=-150;lo<=150;lo+=30){ctx.beginPath();ctx.moveTo(X(W,lo),0);ctx.lineTo(X(W,lo),H);ctx.stroke();}
+  for(let la=-60;la<=60;la+=30){ctx.beginPath();ctx.moveTo(0,Y(H,la));ctx.lineTo(W,Y(H,la));ctx.stroke();}
+  // 纬度覆盖带
+  const cov=Math.min(s.inc_deg,180-s.inc_deg);
+  ctx.fillStyle='rgba(69,200,255,.07)';
+  ctx.fillRect(0,Y(H,cov),W,Y(H,-cov)-Y(H,cov));
+  // SAA 框
+  ctx.strokeStyle='rgba(255,100,90,.85)';ctx.setLineDash([7,5]);ctx.lineWidth=2;
+  const sx=X(W,-100),sy=Y(H,5),sw=X(W,25)-sx,sh=Y(H,-55)-sy;
+  ctx.strokeRect(sx,sy,sw,sh);ctx.setLineDash([]);
+  ctx.fillStyle='rgba(8,17,30,.75)';ctx.fillRect(sx+8,sy+8,74,30);
+  ctx.fillStyle='#ff9d94';ctx.font='600 20px sans-serif';ctx.fillText('SAA',sx+16,sy+31);
+  // 全轨残影
+  const n=s.track.length;
+  for(let k=0;k<n;k++){
+    const p=s.track[k];
+    ctx.fillStyle=TAGC[p.tag]+'2e';
+    ctx.beginPath();ctx.arc(X(W,p.lon),Y(H,p.lat),3,0,7);ctx.fill();
+  }
+  // 已飞过轨迹 + 彗星尾迹
+  for(let k=1;k<=ti;k++){
+    const p=s.track[k];
+    ctx.fillStyle=TAGC[p.tag];
+    ctx.beginPath();ctx.arc(X(W,p.lon),Y(H,p.lat),4.5,0,7);ctx.fill();
+  }
+  // 其他卫星当前位置（菱形标记）
+  for(const s2 of D.satellites){if(s2.id===s.id)continue;
+    const k2=Math.floor(T/s2.sim_min_per_pt)%s2.track.length;
+    const q2=s2.track[k2],mx=X(W,q2.lon),my=Y(H,q2.lat);
+    ctx.fillStyle=CLSC[s2.cls];ctx.globalAlpha=.8;
+    ctx.beginPath();ctx.moveTo(mx,my-4.5);ctx.lineTo(mx+4.5,my);ctx.lineTo(mx,my+4.5);ctx.lineTo(mx-4.5,my);ctx.closePath();ctx.fill();
+    ctx.globalAlpha=1;}
+  for(let k=Math.max(0,ti-14);k<ti;k++){
+    const p=s.track[k],a=(k-(ti-15))/15;
+    ctx.fillStyle=`rgba(69,200,255,${0.08+a*0.5})`;
+    ctx.beginPath();ctx.arc(X(W,p.lon),Y(H,p.lat),5+a*5,0,7);ctx.fill();
+  }
+  // 卫星图标（沿切向）+ 脉冲光环
+  const p=s.track[ti],q=s.track[Math.min(ti+1,n-1)];
+  const x=X(W,p.lon),y=Y(H,p.lat);
+  const ang=Math.atan2(Y(H,q.lat)-y,(X(W,q.lon)-x)||0.01);
+  const pulse=(performance.now()%1600)/1600;
+  ctx.strokeStyle=`rgba(69,200,255,${0.55*(1-pulse)})`;ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(x,y,10+pulse*26,0,7);ctx.stroke();
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);
+  ctx.shadowColor='rgba(69,200,255,.8)';ctx.shadowBlur=12;
+  ctx.fillStyle='#2f7fd0';ctx.fillRect(-30,-4,22,8);ctx.fillRect(8,-4,22,8); // 太阳能板
+  ctx.strokeStyle='rgba(160,220,255,.9)';ctx.lineWidth=1;
+  ctx.strokeRect(-30,-4,22,8);ctx.strokeRect(8,-4,22,8);
+  ctx.beginPath();ctx.moveTo(-22,-4);ctx.lineTo(-14,4);ctx.moveTo(16,-4);ctx.lineTo(24,4);ctx.stroke();
+  ctx.fillStyle='#f0f6fc';ctx.fillRect(-6,-6,12,12); // 星体
+  ctx.strokeStyle='#9fc4dd';ctx.strokeRect(-6,-6,12,12);
+  ctx.fillStyle='#ff5b4d';ctx.beginPath();ctx.arc(0,0,2.6,0,7);ctx.fill(); // 载荷点
+  ctx.restore();
+  // 四角暗角 + 星名标注（半透明底，不遮字）
+  const vg=ctx.createRadialGradient(W/2,H/2,H*0.35,W/2,H/2,H*0.78);
+  vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(4,10,20,.45)');
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(8,17,30,.72)';ctx.fillRect(10,10,ctx.measureText(s.name).width+130,34);
+  ctx.fillStyle='#cfe6f5';ctx.font='600 19px sans-serif';
+  ctx.fillText(s.name+' · '+s.cls+' · '+s.alt_km+' km',20,33);
+}
+
+function drawSpark(s){
+  const cv=document.getElementById('spark');
+  const W=cv.width=cv.clientWidth*2,H=cv.height=192;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#081120';ctx.fillRect(0,0,W,H);
+  const hist=s.track.slice(0,ti+1).map(p=>p.rate).filter(r=>r!=null);
+  ctx.fillStyle='#5f7d95';ctx.font='15px sans-serif';
+  ctx.fillText('瞬时 GCR-only SEU 率 /天 · 随轨道位置滚动（对数轴）',16,22);
+  if(hist.length<2)return;
+  const lmin=Math.log10(Math.min(...hist)),lmax=Math.log10(Math.max(...hist));
+  const pad=30,x0=96,x1=W-12;
+  const ly=r=>{const v=Math.log10(Math.max(r,1e-15));
+    return pad+(lmax-v)/Math.max(lmax-lmin,1e-9)*(H-pad-14)};
+  ctx.strokeStyle='rgba(110,160,200,.18)';for(let k=0;k<3;k++){const yy=pad+k*(H-pad-14)/2;
+    ctx.beginPath();ctx.moveTo(x0,yy);ctx.lineTo(x1,yy);ctx.stroke();}
+  // 渐变填充曲线
+  const gr=ctx.createLinearGradient(0,pad,0,H);
+  gr.addColorStop(0,'rgba(69,200,255,.30)');gr.addColorStop(1,'rgba(69,200,255,0)');
+  ctx.beginPath();ctx.moveTo(x0,H-14);
+  for(let k=0;k<hist.length;k++){const xx=x0+(x1-x0)*k/(s.track.length-1);
+    ctx.lineTo(xx,ly(hist[k]));}
+  ctx.lineTo(x0+(x1-x0)*(hist.length-1)/(s.track.length-1),H-14);ctx.closePath();
+  ctx.fillStyle=gr;ctx.fill();
+  ctx.strokeStyle='#45c8ff';ctx.lineWidth=2.4;ctx.shadowColor='rgba(69,200,255,.6)';ctx.shadowBlur=7;
+  ctx.beginPath();
+  for(let k=0;k<hist.length;k++){const xx=x0+(x1-x0)*k/(s.track.length-1);
+    const yy=ly(hist[k]);k?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);}
+  ctx.stroke();ctx.shadowBlur=0;ctx.lineWidth=1;
+  // 当前点光标
+  const cx=x0+(x1-x0)*(hist.length-1)/(s.track.length-1),cy=ly(hist[hist.length-1]);
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(cx,cy,4.5,0,7);ctx.fill();
+  ctx.strokeStyle='#45c8ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,8,0,7);ctx.stroke();ctx.lineWidth=1;
+  // 均值虚线
+  const mv=hist.reduce((a,b)=>a+b,0)/hist.length;
+  ctx.strokeStyle='#ffb454';ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(x0,ly(mv));ctx.lineTo(x1,ly(mv));ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#7d98ad';ctx.font='15px sans-serif';
+  ctx.fillText(fmt(Math.pow(10,lmax)),10,ly(Math.pow(10,lmax))+5);
+  ctx.fillText(fmt(Math.pow(10,lmin)),10,ly(Math.pow(10,lmin))+5);
+  ctx.fillStyle='#ffb454';ctx.fillText('均值 '+fmt(mv),x0+8,ly(mv)-6);
+}
+
+function renderPanel(){
+  const s=D.satellites.find(x=>x.id===cur);if(!s)return;
+  document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('on',b.dataset.id===cur));
+  const p=s.track[ti]||{},pd=s.per_domain_per_day||{};
+  // HUD 实时指标
+  document.getElementById('h-rate').textContent=fmt(p.rate);
+  document.getElementById('h-pos').textContent=`${p.lat>0?'+':''}${p.lat}° / ${p.lon>0?'+':''}${p.lon}°`;
+  document.getElementById('h-alt').textContent=p.alt+' km';
+  document.getElementById('h-env').innerHTML=`<span style="color:${TAGC[p.tag]}">●</span> ${TAGN[p.tag]||p.tag}`;
+  document.getElementById('h-rc').textContent=fmt(p.rc);
+  document.getElementById('h-l').textContent=p.l==null?'≫3':(+p.l).toFixed(2);
+  document.getElementById('tm').textContent='t+'+(ti*s.sim_min_per_pt).toFixed(1)+' min';
+  // 明细表
+  const rows=[
+    ['轨道',`${s.alt_km}${s.apo_km?'×'+s.apo_km:''} km · ${s.inc_deg}° · ${s.ecc?'e='+s.ecc:'圆轨'} · ${s.period_min} min`],
+    ['SEU 率 · 轨道均值',fmt(s.seu_rate_gcr_only_per_day)+' /天（GCR-only）'],
+    ['SAA 穿越占比',(s.saa_fraction*100).toFixed(1)+'%（粗略框，4圈统计）'],
+    ['SEU 率 · CRAM',fmt(pd.CRAM)+' /天'],
+    ['SEU 率 · BRAM',fmt(pd.BRAM)+' /天'],
+    ['SEU 率 · FF',fmt(pd.FF)+' /天'],
+  ].map(r=>`<tr><td>${r[0]}</td><td class="num">${r[1]}</td></tr>`).join('');
+  document.getElementById('panel').innerHTML=
+    `<div class="nm">${s.name}</div><div class="nt">${s.note}</div>`+
+    `<table>${rows}</table>`+
+    `<div class="prov">${D.model}。${D.caveat}。冻结基线：${D.frozen_baseline}</div>`;
+}
+
+/* ---------- 3D 地球（Three.js） ---------- */
+const ECEF=(lat,lon,alt)=>{const R=1+alt/6371,p=lat*Math.PI/180,l=lon*Math.PI/180;
+  return [R*Math.cos(p)*Math.cos(l),R*Math.sin(p),-R*Math.cos(p)*Math.sin(l)];}
+function dotTex(col){
+  const c=document.createElement('canvas');c.width=c.height=64;
+  const g=c.getContext('2d'),gr=g.createRadialGradient(32,32,2,32,32,30);
+  gr.addColorStop(0,'#ffffff');gr.addColorStop(.3,col);gr.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=gr;g.fillRect(0,0,64,64);
+  return new THREE.CanvasTexture(c);}
+const cam={lon:0.8,lat:0.45,dist:3.4,tdist:3.4,drag:false,lx:0,ly:0};
+function init3D(){
+  if(!window.THREE)return false;
+  const box=document.getElementById('globe');
+  let renderer;
+  try{renderer=new THREE.WebGLRenderer({antialias:true});}catch(e){return false;}
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(box.clientWidth,box.clientHeight);
+  box.appendChild(renderer.domElement);
+  const scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x040a14);
+  const camera=new THREE.PerspectiveCamera(42,box.clientWidth/box.clientHeight,.01,300);
+  // 星空背景
+  const sp=[];for(let i=0;i<2600;i++){const r=60+Math.random()*70,t=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+    sp.push(r*Math.sin(ph)*Math.cos(t),r*Math.cos(ph),r*Math.sin(ph)*Math.sin(t));}
+  const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));
+  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xcfe4ff,size:1.6,sizeAttenuation:false,transparent:true,opacity:.8})));
+  // 地球组：球体 + 轨道线都挂 ECEF 系，随模拟时间自转
+  const earthG=new THREE.Group();scene.add(earthG);
+  const etex=new THREE.TextureLoader().load('img/earth.jpg');
+  earthG.add(new THREE.Mesh(new THREE.SphereGeometry(1,72,72),
+    new THREE.MeshPhongMaterial({map:etex,shininess:8,specular:new THREE.Color(0x2a4a66)})));
+  earthG.add(new THREE.Mesh(new THREE.SphereGeometry(1.045,64,64),
+    new THREE.MeshBasicMaterial({color:0x45c8ff,transparent:true,opacity:.09,side:THREE.BackSide})));
+  scene.add(new THREE.AmbientLight(0x8aa0b8,.85));
+  const sun=new THREE.DirectionalLight(0xffffff,1.15);sun.position.set(6,2.5,4);scene.add(sun);
+  // 17 颗卫星：轨道线（粘在地球组，即 ECEF 地固系）+ 光点（惯性系）
+  const sats=[];
+  for(const s of D.satellites){
+    const n=s.track.length,arr=new Float32Array(n*3);
+    s.track.forEach((p,i)=>{const v=ECEF(p.lat,p.lon,p.alt);arr.set(v,i*3);});
+    const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.BufferAttribute(arr,3));
+    const line=new THREE.LineLoop(lg,new THREE.LineBasicMaterial({color:CLSC[s.cls],transparent:true,opacity:.28}));
+    earthG.add(line);
+    const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:dotTex(CLSC[s.cls])}));
+    spr.scale.setScalar(.05);scene.add(spr);
+    sats.push({s,spr,line,ecef:arr});
+  }
+  // 交互：拖拽旋转 + 滚轮缩放 + 缓动自转
+  const el=renderer.domElement;
+  el.addEventListener('pointerdown',e=>{cam.drag=true;cam.lx=e.clientX;cam.ly=e.clientY;el.setPointerCapture(e.pointerId);});
+  el.addEventListener('pointermove',e=>{if(!cam.drag)return;
+    cam.lon+=(e.clientX-cam.lx)*.005;cam.lat-=(e.clientY-cam.ly)*.005;
+    cam.lat=Math.max(-1.4,Math.min(1.4,cam.lat));cam.lx=e.clientX;cam.ly=e.clientY;});
+  el.addEventListener('pointerup',()=>cam.drag=false);
+  el.addEventListener('wheel',e=>{e.preventDefault();cam.tdist=Math.max(1.6,Math.min(16,cam.tdist*(1+e.deltaY*.001)));},{passive:false});
+  new ResizeObserver(()=>{if(!box.clientWidth)return;renderer.setSize(box.clientWidth,box.clientHeight);
+    camera.aspect=box.clientWidth/box.clientHeight;camera.updateProjectionMatrix();}).observe(box);
+  focusCam();
+  G={renderer,scene,camera,earthG,sats,styled:''};
+  return true;
+}
+function focusCam(){const s=D&&D.satellites.find(x=>x.id===cur);if(!s)return;
+  const r=1+s.alt_km/6371;cam.tdist=Math.max(2.6,r*1.7);}
+function restyle3D(id){if(!G||G.styled===id)return;G.styled=id;
+  for(const o of G.sats){const on=o.s.id===id;
+    o.line.material.opacity=on?.9:.2;
+    o.spr.scale.setScalar(on?.10:.05);}}
+function render3D(dt){
+  const th=T*WE;G.earthG.rotation.y=th; // 地球随模拟时间真实自转
+  const ct=Math.cos(th),st=Math.sin(th);
+  for(const o of G.sats){
+    const k=Math.floor(T/o.s.sim_min_per_pt)%o.s.track.length;
+    const x=o.ecef[k*3],y=o.ecef[k*3+1],z=o.ecef[k*3+2];
+    o.spr.position.set(x*ct+z*st,y,-x*st+z*ct); // ECEF → 惯性系 RotY(th)
+  }
+  restyle3D(cur);
+  if(!cam.drag&&playing)cam.lon+=dt*.00004; // 空闲时缓动
+  cam.dist+=(cam.tdist-cam.dist)*.08;
+  const cl=Math.cos(cam.lat);
+  G.camera.position.set(cam.dist*cl*Math.cos(cam.lon),cam.dist*Math.sin(cam.lat),cam.dist*cl*Math.sin(cam.lon));
+  G.camera.lookAt(0,0,0);
+  G.renderer.render(G.scene,G.camera);
+}
+
+function bilerp(grid,alts,incs,alt,inc,key){
+  const la=Math.log(alt);
+  let i=0;while(i<alts.length-2&&Math.log(alts[i+1])<la)i++;
+  let j=0;while(j<incs.length-2&&incs[j+1]<inc)j++;
+  const a0=alts[i],a1=alts[i+1],c0=incs[j],c1=incs[j+1];
+  const g=(a,c)=>grid.find(g=>g.alt===a&&g.inc===c);
+  const f00=g(a0,c0),f10=g(a1,c0),f01=g(a0,c1),f11=g(a1,c1);
+  if(!f00||!f10||!f01||!f11)return null;
+  const ta=(la-Math.log(a0))/(Math.log(a1)-Math.log(a0));
+  const tc=(inc-c0)/(c1-c0);
+  const v0=f00[key]+(f10[key]-f00[key])*ta, v1=f01[key]+(f11[key]-f01[key])*ta;
+  return v0+(v1-v0)*tc;
+}
+const ALTS=[300,400,550,700,850,1000,1200,1500,2000,2500,3000,4000,5000,6000,8000,10000,13000,16000,20000,23000,28000,32000,35786];
+const INCS=[0,15,28.5,40,45,51.6,55,63.4,75,86,90,97,98,110];
+
+function customOut(){
+  const alt=sliderAlt(),inc=+document.getElementById('si').value;
+  document.getElementById('sav').textContent=alt+' km';
+  document.getElementById('siv').textContent=inc+'°';
+  const g=D.grid,ii=Math.min(inc,110);
+  const rate=bilerp(g,ALTS,INCS,alt,ii,'rate');
+  const rcmin=bilerp(g,ALTS,INCS,alt,ii,'rc_min');
+  const rcmax=bilerp(g,ALTS,INCS,alt,ii,'rc_max');
+  const lmax=bilerp(g,ALTS,INCS,alt,ii,'l_max');
+  const saa=bilerp(g,ALTS,INCS,alt,ii,'saa_frac');
+  const cov=Math.min(inc,180-inc);
+  const envTxt = saa>0.02 ? '可能穿越 SAA（粗略框）' : (alt<6000 && (lmax!=null&&lmax<3)?'内带候选区':'GCR 主导');
+  document.getElementById('cout').innerHTML=
+    `<div><b>${fmt(rate)}</b>整机 SEU 率 /天（插值估计）</div>`+
+    `<div><b>${fmt(rcmin)}–${fmt(rcmax)}</b>截止刚度 GV</div>`+
+    `<div><b>±${cov.toFixed(1)}°</b>纬度覆盖</div>`+
+    `<div><b>${envTxt}</b>环境判别</div>`+
+    `<div class="warn">椭圆轨道、黄道外任务（L2/行星际）不在此网格内；数字为 GCR-only 模型级插值估计。</div>`;
+}
+initDemos();
+boot();
+</script>
+
+<footer>
+  <div class="foot">
+    <span>© 2026 juwade · 辐射软防护</span>
+    <span>数据与新闻均标注来源；实验数字以冻结基线为准</span>
+    <span>Built with plain HTML/CSS · 无追踪无依赖</span>
+  </div>
+</footer>
+</body>
+</html>
