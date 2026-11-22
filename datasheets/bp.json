@@ -239,5 +239,6 @@
       }
     }
   },
-  "criterion": "Original W17 golden, DUE or output below the 50 dB line. Not the stricter post-processing criteria."
+  "criterion": "Original W17 golden, DUE or output below the 50 dB line. Not the stricter post-processing criteria.",
+  "source_access": "Repository access may be required; commit links are not guaranteed publicly accessible. This JSON contains aggregate results and source digests, not original experimental logs."
 }

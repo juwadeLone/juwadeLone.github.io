@@ -82,6 +82,8 @@ test("every solution has an offline datasheet and commit-pinned, digest-identifi
     assert.ok(sheet.includes('download="juwade-'+product.id+'-datasheet.html"'));
     const evidence=JSON.parse(fs.readFileSync(path.join(root,"datasheets",product.id+".json"),"utf8"));
     assert.ok(evidence.sources.length>0);
+    assert.ok(evidence.source_access.includes("Repository access may be required"));
+    assert.ok(sheet.includes("Source repository access required"));
     for(const entry of evidence.sources){
       assert.match(entry.sha256,/^[a-f0-9]{64}$/);
       assert.match(entry.commit,/^[a-f0-9]{40}$/);

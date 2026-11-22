@@ -54,6 +54,9 @@ SAR figures are recounted from per-shot JSONL (`task.outcome`); BP figures prese
 original campaign summary and 50 dB criterion, including Wilson intervals and exclusions.
 Source links are pinned to commits and include original file SHA-256 digests.
 The generator reads committed source bytes, ignoring staged/unstaged source edits.
+Source links may require repository access and may return 404 for unauthorized readers;
+downloadable JSON provides aggregate results/digests, not private raw logs. This PR
+does not change repository visibility or publish the original experiment records.
 FFT has a reference sheet with an explicit missing-numeric-results statement, not
 invented measurement figures. Injection results are not radiation/flight qualification.
 

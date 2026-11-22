@@ -43,6 +43,7 @@ def table(headers, rows):
 
 
 def page(key, title, subtitle, content, data):
+    data["source_access"] = "Repository access may be required; commit links are not guaranteed publicly accessible. This JSON contains aggregate results and source digests, not original experimental logs."
     sources = "".join(f'<li><a href="{item["url"]}" target="_blank" rel="noopener noreferrer">{html.escape(item["path"])}</a><span class="source-hash">Commit: {item["commit"]}<br>SHA-256: {item["sha256"]}</span></li>' for item in data["sources"])
     body = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title} | juwade datasheet</title><style>{CSS}</style></head><body><main>
 <header><strong>juwade. / SIGNAL SYSTEMS</strong><a href="../index.html#products">返回产品 / Back to solutions ↗</a></header>
@@ -51,7 +52,7 @@ def page(key, title, subtitle, content, data):
 <div class="actions"><button onclick="window.print()">打印 / 保存 PDF · Print / save PDF</button><a class="download" href="{key}.html" download="juwade-{key}-datasheet.html">下载手册 HTML / Offline copy</a><a href="{key}.json" download="juwade-{key}-evidence.json">下载数据 / Evidence JSON</a></div>
 <div class="notice"><strong>研究实测 ≠ 飞行鉴定 / Research evidence ≠ flight qualification</strong><p>以下为指定版本与实验条件下的故障注入结果，不是辐照试验、在轨数据或最终商业产品的性能保证。不能直接推算空间 SEU 率或任务失效率。<br>Results apply only to the cited builds and conditions. They are not irradiation tests, in-orbit measurements, mission failure rates or a product guarantee.</p></div>
 {content}
-<h2>可追溯来源 / Traceable evidence</h2><p class="muted">统计由仓库文件生成；链接固定到提交，SHA-256 用于核对原始文件。 Counts are generated from repository evidence; links are commit-pinned and original file digests are provided.</p><ol class="sources">{sources}</ol>
+<h2>可追溯来源 / Traceable evidence</h2><p class="muted">统计由仓库文件生成；链接固定到提交，SHA-256 用于核对原始文件。 Counts are generated from repository evidence; links are commit-pinned and original file digests are provided.</p><div class="notice"><strong>原始来源需仓库权限 / Source repository access required</strong><p>以下链接供具备对应仓库访问权限的读者核对版本；未登录或未获授权时可能显示 404，不能保证公开访问。可下载的汇总 JSON 含计数与文件摘要，不包含原始实验日志。如需审阅原始记录，请通过产品页联系作者。<br>These source links are for readers with access to the corresponding repositories and may return 404 when signed out or unauthorized. The downloadable JSON contains aggregate counts and digests, not raw experiment logs. Contact the author through the product page to request evidence access.</p></div><ol class="sources">{sources}</ol>
 <h2>复核方法 / Reproduction</h2><p>在网站仓库运行 <code>python3 scripts/build_datasheets.py --help</code>，指定三个来源仓库路径，可重新生成本页与 JSON。<br>Regenerate this page and its evidence JSON using the versioned Python script and the source checkouts.</p>
 <footer>juwade · 独立研发 / Independent engineering · 参考配置、价格、供货、授权与任务适用性按项目另行确认。 Configuration, availability, licensing and mission suitability are agreed per project.</footer></main></body></html>"""
     (OUT / f"{key}.html").write_text(body, encoding="utf-8")

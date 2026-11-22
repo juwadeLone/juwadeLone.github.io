@@ -177,5 +177,6 @@
       }
     }
   },
-  "method": "Count task.outcome in each JSONL arm; absent task outcome is NO_TASK. Arms have different sampling and repeated targets; do not pool them into a device-wide probability."
+  "method": "Count task.outcome in each JSONL arm; absent task outcome is NO_TASK. Arms have different sampling and repeated targets; do not pool them into a device-wide probability.",
+  "source_access": "Repository access may be required; commit links are not guaranteed publicly accessible. This JSON contains aggregate results and source digests, not original experimental logs."
 }

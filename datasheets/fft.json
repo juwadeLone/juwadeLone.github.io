@@ -15,5 +15,6 @@
       "url": "https://github.com/juwadeLone/fault_tolerant_SDF_FFT_designs/blob/f805c32ebcd03edb26b9ad95d074f2d285985287/uart_fi/README.md"
     }
   ],
-  "measurement_status": "No published numeric SEU campaign results found in the cited repository; no performance or recovery-rate claim."
+  "measurement_status": "No published numeric SEU campaign results found in the cited repository; no performance or recovery-rate claim.",
+  "source_access": "Repository access may be required; commit links are not guaranteed publicly accessible. This JSON contains aggregate results and source digests, not original experimental logs."
 }
