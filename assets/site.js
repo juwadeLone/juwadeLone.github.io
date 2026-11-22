@@ -96,7 +96,10 @@ function renderDialog(product){
 }
 function chooseProduct(id){
   $("#interest").value=id;
-  if($("#product-dialog").open) $("#product-dialog").close();
+  if($("#product-dialog").open){
+    lastDialogTrigger=null;
+    $("#product-dialog").close();
+  }
   clearDraft();
   $("#inquiry").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"});
   $("#interest").focus({preventScroll:true});
