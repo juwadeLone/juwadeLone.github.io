@@ -46,6 +46,25 @@ site has no payment, customer database, analytics or flight-qualification claims
 
 ## Checks
 
+## Experiment datasheets
+
+Each product links to a bilingual, self-contained HTML datasheet under `datasheets/`.
+Visitors can print/save PDF, download an offline HTML copy, or download its evidence JSON.
+SAR figures are recounted from per-shot JSONL (`task.outcome`); BP figures preserve the
+original campaign summary and 50 dB criterion, including Wilson intervals and exclusions.
+Source links are pinned to commits and include original file SHA-256 digests.
+FFT has a reference sheet with an explicit missing-numeric-results statement, not
+invented measurement figures. Injection results are not radiation/flight qualification.
+
+Regenerate all sheets from the three sibling checkouts:
+
+```sh
+python3 scripts/build_datasheets.py --help
+python3 scripts/build_datasheets.py
+```
+
+## Validation
+
 ```sh
 node --check assets/site.js
 node --test tests/site.test.cjs

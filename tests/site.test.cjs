@@ -53,3 +53,40 @@ test("optional organization falls back cleanly and input whitespace is trimmed",
   assert.ok(draft.body.includes("Organization / team: Not provided"));
   assert.ok(draft.body.endsWith("Requirements:\ntest"));
 });
+
+test("datasheets preserve campaign denominators and excluded records",()=>{
+  const sar=JSON.parse(fs.readFileSync(path.join(root,"datasheets/sar.json"),"utf8"));
+  for(const campaign of Object.values(sar.campaigns)){
+    for(const arm of Object.values(campaign)){
+      assert.equal(arm.records,arm.MASKED+arm.SDC+arm.DUE+arm.NO_TASK);
+    }
+    assert.equal(Object.values(campaign).reduce((n,arm)=>n+arm.records,0),2051);
+  }
+  assert.equal(sar.campaigns.sem_campaign_pt3x3w.e0.NO_TASK,1);
+  assert.equal(sar.campaigns.sem_campaign_pt3x3w.e2_post.NO_TASK,4);
+  const bp=JSON.parse(fs.readFileSync(path.join(root,"datasheets/bp.json"),"utf8"));
+  for(const build of Object.values(bp.builds)){
+    assert.equal(build.e0.valid,1200);
+    assert.equal(build.failure.k,build.e0.below_line+(build.e0.DUE||0));
+    assert.equal(build.failure.share,build.failure.k/build.failure.n);
+    assert.ok(build.failure.share_ci[0]<=build.failure.share);
+    assert.ok(build.failure.share_ci[1]>=build.failure.share);
+    assert.equal(build.control.records,build.control.valid+build.control.invalid);
+  }
+  assert.equal(bp.builds.P7C.e0.records-bp.builds.P7C.e0.valid,1);
+});
+test("every solution has an offline datasheet and commit-pinned, digest-identified evidence",()=>{
+  for(const product of catalog.products){
+    const sheet=fs.readFileSync(path.join(root,"datasheets",product.id+".html"),"utf8");
+    assert.ok(sheet.includes("window.print()"));
+    assert.ok(sheet.includes('download="juwade-'+product.id+'-datasheet.html"'));
+    const evidence=JSON.parse(fs.readFileSync(path.join(root,"datasheets",product.id+".json"),"utf8"));
+    assert.ok(evidence.sources.length>0);
+    for(const entry of evidence.sources){
+      assert.match(entry.sha256,/^[a-f0-9]{64}$/);
+      assert.match(entry.commit,/^[a-f0-9]{40}$/);
+      assert.ok(entry.url.includes("/blob/"+entry.commit+"/"));
+    }
+    if(product.id==="fft")assert.ok(evidence.measurement_status.includes("No published numeric"));
+  }
+});
