@@ -1,0 +1,55 @@
+{
+  "scope": "External real-world SAR application illustrations, not juwade board outputs or validation data.",
+  "policy_url": "https://www.jpl.nasa.gov/jpl-image-use-policy/",
+  "usage": "JPL public-site images may be used for any purpose with credit, subject to caption-specific ownership and policy exceptions. These captions credit NASA/JPL or NASA/JPL-Caltech; no third-party ownership is stated. No endorsement is implied.",
+  "scenes": [
+    {
+      "id": "PIA01791",
+      "file": "san-francisco.webp",
+      "place": "San Francisco Bay, California",
+      "instrument": "SIR-C/X-SAR",
+      "credit": "NASA/JPL",
+      "source": "https://www.jpl.nasa.gov/images/pia01791-space-radar-image-of-san-francisco-california/",
+      "original_url": "https://images-assets.nasa.gov/image/PIA01791/PIA01791~orig.jpg",
+      "original_width": 3200,
+      "original_height": 4700,
+      "original_sha256": "45edd99a6f7bd5400679a6c9a08b86ab8def768c8801c80d89efcf96d657ea68",
+      "width": 1226,
+      "height": 1800,
+      "sha256": "94781d2e77e410e5b59501a011b23d8afaac3971b19a38eb1ede798105dc4870",
+      "changes": "Resized proportionally to 1800px maximum; WebP compression. Cards/banner crop with CSS; full local image remains uncropped. No recoloring."
+    },
+    {
+      "id": "PIA01706",
+      "file": "amazon-manaus.webp",
+      "place": "Manaus, Brazil",
+      "instrument": "SIR-C/X-SAR",
+      "credit": "NASA/JPL-Caltech",
+      "source": "https://www.jpl.nasa.gov/images/pia01706-space-radar-image-of-manaus-brazil/",
+      "original_url": "https://images-assets.nasa.gov/image/PIA01706/PIA01706~orig.jpg",
+      "original_width": 768,
+      "original_height": 2026,
+      "original_sha256": "d3cea9d9a62e4b7d2be41dae6eee1e0af2dc0e1e39fd6b6643e6bf30f770db59",
+      "width": 682,
+      "height": 1800,
+      "sha256": "09254e71e18034f827ed4452d05f3d5b7ad1e695daa1b10dc7dc4e6fb1d47e78",
+      "changes": "Resized proportionally to 1800px maximum; WebP compression. Cards/banner crop with CSS; full local image remains uncropped. No recoloring."
+    },
+    {
+      "id": "PIA01349",
+      "file": "death-valley.webp",
+      "place": "Death Valley, California",
+      "instrument": "SIR-C/X-SAR",
+      "credit": "NASA/JPL",
+      "source": "https://www.jpl.nasa.gov/images/pia01349-color-image-of-death-valley-california-from-sir-c/",
+      "original_url": "https://images-assets.nasa.gov/image/PIA01349/PIA01349~orig.jpg",
+      "original_width": 1200,
+      "original_height": 2501,
+      "original_sha256": "1d84f24352242118779e0e54f5d2ec32a00f533a99edace5cffac9077962c65d",
+      "width": 864,
+      "height": 1800,
+      "sha256": "48093a99d44019f0d76ff71ee703bd70a5e722471a8cc9da1165a252ec3bf8bf",
+      "changes": "Resized proportionally to 1800px maximum; WebP compression. Cards/banner crop with CSS; full local image remains uncropped. No recoloring."
+    }
+  ]
+}

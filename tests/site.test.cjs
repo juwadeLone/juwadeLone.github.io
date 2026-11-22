@@ -65,6 +65,33 @@ test("Chinese and English inquiry drafts preserve Unicode and URL-reserved chara
   }
 });
 
+test("public real-world SAR scenes retain source IDs, rights context and matching file digests",()=>{
+  const crypto=require("node:crypto");
+  const folder=path.join(root,"assets/sar/scenes");
+  const provenance=JSON.parse(fs.readFileSync(path.join(folder,"provenance.json"),"utf8"));
+  assert.equal(provenance.scenes.length,3);
+  assert.equal(provenance.policy_url,"https://www.jpl.nasa.gov/jpl-image-use-policy/");
+  assert.ok(provenance.scope.includes("not juwade board outputs"));
+  assert.deepEqual(provenance.scenes.map(scene=>scene.id),["PIA01791","PIA01706","PIA01349"]);
+  for(const scene of provenance.scenes){
+    const bytes=fs.readFileSync(path.join(folder,scene.file));
+    assert.equal(bytes.toString("ascii",0,4),"RIFF");
+    assert.equal(bytes.toString("ascii",8,12),"WEBP");
+    assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),scene.sha256);
+    assert.match(scene.original_sha256,/^[a-f0-9]{64}$/);
+    assert.equal(new URL(scene.original_url).host,"images-assets.nasa.gov");
+    assert.ok(scene.source.includes(scene.id.toLowerCase()));
+    assert.ok(html.includes(scene.source));
+    assert.ok(html.includes(scene.credit+" · "+scene.id));
+    assert.ok(html.includes('src="assets/sar/scenes/'+scene.file+'"'));
+    assert.ok(scene.original_width>=scene.width && scene.original_height>=scene.height);
+  }
+  for(const locale of ["zh","en"]){
+    assert.ok(catalog.translations[locale].sceneKind.includes(locale==="zh"?"非板卡实测":"NOT OUR BOARD OUTPUT"));
+    assert.ok(catalog.translations[locale].heroSceneCredit.includes(locale==="zh"?"非本板卡输出":"not our board output"));
+  }
+});
+
 test("buyer-facing catalog labels disclose source access and compute the total",()=>{
   for(const locale of ["zh","en"]){
     assert.ok(catalog.translations[locale].source.includes(locale==="en"?"repository access required":"仓库访问权限"));

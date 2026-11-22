@@ -75,11 +75,38 @@ node --test tests/site.test.cjs
 python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
-## SAR images and algorithm introduction
+## Corporate storefront and public SAR scenes
+
+The homepage uses an original corporate product-portal layout: full-width SAR
+banner, product center, application imagery, engineering capabilities, downloads,
+and technical enquiry. The layout takes inspiration from the Milianke reference
+site; its branding, images, claims and page code are not copied.
+
+Three **real-world** NASA/JPL SIR-C/X-SAR scenes show San Francisco Bay, the
+Manaus/Amazon region, and Death Valley. They illustrate SAR applications, **not
+juwade board output, validation data, or a CSA/BP performance comparison**.
+Cards and the hero crop thumbnails; the linked local images keep the complete
+frame, resized proportionally and WebP-compressed without recoloring. Each
+caption credits its NASA/JPL source; the site links the image-use policy and
+states that credits do not imply endorsement. No NASA/JPL logos are used.
+
+`assets/sar/scenes/provenance.json` records official source/download URLs,
+caption credits, image-use policy, transformations, dimensions, and SHA-256
+digests for both original downloads and local files. To reproduce, install
+Pillow in your Python environment and run:
+
+```sh
+python3 scripts/import_public_sar.py
+```
+
+The script rejects changed original-source bytes when a manifest exists.
+The static site itself has no Pillow, package, external-image or build dependency.
+
+## SAR algorithms and board-validation images
 
 The bilingual `#sar-imaging` section explains SAR focusing, the chirp scaling
 algorithm (CSA), and back-projection (BP), with links to the matching products
-and datasheets. The three gallery figures are original synthetic-point research
+and datasheets. Inside the expandable board-validation panel, three figures are original synthetic-point research
 plots: FPGA nine-target output, a floating-point point-response reference, and
 one fault-injection comparison. They are not terrain imagery or a CSA/BP
 performance comparison. No GF-3 scene data or raw echoes are published.
