@@ -198,7 +198,19 @@
   @media (max-width:640px){ .hero{padding:30px 22px 20px} .hero h1{font-size:24px} .me{flex-direction:column;text-align:center;gap:16px} .me .btns{justify-content:center} .stats{grid-template-columns:repeat(2,1fr)} .ava{width:110px;height:110px} .bar nav{gap:10px;font-size:12.5px}
     .feat{grid-template-columns:1fr} .news .d{width:80px} .news li{gap:10px;padding:12px 16px}
     th,td{padding:7px 9px;font-size:12px} .tbl{overflow-x:auto} .hi{min-width:64px} .hi.ctrl{margin-left:0} }
+  .bar nav a { white-space:nowrap; min-height:44px; min-width:44px; display:inline-flex; align-items:center; }
+  .table-scroll { overflow-x:auto; max-width:100%; }
+  .table-scroll table { min-width:760px; }
+  .research-language-note { max-width:1196px; margin:20px auto 0; padding:16px 22px; background:#eaf5f7; border:1px solid #c8dfe4; border-radius:8px; font-size:14px; line-height:1.7; }
+  .research-language-note a { display:inline-flex; align-items:center; min-height:44px; font-weight:600; }
+  @media(max-width:900px) {
+    .bar { height:auto; padding-block:8px; flex-wrap:wrap; gap:4px 12px; }
+    .bar .name { flex:1; white-space:nowrap; }
+    .bar nav { flex:1 0 100%; margin:0; flex-wrap:wrap; gap:0 12px; }
+    .research-language-note { margin:16px 22px 0; }
+  }
 </style>
+<script defer src="assets/research.js"></script>
 </head>
 <body>
 <header>
@@ -208,6 +220,11 @@
     <nav><a href="#dirs">方向</a><a href="#tool">轨道速查</a><a href="#posts">笔记</a><a href="#news">动态</a><a href="#data">数据</a><a href="#projects">项目</a><a href="#about">关于</a></nav>
   </div>
 </header>
+
+<aside id="research-language-note" class="research-language-note" lang="en" hidden>
+  This preserved research dashboard is currently available in Chinese. Its research content and calculations are unchanged.
+  <a href="index.html?lang=en#products">Back to English solutions →</a>
+</aside>
 
 <div class="hero">
   <div class="me">
@@ -355,24 +372,24 @@
   <div class="tblwrap">
     <div class="tname">XC7VX690T 三域 Weibull 截面参数<small>重离子实测（Lee 2014, IEEE REDW）+ 官方位数</small></div>
     <div class="tbl">
-      <table>
+      <div class="table-scroll" role="region" aria-label="研究对比数据 / Research comparison data" tabindex="0"><table>
         <tr><th>域</th><th>LET 阈值<br>(MeV·cm²/mg)</th><th>宽度 W</th><th>形状 s</th><th>σ_sat<br>(cm²/bit)</th><th>位数</th><th>位数来源</th></tr>
         <tr><td class="dom">CRAM</td><td class="num">0.4</td><td class="num">338.5</td><td class="num">0.852</td><td class="num">3.34×10⁻⁸</td><td class="num">229,878,496</td><td>UG470 配置位流长度</td></tr>
         <tr><td class="dom">BRAM</td><td class="num">0.1</td><td class="num">87.5</td><td class="num">0.893</td><td class="num">3.82×10⁻⁸</td><td class="num">54,190,080</td><td>DS180 52,920 Kb×1024</td></tr>
         <tr><td class="dom">FF</td><td class="num">1.1</td><td class="num">271.3</td><td class="num">1.090</td><td class="num">1.47×10⁻⁷</td><td class="num">866,400</td><td>UG474/DS180 CLB FF 数</td></tr>
-      </table>
+      </table></div>
       <div class="cap">σ_sat 为按位饱和截面；DSP（3,600 slices）因 Lee 2014 无重离子 Weibull 而未计入。来源：DOI 10.1109/REDW.2014.7004595 + UG470/DS180/UG474。</div>
     </div>
   </div>
   <div class="tblwrap">
     <div class="tname">任务 SEU 率基线<small>同模型同器件下的轨道对比</small></div>
     <div class="tbl">
-      <table>
+      <div class="table-scroll" role="region" aria-label="研究对比数据 / Research comparison data" tabindex="0"><table>
         <tr><th>轨道</th><th>环境</th><th>地磁截止</th><th>整机 SEU 率</th><th>性质</th></tr>
         <tr><td class="dom">MEO 20200 km / 55°</td><td class="num">GCR（SPENVIS CREME96 实测谱）</td><td class="num">0.04–0.86 GV</td><td class="num">46.160314073644855 /天</td><td>冻结基线（逐位可复现）</td></tr>
         <tr><td class="dom">GEO（Lee 参照）</td><td class="num">GCR 太阳极小 + 100 mil Al</td><td class="num">≈0（无屏蔽）</td><td class="num">CRAM 1.0e-7 · BRAM 5.2e-7 · FF 9.0e-8 /bit·day</td><td>文献参照（GEO 近乎无地磁屏蔽）</td></tr>
         <tr><td class="dom">任意轨道（STK 联动）</td><td class="num">GCR-only（BO2020+LIS）</td><td class="num">逐历元 IGRF-13</td><td class="num">模型级估计，标注 provenance</td><td>模型级（SAA/内带只标区域标志）</td></tr>
-      </table>
+      </table></div>
       <div class="cap">冻结基线仅适用于 20200 km/55° MEO；其它轨道的数字是模型级估计而非冻结证据——来源与假设逐字段标注。</div>
     </div>
   </div>

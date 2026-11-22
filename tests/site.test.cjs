@@ -45,7 +45,16 @@ test("Chinese and English inquiry drafts preserve Unicode and URL-reserved chara
     assert.equal(url.searchParams.get("body"),draft.body);
     assert.ok(draft.text.includes(data.requirements));
     assert.ok(draft.text.includes(data.email));
+    assert.ok(draft.text.startsWith(catalog.translations[locale].mailTo+": 1906233797@qq.com\n"));
   }
+});
+
+test("buyer-facing catalog labels disclose source access and compute the total",()=>{
+  for(const locale of ["zh","en"]){
+    assert.ok(catalog.translations[locale].source.includes(locale==="en"?"repository access required":"仓库访问权限"));
+    assert.ok(catalog.translations[locale].filterAll(7).includes("<span>07</span>"));
+  }
+  assert.ok(catalog.products.find(product=>product.id==="bp").en.specs.some(([label])=>label==="Host link & mitigation"));
 });
 test("optional organization falls back cleanly and input whitespace is trimmed",()=>{
   const draft=catalog.buildInquiry({name:" A ",email:" a@b.co ",organization:" ",requirements:" test "},catalog.translations.en,"Custom","Ground");
