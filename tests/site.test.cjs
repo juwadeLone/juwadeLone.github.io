@@ -34,6 +34,22 @@ test("each catalog solution has bilingual reference specs and a real source URL"
     }
   }
 });
+test("SAR gallery reproduces pinned synthetic-point figures with matching dimensions and digests",()=>{
+  const crypto=require("node:crypto");
+  const provenance=JSON.parse(fs.readFileSync(path.join(root,"assets/sar/provenance.json"),"utf8"));
+  assert.equal(provenance.figures.length,3);
+  for(const figure of provenance.figures){
+    assert.equal(figure.dataset,"Synthetic point targets");
+    assert.match(figure.commit,/^[a-f0-9]{40}$/);
+    const bytes=fs.readFileSync(path.join(root,"assets/sar",figure.file));
+    assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),figure.sha256);
+    assert.equal(bytes.readUInt32BE(16),figure.width);
+    assert.equal(bytes.readUInt32BE(20),figure.height);
+    assert.ok(html.includes(figure.url));
+    assert.ok(html.includes('src="assets/sar/'+figure.file+'"'));
+    assert.ok(figure.url.includes("/blob/"+figure.commit+"/"));
+  }
+});
 test("Chinese and English inquiry drafts preserve Unicode and URL-reserved characters",()=>{
   for(const locale of ["zh","en"]){
     const data={name:"朱 & Team",email:"lab+sar@example.org",organization:"研发 #1",requirements:"SAR 2048×2048\nUDP & UART? budget=待定"};

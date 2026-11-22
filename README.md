@@ -74,3 +74,22 @@ node --check assets/site.js
 node --test tests/site.test.cjs
 python3 -m unittest discover -s tests -p 'test_*.py'
 ```
+
+## SAR images and algorithm introduction
+
+The bilingual `#sar-imaging` section explains SAR focusing, the chirp scaling
+algorithm (CSA), and back-projection (BP), with links to the matching products
+and datasheets. The three gallery figures are original synthetic-point research
+plots: FPGA nine-target output, a floating-point point-response reference, and
+one fault-injection comparison. They are not terrain imagery or a CSA/BP
+performance comparison. No GF-3 scene data or raw echoes are published.
+
+Figure paths, pinned source commits, dimensions and SHA-256 digests are in
+`assets/sar/provenance.json`. Reimport exact source bytes with:
+
+```sh
+python3 scripts/import_sar_figures.py --source ../2048-2048cs-k7-sem
+```
+
+Source links require repository access. Local gallery images and full-size
+copies remain available without access to the source repository.

@@ -1,0 +1,40 @@
+{
+  "attribution": "juwade / 2048-2048cs-k7-sem research repository",
+  "source_access": "Repository access required; links may return 404 without permission.",
+  "scope": "Original, unmodified synthetic-point figures; no GF-3 scene imagery or raw echoes.",
+  "figures": [
+    {
+      "file": "point-target-board.png",
+      "width": 1320,
+      "height": 600,
+      "dataset": "Synthetic point targets",
+      "processing": "FPGA fixed-point output",
+      "source_path": "results/k7_port/point3x3w_focus_board.png",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "793009ebcd0ab8fb2160ea44493a2ef486c8b801f2bdb96087ef04e12d338b88",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_port/point3x3w_focus_board.png"
+    },
+    {
+      "file": "point-target-focus.png",
+      "width": 1776,
+      "height": 696,
+      "dataset": "Synthetic point targets",
+      "processing": "Floating-point reference",
+      "source_path": "experiments/seu_mechanism/point_focus.png",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "b0d9f0cb8b84e75ef4c6501559968f9e0459e29c4edec674ca8439dc0ba32cb9",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/experiments/seu_mechanism/point_focus.png"
+    },
+    {
+      "file": "point-target-injection.png",
+      "width": 2275,
+      "height": 728,
+      "dataset": "Synthetic point targets",
+      "processing": "Single fault-injection example",
+      "source_path": "results/k7_cram/sem_campaign_pt3x3w/figs/sdc_0001_C.png",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "fd9de838985586c3c5efb1ea48c084f1c193732ec8ae4dff951f7681d9b2476d",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/figs/sdc_0001_C.png"
+    }
+  ]
+}

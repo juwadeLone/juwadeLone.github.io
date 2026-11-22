@@ -84,4 +84,50 @@ dialog .source-link{display:inline-flex;align-items:center;min-width:44px;min-he
   .inquiry-form{padding:24px 18px}
   .privacy-note{font-size:13px;line-height:1.7}
 }
+.sar-section{background:var(--pale);border-top:1px solid var(--border)}
+.sar-section .section-intro{max-width:440px;font-size:14px}
+.sar-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.sar-figure{margin:0;min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.sar-figure:first-child{grid-column:1/-1;display:grid;grid-template-columns:1.4fr 1fr;align-items:center}
+.sar-image{min-width:0;background:#fff;display:flex;align-items:center;justify-content:center;padding:16px}
+.sar-image img{width:100%;height:auto;object-fit:contain}
+.sar-figure:not(:first-child) .sar-image{aspect-ratio:2.5}
+.sar-figure:not(:first-child) .sar-image img{max-height:100%}
+.sar-figure figcaption{padding:24px;flex:1;display:flex;flex-direction:column}
+.figure-kind{font-size:10px;color:var(--focus);font-weight:600;letter-spacing:.5px;line-height:1.6}
+.sar-figure h3{font-size:21px;line-height:1.45;margin:10px 0 12px}
+.sar-figure figcaption>p{font-size:14px;line-height:1.9;color:var(--text-muted);margin-bottom:12px}
+.figure-links{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:auto}
+.figure-links a,.sar-scope a,.sar-method-source a,.algorithm-links a,.algorithm-links button{display:inline-flex;align-items:center;min-height:44px;min-width:44px;font-size:13px;line-height:1.6;color:var(--focus)}
+.figure-links a:hover,.sar-scope a:hover,.sar-method-source a:hover,.algorithm-links a:hover,.algorithm-links button:hover{text-decoration:underline}
+.sar-scope,.sar-method-source{font-size:13px;line-height:1.8;color:var(--text-muted);margin-top:20px}
+.algorithm-heading{margin:55px 0 24px}
+.algorithm-heading h3{font-size:26px;line-height:1.5;margin:10px 0}
+.algorithm-heading>p:last-child{font-size:14px;color:var(--text-muted);max-width:720px;line-height:1.8}
+.algorithm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.algorithm-card{min-width:0;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:30px;display:flex;flex-direction:column}
+.algorithm-code{font:12px monospace;color:var(--focus);letter-spacing:1px;margin-bottom:14px}
+.algorithm-card h3{font-size:23px;line-height:1.5;margin-bottom:14px}
+.algorithm-card p,.algorithm-card li{font-size:14px;line-height:1.9}
+.algorithm-card>p{color:var(--text-muted)}
+.algorithm-card ol{margin:24px 0;padding-left:24px}
+.algorithm-card li{padding-left:6px;margin-bottom:12px}
+.algorithm-card li::marker{color:var(--focus);font-weight:600}
+.algorithm-card .algorithm-note{font-size:13px;border-top:1px solid var(--border);padding-top:18px;margin-top:auto}
+.algorithm-links{display:flex;flex-wrap:wrap;gap:4px 22px;margin-top:20px}
+.algorithm-links button{border:0;background:none;padding:0;text-align:left}
+@media(max-width:900px){
+  .sar-figure:first-child{display:flex;grid-column:auto}
+  .sar-gallery,.algorithm-grid{grid-template-columns:minmax(0,1fr)}
+  .sar-section .section-heading{flex-direction:column;gap:16px}
+  .sar-section .section-intro{max-width:640px}
+}
+@media(max-width:560px){
+  .sar-image{padding:10px}
+  .sar-figure figcaption,.algorithm-card{padding:22px}
+  .sar-figure h3{font-size:20px}
+  .algorithm-card h3{font-size:21px}
+  .algorithm-heading h3{font-size:23px}
+  .figure-kind{letter-spacing:0}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
