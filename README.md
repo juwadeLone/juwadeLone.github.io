@@ -8,7 +8,7 @@ The previous research dashboard is preserved, unchanged, at `research.html`.
 No dependency install or build is needed:
 
 ```sh
-python3 -m http.server 8080 --bind 0.0.0.0
+python3 scripts/serve.py --port 8080
 ```
 
 Open the server's root page. This is also compatible with GitHub Pages.
@@ -101,6 +101,10 @@ python3 scripts/import_public_sar.py
 
 The script rejects changed original-source bytes when a manifest exists.
 The static site itself has no Pillow, package, external-image or build dependency.
+Use the local server above for preview: it explicitly serves WebP as `image/webp`
+even on Python VMs without an installed system MIME database, so full-image links
+open as images instead of accidental downloads. GitHub Pages serves these files
+directly; the helper is only for local/session previews.
 
 ## SAR algorithms and board-validation images
 

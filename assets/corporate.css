@@ -19,7 +19,7 @@ html{scroll-padding-top:112px}
 .language{font-size:13px}
 .corporate-hero{display:block;position:relative;isolation:isolate;padding:0;margin:0;width:100%;max-width:none;background:#091a2c;color:white;overflow:hidden}
 .hero-background{position:absolute;inset:0 0 0 auto;width:65%;height:100%;max-width:none;object-fit:cover;object-position:50% 48%;z-index:-2}
-.corporate-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#081c32 12%,#081c32f0 32%,#081c32a8 55%,#081c321a 83%);z-index:-1}
+.corporate-hero:before{content:"";position:absolute;inset:0;background:#081c329c;z-index:-1}
 .hero-inner{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr);gap:80px;align-items:end;min-height:490px;padding-top:70px;padding-bottom:55px}
 .hero-copy{max-width:700px}
 .hero .eyebrow{color:#91ceff;font-size:12px;letter-spacing:2px}
@@ -29,7 +29,7 @@ html{scroll-padding-top:112px}
 .hero-actions{margin-top:32px;gap:28px;flex-wrap:wrap}
 .hero-actions .text-link{color:white;font-size:14px}
 .hero-actions .text-link:hover{color:#8ac9ff}
-.hero-tech{display:flex;flex-direction:column;border:1px solid #ffffff4f;align-self:end;background:#081b31de;padding:9px 22px;max-width:290px;justify-self:end;width:100%;backdrop-filter:blur(8px)}
+.hero-tech{display:flex;flex-direction:column;border:1px solid #ffffff4f;align-self:end;background:#081b31;padding:9px 22px;max-width:290px;justify-self:end;width:100%}
 .hero-tech>div{padding:15px 0;border-bottom:1px solid #ffffff29;display:flex;flex-direction:column;gap:3px}
 .hero-tech>div:last-child{border:0}
 .hero-tech strong{font-size:22px;font-weight:600;letter-spacing:.4px;color:#fff}
@@ -169,7 +169,7 @@ html{scroll-padding-top:112px}
   .hero h1,html[lang=en] .hero h1{font-size:46px;line-height:1.25}
   .hero-description{font-size:15px}
   .hero-background{width:90%;opacity:.7}
-  .corporate-hero:before{background:linear-gradient(90deg,#081c32fa,#081c32c7 60%,#081c3260)}
+  .corporate-hero:before{background:#081c32c9}
   .hero-tech{flex-direction:row;max-width:none;justify-self:stretch;gap:20px;padding:15px 20px}
   .hero-tech>div{border:0;border-right:1px solid #ffffff29;flex:1;min-width:0;padding:0 10px 0 0}
   .hero-tech span{font-size:11px}
