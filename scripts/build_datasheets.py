@@ -24,7 +24,9 @@ CSS = """
 
 
 def read(repo, relative, evidence, repo_name, sha):
-    content = (repo / relative).read_bytes()
+    # Read exactly the bytes that the pinned source link resolves to, even if
+    # the source checkout has staged or unstaged experimental edits.
+    content = subprocess.check_output(["git", "-C", str(repo), "show", f"{sha}:{relative}"])
     evidence.append({"path": relative, "commit": sha,
                      "sha256": hashlib.sha256(content).hexdigest(),
                      "url": f"https://github.com/juwadeLone/{repo_name}/blob/{sha}/{relative}"})

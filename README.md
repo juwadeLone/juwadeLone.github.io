@@ -53,6 +53,7 @@ Visitors can print/save PDF, download an offline HTML copy, or download its evid
 SAR figures are recounted from per-shot JSONL (`task.outcome`); BP figures preserve the
 original campaign summary and 50 dB criterion, including Wilson intervals and exclusions.
 Source links are pinned to commits and include original file SHA-256 digests.
+The generator reads committed source bytes, ignoring staged/unstaged source edits.
 FFT has a reference sheet with an explicit missing-numeric-results statement, not
 invented measurement figures. Injection results are not radiation/flight qualification.
 
@@ -68,4 +69,5 @@ python3 scripts/build_datasheets.py
 ```sh
 node --check assets/site.js
 node --test tests/site.test.cjs
+python3 -m unittest discover -s tests -p 'test_*.py'
 ```
