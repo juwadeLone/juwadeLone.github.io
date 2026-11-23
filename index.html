@@ -79,17 +79,19 @@
         <div><dt data-i18n="metricRateLabel">整片翻转率</dt><dd><strong>46.2</strong><span data-i18n="metricRateUnit">次 / 天</span></dd></div>
         <div><dt data-i18n="metricIntervalLabel">平均翻转间隔</dt><dd><strong>≈ 31</strong><span data-i18n="metricIntervalUnit">分钟</span></dd></div>
         <div><dt data-i18n="metricAgreeLabel">与公开文献数据偏差</dt><dd><strong>&lt; 10</strong><span>%</span></dd></div>
-        <div><dt data-i18n="metricViewsLabel">联动视图</dt><dd><strong>5</strong><span data-i18n="metricViewsUnit">个</span></dd></div>
+        <div><dt data-i18n="metricGeant4Label">Geant4 独立复核偏差</dt><dd><strong>&lt; 20</strong><span>%</span></dd></div>
+        <div><dt data-i18n="metricViewsLabel">联动视图</dt><dd><strong>6</strong><span data-i18n="metricViewsUnit">个</span></dd></div>
       </dl>
       <p class="platform-basis" data-i18n="metricBasis">既有平台参考算例（模型计算，非辐照实测）：Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳活动低年）· 100 mil 铝屏蔽。CRAM 20.8、BRAM 25.3、FF 0.09 次 / 天。</p>
       <div class="platform-viewer" data-radiation-viewer>
-        <div class="platform-viewer-intro"><span class="scene-indicator" aria-hidden="true"></span><p data-i18n="sceneIntro">直接在网页里探索原理 · 示意图，不是模型计算或辐照实测</p></div>
+        <div class="platform-viewer-intro"><span class="scene-indicator" aria-hidden="true"></span><p data-i18n="sceneIntro">站内双语图解 · 原理演示与既有模型结果分别标注</p></div>
         <div class="platform-tabs" role="tablist" aria-label="仿真平台视图" data-label="platformTabsLabel" hidden>
           <button type="button" role="tab" id="view-tab-strike" aria-controls="view-strike" aria-selected="true" data-view-tab><span>01</span><span data-i18n="viewStrikeTab">离子打击</span></button>
           <button type="button" role="tab" id="view-tab-orbit" aria-controls="view-orbit" aria-selected="false" tabindex="-1" data-view-tab><span>02</span><span data-i18n="viewOrbitTab">轨道环境</span></button>
           <button type="button" role="tab" id="view-tab-sar" aria-controls="view-sar" aria-selected="false" tabindex="-1" data-view-tab><span>03</span><span data-i18n="viewSarTab">SAR 后果</span></button>
           <button type="button" role="tab" id="view-tab-device" aria-controls="view-device" aria-selected="false" tabindex="-1" data-view-tab><span>04</span><span data-i18n="viewDeviceTab">器件内部</span></button>
           <button type="button" role="tab" id="view-tab-effects" aria-controls="view-effects" aria-selected="false" tabindex="-1" data-view-tab><span>05</span><span data-i18n="viewEffectsTab">效应总览</span></button>
+          <button type="button" role="tab" id="view-tab-geant4" aria-controls="view-geant4" aria-selected="false" tabindex="-1" data-view-tab><span>06</span><span data-i18n="viewGeant4Tab">独立复核</span></button>
         </div>
         <figure class="platform-view" id="view-strike" role="tabpanel" tabindex="0" aria-labelledby="view-tab-strike">
           <div class="platform-canvas strike-canvas" data-strike-scene>
@@ -183,7 +185,16 @@
           </div>
           <figcaption><p class="scene-kicker" data-i18n="sceneEvidenceBoundary">模型、演示与实测，分开阅读</p><h3 data-i18n="viewEffectsTitle">算了什么，没算什么。</h3><p data-i18n="viewEffectsBody">上方数值是既有平台在所列条件下的参考模型结果；站内图解只解释原理，不会重新计算这些数值。板级注入实测在下方独立展示，不能等同于辐照鉴定。</p><a class="scene-evidence-link" href="#fault-injection" data-i18n="sceneEvidence">查看独立的板级注入实测 ↓</a></figcaption>
         </figure>
-        <noscript><p class="scene-no-script">静态原理图已完整展示；启用 JavaScript 后可切换视图、轨道并播放示意。 Static diagrams remain available; enable JavaScript for view controls and animation.</p></noscript>
+        <figure class="platform-view" id="view-geant4" role="tabpanel" tabindex="0" aria-labelledby="view-tab-geant4">
+          <div class="platform-canvas geant4-canvas">
+            <div class="scene-overline"><span data-i18n="crosscheckReference">既有复核算例 / 非本页计算</span><span aria-hidden="true">06 / CHECK</span></div>
+            <ol class="crosscheck-setup"><li><span data-i18n="crosscheckParticle">入射离子</span><strong>Fe-56</strong></li><li><span data-i18n="crosscheckShield">铝屏蔽</span><strong>2 mm</strong></li><li><span data-i18n="crosscheckTarget">硅敏感体</span><strong>10 µm</strong></li></ol>
+            <dl class="crosscheck-values"><div><dt data-i18n="crosscheckPlatform">原平台</dt><dd>9.04 × 10<sup>−8</sup></dd></div><div><dt>Geant4</dt><dd>9.54 × 10<sup>−8</sup></dd></div></dl>
+            <p class="crosscheck-unit" data-i18n="crosscheckUnit">翻转 / bit / 天</p><p class="scene-inline-note" data-i18n="crosscheckNote">此处复述既有复核结果，不重新运行 Geant4，也不是束流试验。</p>
+          </div>
+          <figcaption><p class="scene-kicker" data-i18n="crosscheckKicker">独立计算路径的对照</p><h3 data-i18n="viewGeant4Title">换一条计算路径，把数再算一遍。</h3><p data-i18n="viewGeant4Body">用独立的 Geant4 蒙特卡洛仿真复核平台结果：Fe-56 穿过 2mm 铝屏蔽打到 10µm 硅敏感体，沉积能量换算 LET 谱，叠 Lee 2014 实测 Weibull 得 9.54×10⁻⁸ 翻转/bit/天，与平台 9.04×10⁻⁸ 相差约 5%。两套独立实现收敛到同一量级。</p></figcaption>
+        </figure>
+        <noscript><p class="scene-no-script">静态图解已完整展示；启用 JavaScript 后可切换视图、轨道并播放示意。 Static diagrams remain available; enable JavaScript for view controls and animation.</p></noscript>
       </div>
       <div class="platform-detail">
         <div class="platform-offer"><h3 data-i18n="offerTitle">你能拿到什么</h3><ol>

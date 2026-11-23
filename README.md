@@ -107,9 +107,11 @@ git diff --check
 
 ## Optional radiation simulation service
 
-The homepage introduces the existing `juwadeLone/seu_platform` through five native,
+The homepage introduces the existing `juwadeLone/seu_platform` through six native,
 bilingual views: a one-shot particle-strike illustration, selectable orbit categories,
-conceptual SAR consequences, an SRAM-type cell circuit and reference-model coverage.
+conceptual SAR consequences, an SRAM-type cell circuit, reference-model coverage
+and the existing Geant4 cross-check. The latter retains the reference inputs and
+values already published on main, presenting them as bilingual HTML rather than a screenshot.
 The diagrams use inline SVG and real translated page text, not screenshots, iframes
 or a 3D runtime. Existing reference metrics remain separate from the illustrations.
 Changing LEO/MEO/GEO only changes the diagram and explanation, not the reference case.
@@ -121,7 +123,7 @@ measured imagery; the measured-paper gallery and board-level evidence stay separ
 Dynamic text keeps `data-i18n` keys so changing language preserves the current state.
 Animation runs only on request, finishes once, and is skipped for reduced motion.
 Changing modes, resetting or leaving the strike view cancels an in-flight animation.
-With JavaScript disabled all five diagrams stay visible and unavailable controls stay
+With JavaScript disabled all six views stay visible and unavailable controls stay
 hidden. No dependencies, third-party requests or build step are added.
 
 GitHub Pages cannot execute the Python backend. The original interactive service

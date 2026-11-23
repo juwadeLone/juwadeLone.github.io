@@ -224,7 +224,7 @@ test("radiation views use native bilingual diagrams and remain readable without 
   assert.ok(html.indexOf('id="services"')<html.indexOf('id="radiation-platform"'),"Featured platform follows services");
   assert.ok(section.includes('data-i18n="featureBadge"'));
   const tabs=[...section.matchAll(/role="tab" id="([^"]+)" aria-controls="([^"]+)"/g)];
-  assert.equal(tabs.length,5);
+  assert.equal(tabs.length,6);
   for(const [,tab,panel] of tabs){
     const attributes=section.match(new RegExp('<figure[^>]*id="'+panel+'"[^>]*>'))?.[0]||"";
     assert.ok(attributes.includes('role="tabpanel"')&&attributes.includes('aria-labelledby="'+tab+'"'),panel);
@@ -237,6 +237,8 @@ test("radiation views use native bilingual diagrams and remain readable without 
   assert.doesNotMatch(section,/<(?:img|iframe|canvas)\b|assets\/simulation\//,"No raster or embedded simulator UI");
   assert.equal((section.match(/<svg\b/g)||[]).length,5);
   assert.match(section,/class="effects-list"/);
+  assert.match(section,/class="crosscheck-values"/);
+  assert.ok(section.includes("9.04 × 10")&&section.includes("9.54 × 10"),"Retain the existing Geant4 comparison");
   assert.match(section,/data-i18n="strikeTiming"/);
   assert.match(section,/data-i18n="orbitIndependent"/);
   assert.match(section,/data-i18n="effectsNoZero"/);

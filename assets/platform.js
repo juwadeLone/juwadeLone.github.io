@@ -104,7 +104,7 @@
       select(tabs[(next + tabs.length) % tabs.length], true);
     });
   });
-  // With no JS, all five native diagrams stay readable and inert controls stay hidden.
+  // With no JS, all native views stay readable and inert controls stay hidden.
   select(tabs[0]);
   viewer.querySelector(".platform-tabs").hidden = false;
   viewer.querySelector("[data-strike-controls]").hidden = false;
