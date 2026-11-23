@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "solution": "sar",
+  "sources": [
+    {
+      "path": "results/k7_cram/sem_campaign_pt3x3w/pilot/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "9d2637ac22badc6339ee0041356e836e58b2a17bcdde3ba0c949a0e232bceab8",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/pilot/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_pt3x3w/e0/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "f9215c445283cfc582ed5e9062457428ab4e91574f10a423cbf16d0860a1af89",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/e0/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_pt3x3w/control/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "259eeff8116658dd107da33b51939721889cf190e2aaacb3b43c9f1583f89b4e",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/control/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_pt3x3w/e2_pre/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "0eeb35b0b31103830c6dbb66f8b8f66109fa136156fe06392e79491de0c50e4e",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/e2_pre/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_pt3x3w/e2_post/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "957a48577957dc75164de5f53af095ae27dbbc13548229a7b995e98324f06dcd",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/e2_post/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_pt3x3w/e1_rest/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "477d4f5794ce082610827d2ea6e7f7792c90dbd084c00e5f26fa6c5a3a1d3e2d",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/e1_rest/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_v2_reference/pilot/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "53951ff8092ec1b481925950198ff7c0536f279f20b6c706a43ef14df3283053",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_v2_reference/pilot/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_v2_reference/e0/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "1f08414ca7b6f6c7d0d65bccea679b8a520f6176749c9e99c9ffcd4f0276f105",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_v2_reference/e0/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_v2_reference/control/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "b77c90480296f2d206c80cd74dbeda6e3236726c53dd1df6ec1c225fead5ce33",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_v2_reference/control/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_v2_reference/e2_pre/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "4bd881234b80f4f1fa2894312875d72c99afebc6557545fe5a31094de8b7b8e9",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_v2_reference/e2_pre/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_v2_reference/e2_post/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "838168b9784a94d51ca68d2f573ad1a710de02a162f5ca38047beed0f5dfc92b",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_v2_reference/e2_post/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_v2_reference/e1_rest/injections.jsonl",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "79c6cb0721e648997bd0576e3315f554dc3d24ca00ba169759927970061c08bd",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_v2_reference/e1_rest/injections.jsonl"
+    },
+    {
+      "path": "results/k7_cram/sem_campaign_pt3x3w/pt_vs_gf3_report.md",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "c4ffcccad812ade80d000d2b15b7a99f305070cfc746f90b1989c846ae48088b",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_cram/sem_campaign_pt3x3w/pt_vs_gf3_report.md"
+    },
+    {
+      "path": "README.md",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "sha256": "65b4dce7cba677749aae446b90ff800fa15403c915826395f51d5c7c44b0199a",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/README.md"
+    }
+  ],
+  "campaigns": {
+    "sem_campaign_pt3x3w": {
+      "pilot": {
+        "records": 271,
+        "MASKED": 211,
+        "SDC": 43,
+        "DUE": 17,
+        "NO_TASK": 0
+      },
+      "e0": {
+        "records": 800,
+        "MASKED": 597,
+        "SDC": 132,
+        "DUE": 70,
+        "NO_TASK": 1
+      },
+      "control": {
+        "records": 150,
+        "MASKED": 145,
+        "SDC": 0,
+        "DUE": 5,
+        "NO_TASK": 0
+      },
+      "e2_pre": {
+        "records": 100,
+        "MASKED": 83,
+        "SDC": 14,
+        "DUE": 3,
+        "NO_TASK": 0
+      },
+      "e2_post": {
+        "records": 100,
+        "MASKED": 80,
+        "SDC": 16,
+        "DUE": 0,
+        "NO_TASK": 4
+      },
+      "e1_rest": {
+        "records": 630,
+        "MASKED": 490,
+        "SDC": 87,
+        "DUE": 53,
+        "NO_TASK": 0
+      }
+    },
+    "sem_campaign_v2_reference": {
+      "pilot": {
+        "records": 271,
+        "MASKED": 217,
+        "SDC": 48,
+        "DUE": 6,
+        "NO_TASK": 0
+      },
+      "e0": {
+        "records": 800,
+        "MASKED": 621,
+        "SDC": 153,
+        "DUE": 25,
+        "NO_TASK": 1
+      },
+      "control": {
+        "records": 150,
+        "MASKED": 146,
+        "SDC": 0,
+        "DUE": 4,
+        "NO_TASK": 0
+      },
+      "e2_pre": {
+        "records": 100,
+        "MASKED": 83,
+        "SDC": 16,
+        "DUE": 1,
+        "NO_TASK": 0
+      },
+      "e2_post": {
+        "records": 100,
+        "MASKED": 83,
+        "SDC": 15,
+        "DUE": 0,
+        "NO_TASK": 2
+      },
+      "e1_rest": {
+        "records": 630,
+        "MASKED": 499,
+        "SDC": 104,
+        "DUE": 27,
+        "NO_TASK": 0
+      }
+    }
+  },
+  "method": "Count task.outcome in each JSONL arm; absent task outcome is NO_TASK. Arms have different sampling and repeated targets; do not pool them into a device-wide probability.",
+  "source_access": "Repository access may be required; commit links are not guaranteed publicly accessible. This JSON contains aggregate results and source digests, not original experimental logs."
+}

@@ -1,0 +1,244 @@
+{
+  "schema": 1,
+  "solution": "bp",
+  "sources": [
+    {
+      "path": "results/20261028-bp-v7-cram/summary/summary.json",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "sha256": "2a830862de5f891c62f4d023d5417e96f0462760015864ce74b5836cb4619d5b",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/results/20261028-bp-v7-cram/summary/summary.json"
+    },
+    {
+      "path": "experiments/bp_k7/results/t7_cram_merged_20261029/summary/summary.json",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "sha256": "b06da4576a907b08c2d8f05595a028ca1e61e257eb073a632d4c5634fec9d95a",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/experiments/bp_k7/results/t7_cram_merged_20261029/summary/summary.json"
+    },
+    {
+      "path": "experiments/bp_k7/results/p7c_cram_merged_20261031/summary/summary.json",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "sha256": "faf5aedc69a5426a6d3737978a8caea6afcffc94becd924910b3decd1b1b02b7",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/experiments/bp_k7/results/p7c_cram_merged_20261031/summary/summary.json"
+    },
+    {
+      "path": "experiments/bp_k7/results/p7c_cram_merged_20261031/p7.md",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "sha256": "299b0ae9ba3fe72f4b2d65918c4f304386650a196ea1c0a2360aa9db8c5dac65",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/experiments/bp_k7/results/p7c_cram_merged_20261031/p7.md"
+    },
+    {
+      "path": "experiments/bp_k7/results/v7_t7_p7c_cram_compare_20261031.md",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "sha256": "2f75a847036c8f76041e570216f987b94712bc4bbda2c7cecdf3a40a4f039bd5",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/experiments/bp_k7/results/v7_t7_p7c_cram_compare_20261031.md"
+    },
+    {
+      "path": "README.md",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "sha256": "e0c0abf4480143d891e167581190a497a563416a43edfb50412a8702debf2b59",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/README.md"
+    }
+  ],
+  "builds": {
+    "V7": {
+      "pool_bits": 6888526,
+      "e0": {
+        "records": 1200,
+        "changed": 260,
+        "identical": 871,
+        "DUE": 33,
+        "below_line": 36,
+        "valid": 1200,
+        "counters_differ": 3,
+        "counters_differ_image_identical": 1,
+        "sem_uncorrectable_after": [
+          32,
+          830,
+          833
+        ],
+        "invalid_shots": []
+      },
+      "failure": {
+        "k": 69,
+        "n": 1200,
+        "share": 0.0575,
+        "share_ci": [
+          0.04568586201086825,
+          0.072138276978846
+        ],
+        "xsec": 396090.245,
+        "xsec_ci": [
+          314708.2482942782,
+          496926.3965639822
+        ]
+      },
+      "control": {
+        "records": 60,
+        "identical": 54,
+        "invalid": 6,
+        "valid": 54,
+        "counters_differ": 0,
+        "counters_differ_image_identical": 0,
+        "sem_uncorrectable_after": [],
+        "invalid_shots": [
+          [
+            17,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            20,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            27,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            38,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            39,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            41,
+            "INVALID_NO_DETECT"
+          ]
+        ]
+      }
+    },
+    "T7": {
+      "pool_bits": 21308037,
+      "e0": {
+        "records": 1200,
+        "identical": 1189,
+        "changed": 8,
+        "DUE": 2,
+        "below_line": 1,
+        "valid": 1200,
+        "counters_differ": 0,
+        "counters_differ_image_identical": 0,
+        "sem_uncorrectable_after": [
+          257
+        ],
+        "invalid_shots": []
+      },
+      "failure": {
+        "k": 3,
+        "n": 1200,
+        "share": 0.0025,
+        "share_ci": [
+          0.0008505665045668183,
+          0.007324595410422662
+        ],
+        "xsec": 53270.0925,
+        "xsec_ci": [
+          18123.902550270435,
+          156072.75001531627
+        ]
+      },
+      "control": {
+        "records": 60,
+        "identical": 54,
+        "invalid": 6,
+        "valid": 54,
+        "counters_differ": 0,
+        "counters_differ_image_identical": 0,
+        "sem_uncorrectable_after": [],
+        "invalid_shots": [
+          [
+            34,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            36,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            39,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            43,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            48,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            55,
+            "INVALID_NO_DETECT"
+          ]
+        ]
+      }
+    },
+    "P7C": {
+      "pool_bits": 14070316,
+      "e0": {
+        "records": 1201,
+        "identical": 1157,
+        "changed": 40,
+        "below_line": 3,
+        "invalid": 1,
+        "valid": 1200,
+        "counters_differ": 1,
+        "counters_differ_image_identical": 1,
+        "sem_uncorrectable_after": [
+          397,
+          570
+        ],
+        "invalid_shots": [
+          [
+            183,
+            "INVALID_SEM"
+          ]
+        ]
+      },
+      "failure": {
+        "k": 3,
+        "n": 1200,
+        "share": 0.0025,
+        "share_ci": [
+          0.0008505665045668183,
+          0.007324595410422662
+        ],
+        "xsec": 35175.79,
+        "xsec_ci": [
+          11967.739498270577,
+          103059.37199679654
+        ]
+      },
+      "control": {
+        "records": 60,
+        "identical": 56,
+        "invalid": 4,
+        "valid": 56,
+        "counters_differ": 0,
+        "counters_differ_image_identical": 0,
+        "sem_uncorrectable_after": [],
+        "invalid_shots": [
+          [
+            18,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            20,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            32,
+            "INVALID_NO_DETECT"
+          ],
+          [
+            55,
+            "INVALID_NO_DETECT"
+          ]
+        ]
+      }
+    }
+  },
+  "criterion": "Original W17 golden, DUE or output below the 50 dB line. Not the stricter post-processing criteria.",
+  "source_access": "Repository access may be required; commit links are not guaranteed publicly accessible. This JSON contains aggregate results and source digests, not original experimental logs."
+}
