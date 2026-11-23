@@ -16,7 +16,7 @@
           observer.unobserve(entry.target);
         });
       }, {threshold: 0.06});
-      document.querySelectorAll(".section-heading,.service-card,.product-card,.scene-card,.algorithm-card,.case-card,.resource-card,.process-grid li,.platform-metrics>div,.platform-viewer,.platform-offer li").forEach((element, index) => {
+      document.querySelectorAll(".section-heading,.service-card,.product-card,.scene-card,.algorithm-card,.case-card,.resource-card,.process-grid li,.platform-metrics>div,.platform-viewer,.platform-offer li,.injection-metrics>div,.injection-card").forEach((element, index) => {
         element.dataset.reveal = "";
         element.style.setProperty("--reveal-delay", `${(index % 3) * 55}ms`);
         observer.observe(element);

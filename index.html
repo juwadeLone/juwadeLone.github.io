@@ -24,9 +24,11 @@
   <link rel="stylesheet" href="assets/editorial.css">
   <link rel="stylesheet" href="assets/services.css">
   <link rel="stylesheet" href="assets/platform.css">
+  <link rel="stylesheet" href="assets/injection.css">
   <script defer src="assets/catalog-sources.js"></script>
   <script defer src="assets/catalog.js"></script>
   <script defer src="assets/solution-translations.js"></script>
+  <script defer src="assets/injection-data.js"></script>
   <script defer src="assets/catalog-render.js"></script>
   <script defer src="assets/site.js"></script>
   <script defer src="assets/platform.js"></script>
@@ -42,6 +44,7 @@
       <a href="#products" data-i18n="navProducts">板卡</a>
       <a href="#algorithms" data-i18n="navAlgorithms">成像算法</a>
       <a class="nav-feature" href="#radiation-platform" data-i18n="navResearch">辐射仿真平台</a>
+      <a href="#fault-injection" data-i18n="navInjection">注入实测</a>
       <a href="#validation" data-i18n="navValidation">项目案例</a>
       <a href="#sar-imaging" data-i18n="navSAR">实测成像</a>
     </nav>
@@ -109,6 +112,31 @@
           <p class="platform-limits" data-i18n="simulationLimits">当前参考模型尚未包含太阳粒子事件、俘获质子与总剂量效应。仿真用于设计阶段评估，不替代束流试验。</p>
         </div>
       </div>
+    </div></section>    <section class="section injection-section" id="fault-injection" aria-labelledby="injection-title"><div class="wrap">
+      <div class="section-heading"><div><p class="eyebrow" data-i18n="injEyebrow">BOARD-LEVEL FAULT INJECTION / 板级注入实测</p><h2 id="injection-title" data-i18n="injTitle">加固有没有用，<br>用上万次实测注入说话。</h2></div><p class="section-intro" data-i18n="injIntro">在 Kintex-7 板上逐次翻转配置存储器位，每次都跑完整的 2048 × 2048 成像，并与无故障输出逐位比对。两条 SAR 成像链、10 个设计版本，全部实测。</p></div>
+      <dl class="injection-metrics">
+        <div><dt data-i18n="injM1Label">有效板级注入</dt><dd><strong>12,000</strong><span data-i18n="injM1Unit">次</span></dd></div>
+        <div><dt data-i18n="injM2Label">实测设计版本</dt><dd><strong>10</strong><span data-i18n="injM2Unit">个</span></dd></div>
+        <div><dt data-i18n="injM3Label">CSA 整体三模冗余</dt><dd><strong>15×</strong><span data-i18n="injM3Unit">敏感位下降</span></dd></div>
+        <div><dt data-i18n="injM4Label">BP 运行时检查</dt><dd><strong>11×</strong><span data-i18n="injM4Unit">敏感位下降</span></dd></div>
+      </dl>
+      <div class="injection-grid">
+        <article class="injection-card"><header><span class="injection-code">CSA 2048 × 2048</span><h3 data-i18n="injCsaTitle">调频变标成像：七种加固方案对比</h3><p data-i18n="injCsaNote">Kintex-7 XC7K325T · 每个版本 1200 次注入</p></header><ol class="injection-bars" id="injection-csa"></ol></article>
+        <article class="injection-card"><header><span class="injection-code">BP 2048 × 2048</span><h3 data-i18n="injBpTitle">反投影成像：三种可靠性配置</h3><p data-i18n="injBpNote">Kintex-7 XC7K325T · 每个版本 1200 次注入</p></header><ol class="injection-bars" id="injection-bp"></ol>
+          <p class="injection-legend" data-i18n="injLegend">条形长度为等效敏感位数，细线为 95% 置信区间。越短越好。</p></article>
+      </div>
+      <div class="injection-findings"><h3 data-i18n="injFindTitle">实测告诉我们什么</h3><ul>
+        <li data-i18n="injFind1">不加保护时，5.8%（BP）到 6.9%（CSA）的随机配置位翻转就会让成像失效或挂死。</li>
+        <li data-i18n="injFind2">整体三模冗余效果最好，等效敏感位降到约 1/15，但 DSP 用量从 173 增加到 493。</li>
+        <li data-i18n="injFind3">降精度冗余不增加 DSP（仍为 173），最佳方案的等效敏感位降到约 1/4。副本位宽偏离计算值，无论加宽还是收窄都会变差。</li>
+        <li data-i18n="injFind4">BP 运行时检查：71 次报警全部自动重跑恢复，没有出现挂死，等效敏感位降到约 1/11。</li>
+      </ul></div>
+      <details class="injection-details"><summary data-i18n="injDetailsSummary">判定方法、资源用量与原始数据</summary>
+        <div class="injection-method"><p data-i18n="injMethod">用 Xilinx SEM 从设计的配置位抽样池中均匀随机抽取 1200 位，逐次翻转；每次运行完整成像并与无故障输出逐位比对，修复后再进行下一次。结果分四类：完全一致、输出改变但 PSNR ≥ 50 dB、低于判定线（PSNR &lt; 50 dB）、挂死或无输出（DUE）。失效 = 低于判定线 + DUE；等效敏感位 = 失效比例 × 抽样池位数。</p>
+        <p class="injection-caption" id="injection-caption" data-i18n="injTableCaption">CSA 七个版本的资源用量（整板设计，布线后）与注入结果</p><div class="table-scroll"><table class="injection-table" aria-describedby="injection-caption"><thead><tr><th scope="col" data-i18n="injColBuild">版本</th><th scope="col">LUT</th><th scope="col">FF</th><th scope="col">BRAM36</th><th scope="col">DSP</th><th scope="col" data-i18n="injColPool">抽样池（位）</th><th scope="col" data-i18n="injColFail">失效</th><th scope="col" data-i18n="injColVuln">等效敏感位</th></tr></thead><tbody id="injection-table"></tbody></table></div>
+        <div class="injection-links"><a href="https://github.com/juwadeLone/xidian-csft/tree/8f85b765041caeedf3b051ae4912fdf7f42af937" target="_blank" rel="noopener noreferrer" data-i18n="injRawCsa">CSA 逐次注入原始记录（GitHub）↗</a><a href="datasheets/bp.html" data-i18n="injRawBp">BP 注入验证手册 ↗</a></div></div>
+      </details>
+      <div class="injection-cta"><p data-i18n="injLimits">故障注入模拟的是配置存储器单位翻转，不是辐照试验。结合上方仿真平台给出的翻转率，可以做设计阶段的在轨风险估算。</p><button class="button" type="button" data-quote="reliability" data-i18n="injCta">为我的设计做注入测评 →</button></div>
     </div></section>    <section class="section wrap" id="products" aria-labelledby="products-title">
       <div class="section-heading"><div><p class="eyebrow" data-i18n="productsEyebrow">PRODUCT CENTER / 产品中心</p><h2 id="products-title" data-i18n="productsTitle">面向信号处理的硬件与算法</h2></div><p class="section-intro" data-i18n="productsIntro">从研究平台出发，围绕任务选型。<br>板卡配置、算法授权与交付范围逐项确认。</p></div>
       <div class="catalog-toolbar"><span id="product-count" class="catalog-count" aria-live="polite">3 款板卡</span></div>
@@ -164,7 +192,7 @@
       <form id="inquiry-form" class="inquiry-form"><div class="form-row"><label><span data-i18n="nameLabel">你的称呼 *</span><input name="name" autocomplete="name" required maxlength="80" placeholder="如何称呼你" data-placeholder="namePlaceholder"></label><label><span data-i18n="emailLabel">联系邮箱 *</span><input name="email" type="email" autocomplete="email" required maxlength="160" placeholder="you@organization.com"></label></div><label><span data-i18n="organizationLabel">单位 / 团队</span><input name="organization" autocomplete="organization" maxlength="120" placeholder="学校、研究所或公司" data-placeholder="organizationPlaceholder"></label><div class="form-row"><label><span data-i18n="interestLabel">感兴趣的方案 *</span><select name="product" id="interest" required></select></label><label><span data-i18n="scenarioLabel">实验场景 *</span><select name="scenario" id="scenario" required></select></label></div><label><span data-i18n="requirementsLabel">项目需求 *</span><textarea name="requirements" rows="4" required maxlength="2000" placeholder="例如：SAR 实时成像，需要千兆网口，计划先进行地面功能验证……" data-placeholder="requirementsPlaceholder"></textarea></label><p class="privacy-note" data-i18n="privacyNote">表单不会上传或保存你的信息。将生成邮件草稿，由你在邮箱中确认发送。</p><button class="button submit" type="submit" data-i18n="compose">生成询价邮件 ↗</button><p class="form-status" id="form-status" role="status"></p><div id="email-draft" hidden><label><span data-i18n="draftLabel">邮件内容（也可直接复制发送）</span><textarea id="draft-text" readonly rows="7"></textarea></label><div class="draft-actions"><a class="text-link" id="open-email" href="mailto:1906233797@qq.com" data-i18n="openEmail">打开邮箱 →</a><button type="button" class="text-link" id="copy-draft" data-i18n="copy">复制内容</button><button type="button" class="text-link" id="download-draft" data-i18n="download">下载询价单</button></div></div></form>
     </div></section>
   </main>
-  <footer class="corporate-footer"><div class="wrap footer-grid"><div><a class="brand" href="#">juwade<span class="brand-dot">.</span></a><p data-i18n="footerBrand">FPGA 信号处理与可靠计算</p><small data-i18n="footerLine">独立研发 · 板卡与算法协同 · 面向实验评估</small></div><div><h3 data-i18n="footerProducts">产品与方案</h3><a href="#services" data-i18n="navServices">服务</a><a href="#products">A7 / K7 / V7</a><a href="#algorithms">CSA / BP</a><a href="#operators">FFT / CORDIC</a><a href="#radiation-platform" data-i18n="navResearch">辐射仿真</a></div><div><h3 data-i18n="footerResources">技术资源</h3><a href="#sar-imaging" data-i18n="navSAR">SAR 图像</a><a href="#resources" data-i18n="navDatasheets">资料下载</a><a href="https://github.com/juwadeLone" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div><div><h3 data-i18n="footerContact">联系开发者</h3><a class="footer-email" href="mailto:1906233797@qq.com">1906233797@qq.com</a><p data-i18n="footerMailNote">配置、报价与交付范围按项目沟通确认。</p><a href="#inquiry" data-i18n="navContact">技术咨询</a></div></div><div class="wrap footer-bottom"><span>© <span id="year">2026</span> juwade</span><p data-i18n="footerBottom">公开影像用于原理展示；产品适用性与交付以双方书面确认为准。</p></div></footer>
+  <footer class="corporate-footer"><div class="wrap footer-grid"><div><a class="brand" href="#">juwade<span class="brand-dot">.</span></a><p data-i18n="footerBrand">FPGA 信号处理与可靠计算</p><small data-i18n="footerLine">独立研发 · 板卡与算法协同 · 面向实验评估</small></div><div><h3 data-i18n="footerProducts">产品与方案</h3><a href="#services" data-i18n="navServices">服务</a><a href="#products">A7 / K7 / V7</a><a href="#algorithms">CSA / BP</a><a href="#operators">FFT / CORDIC</a><a href="#radiation-platform" data-i18n="navResearch">辐射仿真</a><a href="#fault-injection" data-i18n="navInjection">注入实测</a></div><div><h3 data-i18n="footerResources">技术资源</h3><a href="#sar-imaging" data-i18n="navSAR">SAR 图像</a><a href="#resources" data-i18n="navDatasheets">资料下载</a><a href="https://github.com/juwadeLone" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div><div><h3 data-i18n="footerContact">联系开发者</h3><a class="footer-email" href="mailto:1906233797@qq.com">1906233797@qq.com</a><p data-i18n="footerMailNote">配置、报价与交付范围按项目沟通确认。</p><a href="#inquiry" data-i18n="navContact">技术咨询</a></div></div><div class="wrap footer-bottom"><span>© <span id="year">2026</span> juwade</span><p data-i18n="footerBottom">公开影像用于原理展示；产品适用性与交付以双方书面确认为准。</p></div></footer>
   <dialog id="product-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" aria-label="关闭" data-label="closeLabel">×</button><div id="dialog-content"></div></dialog>
   <noscript><div class="noscript">请启用 JavaScript 查看产品和生成询价邮件，或直接联系 <a href="mailto:1906233797@qq.com">1906233797@qq.com</a>。 Enable JavaScript to explore products, or email me directly.</div></noscript>
 </body>

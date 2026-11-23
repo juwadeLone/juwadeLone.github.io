@@ -220,7 +220,7 @@ test("hardware, algorithms, primitives, simulation, imagery and validation have 
   }
 });
 test("radiation simulator is featured with five bilingual views and its own media",()=>{
-  const section=html.slice(html.indexOf('id="radiation-platform"'),html.indexOf('id="products"'));
+  const section=html.slice(html.indexOf('id="radiation-platform"'),html.indexOf('id="fault-injection"'));
   assert.ok(html.indexOf('id="services"')<html.indexOf('id="radiation-platform"'),"Featured platform follows services");
   assert.ok(section.includes('data-i18n="featureBadge"'));
   const tabs=[...section.matchAll(/role="tab" id="([^"]+)" aria-controls="([^"]+)"/g)];
@@ -237,4 +237,38 @@ test("radiation simulator is featured with five bilingual views and its own medi
   assert.ok(section.includes("46.2")&&section.includes('data-quote="reliability"'));
   assert.ok(catalog.catalogData.services.find(service=>service.id==="reliability").featured);
   assert.doesNotMatch(section,/github\.com|Lee et al/);
+});
+test("board-level injection data is internally consistent and matches the headline numbers",()=>{
+  const data=vm.runInNewContext(fs.readFileSync(path.join(root,"assets/injection-data.js"),"utf8")+";injectionData");
+  const section=html.slice(html.indexOf('id="fault-injection"'),html.indexOf('id="products"'));
+  const wilson=(k,n)=>{const z=1.96,p=k/n,d=1+z*z/n,c=(p+z*z/(2*n))/d,h=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d;return[c-h,c+h];};
+  const builds=data.chains.flatMap(chain=>chain.builds);
+  assert.equal(builds.length,10);
+  assert.equal(builds.reduce((sum,b)=>sum+b.n,0),12000);
+  for(const b of builds){
+    assert.equal(b.fail,b.below+b.due,b.id);
+    assert.equal(b.n,b.identical+b.changed+b.below+b.due,b.id);
+    assert.equal(b.vuln,Math.round(b.fail/b.n*b.pool),b.id);
+    const ci=wilson(b.fail,b.n);
+    assert.ok(Math.abs(b.shareCi[0]-ci[0])<1e-12&&Math.abs(b.shareCi[1]-ci[1])<1e-12,b.id);
+    assert.ok(b.zh&&b.en);
+  }
+  const [csa,bp]=data.chains;
+  assert.equal(csa.builds.length,7);
+  assert.ok(csa.builds.every(b=>b.util&&b.util.dsp>0));
+  const ratio=(chain,id)=>chain.builds[0].vuln/chain.builds.find(b=>b.id===id).vuln;
+  assert.equal(Math.round(ratio(csa,"TMR17")),15);
+  assert.equal(Math.round(ratio(bp,"P7C")),11);
+  assert.equal(Math.round(ratio(csa,"GR17")),4);
+  assert.ok(section.includes("<strong>12,000</strong>")&&section.includes("<strong>15×</strong>")&&section.includes("<strong>11×</strong>"));
+  const bpSheet=JSON.parse(fs.readFileSync(path.join(root,"datasheets/bp.json"),"utf8"));
+  for(const b of bp.builds)assert.ok(Math.abs(b.vuln-bpSheet.builds[b.id].failure.xsec)<1,b.id);
+  for(const locale of ["zh","en"]){
+    const t=catalog.translations[locale];
+    assert.ok(t.injFind1.includes("5.8%")&&t.injFind1.includes("6.9%"));
+    assert.ok(t.injFind2.includes("173")&&t.injFind2.includes("493"));
+  }
+  assert.ok(section.includes('data-quote="reliability"'));
+  assert.match(section,/github\.com\/juwadeLone\/xidian-csft\/tree\/[a-f0-9]{40}"/);
+  for(const source of data.sources)assert.match(source.sha256,/^[a-f0-9]{64}$/);
 });

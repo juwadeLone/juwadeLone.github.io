@@ -8,7 +8,20 @@ function serviceCard(service,index){
   const s=service[language];
   return `<article class="service-card${service.featured?" featured":""}" data-service="${service.id}"><span class="service-number">${String(index+1).padStart(2,"0")}</span>${service.featured?`<span class="service-badge">${t("serviceFeatured")}</span>`:""}<h3>${s.title}</h3><p class="service-who"><strong>${t("serviceWho")}</strong>${s.who}</p><ul>${s.items.map(item=>`<li>${item}</li>`).join("")}</ul>${service.featured?`<a class="service-link" href="#radiation-platform">${t("serviceFeatureLink")}</a>`:""}<button type="button" data-quote="${service.id}" aria-label="${s.title} — ${t("serviceCta")}">${t("serviceCta")}</button></article>`;
 }
-function renderProducts(){
+function injectionNumber(value){return value.toLocaleString(language==="zh"?"zh-CN":"en-US");}
+function injectionChart(chain){
+  const base=chain.builds[0].vuln,max=Math.max(...chain.builds.map(b=>b.vulnCi[1]));
+  const pct=value=>(value/max*100).toFixed(2);
+  return chain.builds.map((b,i)=>`<li class="inj-row${i?"":" base"}"><div class="inj-label"><strong>${b[language]}</strong><span>${b.id} · ${t("injFailShort")} ${b.fail}/${b.n}</span></div><div class="inj-track" aria-hidden="true"><span class="inj-bar" style="width:${pct(b.vuln)}%"></span><span class="inj-ci" style="left:${pct(b.vulnCi[0])}%;width:${(pct(b.vulnCi[1])-pct(b.vulnCi[0])).toFixed(2)}%"></span></div><div class="inj-value"><strong>${injectionNumber(b.vuln)} ${t("injBits")}</strong><em>${i?"↓ "+(base/b.vuln).toFixed(1)+"×":t("injBase")}</em></div></li>`).join("");
+}
+function renderInjection(){
+  if(typeof injectionData==="undefined"||!$("#injection-csa"))return;
+  const [csa,bp]=injectionData.chains;
+  $("#injection-csa").innerHTML=injectionChart(csa);
+  $("#injection-bp").innerHTML=injectionChart(bp);
+  $("#injection-table").innerHTML=csa.builds.map(b=>`<tr><th scope="row">${b.id} · ${b[language]}</th><td>${injectionNumber(b.util.lut)}</td><td>${injectionNumber(b.util.ff)}</td><td>${b.util.bram36}</td><td>${b.util.dsp}</td><td>${injectionNumber(b.pool)}</td><td>${b.fail}/${b.n}</td><td>${injectionNumber(b.vuln)}</td></tr>`).join("");
+}function renderProducts(){
+  renderInjection();
   const boards=products.filter(product=>product.category==="board");
   $("#service-grid").innerHTML=services.map(serviceCard).join("");
   $("#product-grid").innerHTML=boards.map(catalogCard).join("");
