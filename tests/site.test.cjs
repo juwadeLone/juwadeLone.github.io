@@ -7,7 +7,8 @@ const root=path.resolve(__dirname,"..");
 const source=fs.readFileSync(path.join(root,"assets/site.js"),"utf8");
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 // The content and draft builder are pure. Do not simulate or replace browser behavior.
-const catalog=vm.runInNewContext(source.slice(0,source.indexOf('let language="zh";'))+';({products,translations,buildInquiry});');
+const prelude=["catalog-sources.js","catalog.js","solution-translations.js"].map(file=>fs.readFileSync(path.join(root,"assets",file),"utf8")).join("\n");
+const catalog=vm.runInNewContext(prelude+'\n'+source.slice(0,source.indexOf('let language="zh";'))+';({products,translations,buildInquiry,catalogData,catalogSources});');
 
 test("every storefront translation, placeholder and accessible name exists in both languages",()=>{
   const used=[...html.matchAll(/data-(?:i18n|placeholder|label|alt)="([^"]+)"/g)].map(match=>match[1]);
@@ -21,16 +22,18 @@ test("all local storefront assets and research entry point resolve",()=>{
     if(/^(?:https?:|mailto:|#)/.test(reference))continue;
     assert.ok(fs.existsSync(path.join(root,reference)),reference);
   }
-  for(const product of catalog.products)assert.ok(fs.existsSync(path.join(root,"assets",product.image)));
+  for(const product of catalog.products.filter(p=>p.image))assert.ok(fs.existsSync(path.join(root,"assets",product.image)));
   assert.ok(fs.readFileSync(path.join(root,"research.html"),"utf8").includes("orbit_radiation.json"));
 });
 test("each catalog solution has bilingual reference specs and a real source URL",()=>{
-  assert.equal(new Set(catalog.products.map(product=>product.id)).size,3);
+  assert.equal(new Set(catalog.products.map(product=>product.id)).size,8);
   for(const product of catalog.products){
     assert.match(product.source,/^https:\/\/github\.com\/juwadeLone\//);
     for(const locale of ["zh","en"]){
       assert.ok(product[locale].title);
-      assert.equal(product[locale].specs.length,6);
+      assert.ok(product[locale].description);
+      assert.ok(product[locale].detail);
+      assert.ok(product[locale].specs.length>=3);
     }
   }
 });
@@ -97,7 +100,16 @@ test("buyer-facing catalog labels disclose source access and compute the total",
     assert.ok(catalog.translations[locale].source.includes(locale==="en"?"repository access required":"仓库访问权限"));
     assert.ok(catalog.translations[locale].filterAll(7).includes("<span>07</span>"));
   }
-  assert.ok(catalog.products.find(product=>product.id==="bp").en.specs.some(([label])=>label==="Host link & mitigation"));
+  const boards=catalog.products.filter(product=>product.category==="board");
+  assert.deepEqual(Array.from(boards,p=>p.id),["a7","k7","v7"]);
+  for(const product of boards){
+    assert.ok(!product.datasheet,"Bare boards must not link algorithm validation as their datasheet");
+    for(const locale of ["zh","en"]){
+      assert.equal(product[locale].specs.length,6);
+      assert.doesNotMatch(JSON.stringify(product[locale].specs),/run_s|pass_gate|SEM|FFT|CSA|BP|2048|4096|125 MHz|4\.29/);
+    }
+  }
+  assert.ok(catalog.translations.en.count(boards.length).startsWith("3 boards"));
 });
 test("optional organization falls back cleanly and input whitespace is trimmed",()=>{
   const draft=catalog.buildInquiry({name:" A ",email:" a@b.co ",organization:" ",requirements:" test "},catalog.translations.en,"Custom","Ground");
@@ -127,12 +139,12 @@ test("datasheets preserve campaign denominators and excluded records",()=>{
   }
   assert.equal(bp.builds.P7C.e0.records-bp.builds.P7C.e0.valid,1);
 });
-test("every solution has an offline datasheet and commit-pinned, digest-identified evidence",()=>{
-  for(const product of catalog.products){
-    const sheet=fs.readFileSync(path.join(root,"datasheets",product.id+".html"),"utf8");
+test("algorithm and FFT validation links have offline sheets with pinned evidence",()=>{
+  for(const product of catalog.products.filter(p=>p.datasheet)){
+    const sheet=fs.readFileSync(path.join(root,"datasheets",product.datasheet+".html"),"utf8");
     assert.ok(sheet.includes("window.print()"));
-    assert.ok(sheet.includes('download="juwade-'+product.id+'-datasheet.html"'));
-    const evidence=JSON.parse(fs.readFileSync(path.join(root,"datasheets",product.id+".json"),"utf8"));
+    assert.ok(sheet.includes('download="juwade-'+product.datasheet+'-datasheet.html"'));
+    const evidence=JSON.parse(fs.readFileSync(path.join(root,"datasheets",product.datasheet+".json"),"utf8"));
     assert.ok(evidence.sources.length>0);
     assert.ok(evidence.source_access.includes("Repository access may be required"));
     assert.ok(sheet.includes("Source repository access required"));
@@ -142,5 +154,50 @@ test("every solution has an offline datasheet and commit-pinned, digest-identifi
       assert.ok(entry.url.includes("/blob/"+entry.commit+"/"));
     }
     if(product.id==="fft")assert.ok(evidence.measurement_status.includes("No published numeric"));
+  }
+});
+
+test("catalog parameters resolve to pinned sources and memory/timing retain evidence boundaries",()=>{
+  const provenance=JSON.parse(fs.readFileSync(path.join(root,"assets/catalog-provenance.json"),"utf8"));
+  for(const item of [...catalog.products,...catalog.catalogData.cases]){
+    assert.ok(item.sourceIds.length);
+    for(const id of item.sourceIds){
+      const entry=provenance.sources[id];
+      assert.ok(entry,id);
+      assert.match(entry.commit,/^[a-f0-9]{40}$/);
+      assert.match(entry.sha256,/^[a-f0-9]{64}$/);
+      assert.ok(entry.url.includes("/blob/"+entry.commit+"/"));
+      assert.equal(catalog.catalogSources[id].sha256,entry.sha256);
+    }
+  }
+  for(const [board,bytes] of [["a7",512*2**20],["k7",2*2**30],["v7",8*2**30]]){
+    const memory=provenance.memory[board];
+    assert.equal(memory.total_bytes,bytes);
+    assert.equal(memory.total_bytes,memory.channel_bytes.reduce((a,b)=>a+b,0));
+    assert.match(memory.basis,/configuration geometry/);
+  }
+  assert.equal(provenance.k7_historical_run.pass_gate,false);
+  assert.equal(provenance.k7_historical_run.used_as_benchmark,false);
+  assert.equal(provenance.bp_v4.runs.length,2);
+  assert.ok(provenance.bp_v4.runs.every(run=>run.ok&&run.pixels_differing===0));
+  assert.equal(catalog.catalogData.cases.length,4);
+  assert.ok(catalog.catalogData.cases.find(c=>c.id==="k7-bp-v4").en.result.includes("excludes upload/readback"));
+  assert.ok(catalog.products.find(p=>p.id==="fft").en.detail.includes("constraint, not measured"));
+  assert.ok(catalog.products.find(p=>p.id==="cordic").en.detail.includes("CE-enabled advances"));
+});
+
+test("hardware, algorithms, primitives, simulation, imagery and validation have unique destinations",()=>{
+  const ids=Array.from(html.matchAll(/\bid="([^"]+)"/g),m=>m[1]);
+  assert.equal(ids.length,new Set(ids).size,"Duplicate HTML id");
+  for(const id of ["products","algorithms","operators","radiation-platform","validation","sar-imaging"]){
+    assert.ok(ids.includes(id),id);
+    assert.ok(html.includes('href="#'+id+'"'),id);
+  }
+  assert.ok(html.indexOf('id="validation"')<html.indexOf('class="validation-details"'));
+  assert.ok(html.indexOf('id="products"')<html.indexOf('id="algorithms"'));
+  const crypto=require("node:crypto");
+  for(const [file,id] of [["orbit.webp","simulation-orbit"],["effects.png","simulation-effects"]]){
+    const bytes=fs.readFileSync(path.join(root,"assets/simulation",file));
+    assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),catalog.catalogSources[id].sha256);
   }
 });

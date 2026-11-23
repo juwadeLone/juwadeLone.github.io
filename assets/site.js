@@ -1,20 +1,7 @@
 "use strict";
 
 // All catalog claims refer to the linked research implementations, not flight qualification.
-const products = [
-  {id:"sar",category:"board",code:"SAR imaging board",image:"board.svg",style:"sar",tags:["Kintex-7","2048 × 2048","SEM IP"],
-    source:"https://github.com/juwadeLone/2048-2048cs-k7-sem",
-    zh:{title:"SAR 成像实验平台",type:"FPGA 板卡方案",subtitle:"KINtex-7 · CHIRP SCALING".toUpperCase(),description:"集成定点 CSA 成像与 SEM 故障注入，连接从原始回波到成像结果的验证流程。",detail:"基于已有 Kintex-7 研究平台，提供 SAR 成像与配置存储器故障注入的方案沟通。可围绕你的实验讨论板卡、算法移植及主机工具的交付范围。",specs:[["参考器件","XC7K325T FFG900-2"],["成像规模","2048 × 2048，定点 CSA"],["参考时钟","125 MHz（研究实现）"],["接口","DDR3 / 千兆以太网 UDP / UART"],["实验工具","Xilinx SEM IP，Python 主机脚本"],["参考工具链","Vivado 2018.3"]]},
-    en:{title:"SAR imaging platform",type:"FPGA board solution",subtitle:"KINTEX-7 · CHIRP SCALING",description:"Chirp scaling algorithm (CSA) imaging with Xilinx Soft Error Mitigation (SEM) IP for fault injection and configuration-memory scrubbing.",detail:"A solution based on the existing Kintex-7 research platform for SAR imaging and configuration-memory fault injection. Board configuration, algorithm porting and host tooling are scoped for your project.",specs:[["Reference device","XC7K325T FFG900-2"],["Image size","2048 × 2048, fixed-point CSA"],["Reference clock","125 MHz (research implementation)"],["Interfaces","DDR3 / Gigabit Ethernet UDP / UART"],["Experiment tools","Xilinx SEM IP, Python host scripts"],["Reference tools","Vivado 2018.3"]]}},
-  {id:"fft",category:"ip",code:"Streaming FFT IP",image:"fft.svg",style:"fft",tags:["1024-point","4-lane","SystemVerilog"],
-    source:"https://github.com/juwadeLone/fault_tolerant_SDF_FFT_designs",
-    zh:{title:"容错流式 FFT",type:"算法与 IP 方案",subtitle:"PARALLEL SDF · ONLINE RECOVERY",description:"四路并行流式 FFT，探索分级纠错与在线恢复，为可靠信号处理提供可研究的 RTL 起点。",detail:"1024 点、四路、十级并行 SDF FFT 的纯 SystemVerilog 研究实现，包括 SubFFT 与 PFFT 架构及其无保护、ECC、TMR 变体。具体授权与集成支持需另行约定。",specs:[["变换规模","1024 点 / 四路并行 / 十级"],["实现语言","SystemVerilog（纯 RTL）"],["容错变体","SubFFT / PFFT，ECC / TMR"],["参考器件","XC7VX690T FFG1761-2"],["参考工具链","Vivado 2022.1"],["交付形态","算法 / IP 集成方案，非独立板卡"]]},
-    en:{title:"Fault-tolerant streaming FFT",type:"Algorithm & IP solution",subtitle:"STREAMING TRANSFORM · ONLINE RECOVERY",description:"Four-lane streaming fast Fourier transform (FFT) with staged error correction and online recovery, based on research RTL.",detail:"Pure SystemVerilog research implementations of 1024-point, four-lane, ten-stage single-path delay-feedback (SDF) FFTs. SubFFT uses a sub-transform decomposition; PFFT is the alternative parallel-transform mapping. Both include baseline, error-correcting code (ECC) and triple modular redundancy (TMR) variants. Licensing and integration support are agreed separately.",specs:[["Transform","1024 points / 4 lanes / 10 stages"],["Implementation","SystemVerilog (pure RTL)"],["Variants","SubFFT / PFFT, ECC / TMR"],["Reference device","XC7VX690T FFG1761-2"],["Reference tools","Vivado 2022.1"],["Delivery","Algorithm / IP integration, not a board"]]}},
-  {id:"bp",category:"board",code:"Back-projection board",image:"board.svg",style:"bp",tags:["Back-projection","2 GiB DDR3","Fault injection"],
-    source:"https://github.com/juwadeLone/BP_FT_platform",
-    zh:{title:"BP 成像与可靠性验证",type:"FPGA 板卡方案",subtitle:"BACK-PROJECTION · FAULT STUDY",description:"将 BP 成像、冗余保护与板级故障注入连接起来，为成像算法的可靠性评估提供实验路径。",detail:"基于 Kintex-7 的 2048 × 2048 定点反投影 SAR 成像研究平台。研究仓库包含 Base-BP、TMR-BP 与运行时检查 RA-BP 的实现及实验记录。",specs:[["参考器件","XC7K325T FFG900-2"],["成像算法","2048 × 2048 定点 BP"],["存储","DDR3，2 GiB（参考平台）"],["链路与纠错","UDP / SEM IP"],["保护方案","Base-BP / TMR-BP / RA-BP"],["参考工具链","Vivado 2018.3"]]},
-    en:{title:"Back-projection (BP) imaging & reliability",optionTitle:"BP imaging & reliability",type:"FPGA board solution",subtitle:"BACK-PROJECTION · FAULT STUDY",description:"Connect back-projection (BP) imaging, redundant protection and board-level fault injection in one traceable research workflow.",detail:"A Kintex-7 research platform for 2048 × 2048 fixed-point back-projection SAR imaging. The access-restricted source includes baseline back-projection (Base-BP), triple-modular-redundant back-projection (TMR-BP) and RA-BP, a back-projection design with runtime checks and replicas, plus experimental records.",specs:[["Reference device","XC7K325T FFG900-2"],["Imaging","2048 × 2048 fixed-point BP"],["Memory","DDR3, 2 GiB (reference platform)"],["Host link & mitigation","UDP / SEM IP"],["Protection","Base-BP / TMR-BP / RA-BP"],["Reference tools","Vivado 2018.3"]]}}
-];
+const products = catalogData.products;
 
 const translations = {
   zh:{
@@ -235,6 +222,11 @@ const translations = {
   }
 };
 
+Object.assign(translations.zh,solutionTranslations.zh);
+Object.assign(translations.en,solutionTranslations.en);
+translations.zh.count=n=>n+" 款板卡";
+translations.en.count=n=>n+" board"+(n===1?"":"s");
+
 function buildInquiry(data,strings,productTitle,scenarioTitle){
   const subject=strings.mailSubject+" — "+productTitle;
   const body=[
@@ -258,23 +250,11 @@ const $=selector=>document.querySelector(selector);
 const t=key=>translations[language][key];
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 
-function renderProducts(){
-  const visible=products.filter(product=>activeFilter==="all" || product.category===activeFilter);
-  $("#product-grid").innerHTML=visible.map(product=>{
-    const p=product[language];
-    return `<article class="product-card"><div class="product-art ${product.style}"><span class="art-index">${product.code}</span><img src="assets/${product.image}" alt="${escapeHtml(product.id==="fft"?p.title:t("boardAlt"))}" width="660" height="490" loading="lazy"><span class="art-type">${product.id==="fft"?"SIGNAL FLOW":t("schematic")}</span></div><div class="product-info"><p class="product-category">${p.type}</p><h3>${p.title}</h3><p class="product-subtitle">${p.subtitle}</p><p class="product-description">${p.description}</p><div class="spec-chips">${product.tags.map(tag=>`<span>${tag}</span>`).join("")}</div><div class="product-bottom"><button type="button" data-details="${product.id}" aria-label="${p.title} — ${t("details")}">${t("details")}</button><button type="button" class="quote" data-quote="${product.id}" aria-label="${p.title} — ${t("quote")}">${t("quote")}</button></div><a class="datasheet-link" href="datasheets/${product.id}.html">${t("datasheet")} ↗</a><a class="repository-link" href="${product.source}" target="_blank" rel="noopener noreferrer">${t("source")}</a></div></article>`;
-  }).join("");
-  $("#product-count").textContent=t("count")(visible.length);
-}
 function renderOptions(){
   const interest=$("#interest"),scenario=$("#scenario"),oldProduct=interest.value,oldScenario=scenario.value;
   interest.innerHTML=`<option value="">${t("selectProduct")}</option>`+products.map(product=>`<option value="${product.id}">${(product[language].optionTitle||product[language].title)}</option>`).join("")+`<option value="custom">${t("custom")}</option>`;
   scenario.innerHTML=`<option value="">${t("selectScenario")}</option>`+["ground","airborne","space","other"].map(value=>`<option value="${value}">${t(value)}</option>`).join("");
   interest.value=oldProduct; scenario.value=oldScenario;
-}
-function renderDialog(product){
-  const p=product[language];
-  $("#dialog-content").innerHTML=`<p class="dialog-eyebrow">${product.code}</p><h2 id="dialog-title">${p.title}</h2><p>${p.detail}</p><dl>${p.specs.map(([key,value])=>`<div><dt>${key}</dt><dd>${value}</dd></div>`).join("")}</dl><a class="source-link" href="${product.source}" target="_blank" rel="noopener noreferrer">${t("source")}</a><a class="source-link datasheet-source" href="datasheets/${product.id}.html">${t("datasheet")} ↗</a><p class="dialog-note">${t("deliveryNote")}</p><button class="button" type="button" data-quote="${product.id}">${t("quote")}</button>`;
 }
 function chooseProduct(id){
   $("#interest").value=id;
@@ -288,8 +268,8 @@ function chooseProduct(id){
 }
 function setLanguage(){
   document.documentElement.lang=language==="zh"?"zh-CN":"en";
-  document.title=language==="zh"?"juwade · 信号处理，从算法到实验":"juwade · FPGA signal processing, from algorithm to experiment";
-  document.querySelector('meta[name="description"]').content=language==="zh"?"juwade · 面向星载与机载实验评估的 FPGA 信号处理方案。SAR 成像、容错 FFT 与硬件在环验证。":"FPGA signal processing solutions for airborne and spaceborne research evaluation. SAR imaging, fault-tolerant FFT and hardware-in-the-loop verification.";
+  document.title=language==="zh"?"juwade · 抗辐射星载 SAR 设计方案":"juwade · Radiation-tolerant spaceborne SAR design";
+  document.querySelector('meta[name="description"]').content=language==="zh"?"抗辐射星载 SAR 设计方案：A7、K7、V7 板卡，CSA / BP 成像算法，FFT / CORDIC 基本算子与辐射效应仿真。":"Radiation-tolerant spaceborne SAR design: A7, K7 and V7 hardware, CSA/BP algorithms, FFT/CORDIC primitives and radiation-effects simulation.";
   document.querySelectorAll("[data-i18n]").forEach(element=>{const value=t(element.dataset.i18n);element.innerHTML=typeof value==="function"?value(products.length):value;});
   document.querySelectorAll("[data-placeholder]").forEach(element=>element.placeholder=t(element.dataset.placeholder));
   document.querySelectorAll("[data-label]").forEach(element=>element.setAttribute("aria-label",t(element.dataset.label)));
