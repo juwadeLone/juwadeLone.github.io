@@ -1,0 +1,27 @@
+/* Distinct hardware, algorithm, primitive, simulation and validation layers. */
+#inquiry .email-link{display:inline-flex;align-items:center;min-height:44px;min-width:44px}
+.header{gap:20px}.header nav{gap:18px}.header nav a{min-height:44px;display:inline-flex;align-items:center}.header nav a:after{bottom:0}
+.catalog-toolbar{justify-content:space-between;gap:24px;flex-wrap:wrap}
+.catalog-specs{margin:22px 0;font-size:13px;line-height:1.7}
+.catalog-specs>div{padding:9px 0;border-top:1px solid var(--border)}
+.catalog-specs dt{color:var(--text-muted);font-size:12px}.catalog-specs dd{margin:2px 0 0;color:var(--text);overflow-wrap:anywhere}
+.product-info{display:flex;flex-direction:column}.product-info .product-bottom{margin-top:auto}
+.product-art img{max-height:230px}.product-art{min-height:260px}
+.primitive-symbol{background:linear-gradient(125deg,#102e4e,#184872);color:#cae5ff;padding:34px;font-size:34px;letter-spacing:3px;font-weight:600}
+.operator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.algorithm-section{background:var(--pale)}.algorithm-section .algorithm-grid{margin-top:0}.algorithm-section .algorithm-card{background:#fff}
+.simulation-section{background:#0c223b;color:#e4edf7}.simulation-section .eyebrow{color:#a9d8ff}.simulation-section h2{color:white;max-width:920px}
+.simulation-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:start}
+.simulation-layout figure{margin:0;min-width:0}.simulation-layout img{width:100%;height:auto;display:block;border:1px solid #47617b;border-radius:3px}.simulation-layout figure>a{display:block;margin-bottom:14px}
+.simulation-layout figcaption{color:#b7c6d7;font-size:12px;margin:0 0 26px}.simulation-copy p{line-height:1.85;margin:0 0 22px}.simulation-copy .lead{font-size:18px;color:#fff}
+.simulation-flow{padding:20px;border-left:3px solid #7bbcff;background:#ffffff08}.simulation-copy .button{margin:2px 0 20px;color:white}
+.simulation-copy .simulation-availability{font-size:13px;color:#b7c6d7}.simulation-links{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center}
+.simulation-links a,.simulation-links button{color:#a9d8ff;min-height:44px;display:inline-flex;align-items:center;text-align:left;font-size:14px;background:none;border:0;padding:0;cursor:pointer}
+.case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.case-card{padding:30px;border:1px solid var(--border);min-width:0;background:#fff}.case-card h3{font-size:22px;margin:9px 0 22px}.case-card p{font-size:14px;line-height:1.85;color:var(--text-muted)}
+.case-card dl{font-size:14px}.case-card dt{font-size:12px;color:var(--text-muted);margin-bottom:6px}.case-card dd{margin:0 0 20px;overflow-wrap:anywhere}.case-card summary{cursor:pointer;min-height:44px;font-size:13px;color:var(--primary-action);padding:10px 0}.case-card .source-link{display:block;min-height:44px;font-size:13px;padding:10px 0}
+.validation-section{background:var(--pale)}.validation-details{margin-top:36px}.simulation-section,.validation-section,.algorithm-section,#operators{scroll-margin-top:30px}
+#dialog-content>.source-link{display:block;min-height:44px;padding:10px 0;font-size:14px}
+@media(min-width:1101px) and (max-width:1320px){.header{gap:16px;padding-left:24px;padding-right:24px}.header nav{gap:14px}.header nav a{font-size:13px}.header .brand{font-size:26px}.header-actions{gap:8px}}
+@media(max-width:1100px){.header{height:auto;min-height:88px;flex-wrap:wrap;padding-top:12px;padding-bottom:0;gap:4px 20px}.header nav{display:flex;order:3;width:100%;overflow-x:auto;gap:23px;padding:6px 0 0;scrollbar-width:thin}.header nav a{flex-shrink:0;padding:6px 0}.header-actions{margin-left:auto}.simulation-layout{gap:28px}.hero-tech strong{font-size:20px}.simulation-copy .lead{font-size:17px}}
+@media(max-width:767px){.operator-grid,.case-grid,.simulation-layout{grid-template-columns:1fr}.catalog-toolbar{align-items:flex-start}.case-card{padding:24px}.simulation-layout{gap:28px}.simulation-copy .button{font-size:13px;gap:10px;padding:14px 16px;max-width:100%;white-space:normal}.header nav{gap:20px}.header nav a{font-size:13px}.hero-tech{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-tech strong{font-size:14px;letter-spacing:0}.hero-tech span{font-size:10px}.corporate-hero h1{font-size:clamp(32px,8vw,46px)}.catalog-specs{font-size:14px}.simulation-section h2{font-size:29px}.catalog-note{font-size:13px}}

@@ -1,4 +1,4 @@
-# juwade · Signal systems
+# juwade · Radiation-tolerant spaceborne SAR design
 
 Chinese / English FPGA solution showcase, built with plain HTML, CSS and JavaScript.
 The previous research dashboard is preserved, unchanged, at `research.html`.
@@ -16,11 +16,35 @@ The storefront makes no third-party asset requests and requires no backend.
 
 ## Catalog and translations
 
-`assets/site.js` contains the bilingual catalog, reference specifications, source links,
-UI translations and inquiry behavior. All product specifications describe existing
-research implementations; availability, final hardware, licensing, price and mission
-qualification are **not** asserted. Board illustrations are explicitly conceptual.
-Replace them with approved product photography when available.
+`assets/catalog.js` separates hardware (A7/K7/V7), imaging algorithms (CSA/BP),
+compute primitives (FFT/CORDIC), the radiation simulator, and four validation cases.
+`assets/catalog-render.js` renders only boards in the hardware section and only
+primitives in the operator section. Algorithm descriptions, public SAR imagery and
+validation cases each have independent destinations. Board cards do not use algorithm
+experiment sheets as hardware datasheets. `assets/site.js` retains inquiry behavior;
+`assets/solution-translations.js` supplies the new bilingual section copy.
+
+Capacity is calculated from each configured MIG's address geometry and bus width:
+`2^(row + column + bank) × data_width / 8`, summed over active channels. This gives
+512 MiB for A7, 2 GiB for K7 and 2 × 4 GiB for V7, not physical capacity acceptance
+testing. V7 uses FFG1927; the FFT repository's FFG1761 target is not the same board.
+No A7/V7 frame time is invented. K7's historical `pass_gate=false` timing is not a
+benchmark. BP V4's two `run_s` values exclude upload/readback and do not generalize
+to other protection builds. All board drawings are generic concept illustrations.
+
+`assets/catalog-provenance.json` and `assets/catalog-sources.js` contain exact commits,
+paths and SHA-256 digests, memory derivations and original BP V4 timing values.
+To regenerate/check them, use the sibling checkout names in `scripts/catalog_sources.py`:
+
+```sh
+python3 scripts/catalog_sources.py
+python3 scripts/catalog_sources.py --check
+```
+
+Source checkouts are needed only to regenerate provenance, not to serve the site or run
+the Node content tests. Availability, final hardware, licensing, price and mission
+qualification are not asserted. Replace concept illustrations with approved photos
+when available.
 
 The three research sources are:
 
@@ -48,7 +72,8 @@ site has no payment, customer database, analytics or flight-qualification claims
 
 ## Experiment datasheets
 
-Each product links to a bilingual, self-contained HTML datasheet under `datasheets/`.
+Algorithms and the FFT primitive link to bilingual, self-contained validation sheets
+under `datasheets/`. These are experiment records, not bare-board specifications.
 Visitors can print/save PDF, download an offline HTML copy, or download its evidence JSON.
 SAR figures are recounted from per-shot JSONL (`task.outcome`); BP figures preserve the
 original campaign summary and 50 dB criterion, including Wilson intervals and exclusions.
@@ -71,9 +96,37 @@ python3 scripts/build_datasheets.py
 
 ```sh
 node --check assets/site.js
+node --check assets/catalog.js
+node --check assets/catalog-render.js
+node --check assets/catalog-sources.js
+node --check assets/solution-translations.js
 node --test tests/site.test.cjs
 python3 -m unittest discover -s tests -p 'test_*.py'
+git diff --check
 ```
+
+## Optional radiation simulation service
+
+The homepage introduces the existing `juwadeLone/seu_platform` with original platform
+screenshots, source links, reference conditions and missing-data limits. GitHub Pages
+cannot execute its Python backend. The interactive service runs separately and its
+Devin App link requires organization authorization and the managing session's server;
+the preserved public orbit dashboard remains available at `research.html`.
+
+For a local interactive service, obtain authorized source checkouts of `seu_platform`
+and `tcas`. The launcher defaults to sibling directories `seu-platform/` and `tcas/`:
+
+```sh
+python3 scripts/serve_simulation.py --port 8090
+```
+
+Alternatively set `SEU_PLATFORM_ROOT` to the platform checkout and `ORBIT_SEU_ROOT`
+to a tree containing `orbit_seu/`, `examples/xc7vx690t_measured_meo.json` and the real
+referenced environment data. Upstream Python dependencies (including NumPy) must be
+available. Startup validates the actual orbit data; it never synthesizes missing spectra.
+The wrapper adds upstream's desktop import path without editing either source repo.
+Use the platform README for its own model/data setup. The platform UI is Chinese.
+The service is an existing simulation viewer, not new board or radiation testing.
 
 ## Corporate storefront and public SAR scenes
 

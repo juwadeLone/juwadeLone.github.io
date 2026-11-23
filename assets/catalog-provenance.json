@@ -1,0 +1,202 @@
+{
+  "scope": "Configured hardware, algorithms, primitives and validation cases are separate. No flight qualification is asserted.",
+  "source_access": "Source repository access may be required. No proprietary RTL or raw GF-3 data/images are redistributed.",
+  "sources": {
+    "a7-readme": {
+      "repo": "juwadeLone/256x256A7csimaga",
+      "commit": "1a23992fe7911a47abf826cf2608898a559bdc3c",
+      "path": "README.md",
+      "sha256": "7f805f829056da479b68bf05671bedc899b8d94bcc53b929de7596589b46dcac",
+      "url": "https://github.com/juwadeLone/256x256A7csimaga/blob/1a23992fe7911a47abf826cf2608898a559bdc3c/README.md"
+    },
+    "a7-mig": {
+      "repo": "juwadeLone/256x256A7csimaga",
+      "commit": "1a23992fe7911a47abf826cf2608898a559bdc3c",
+      "path": "ddr_prj.srcs/sources_1/ip/mig_7series_0/mig_a.prj",
+      "sha256": "6e1f73d82b59de821bd079d6a1fb7cabc09da7a60e95fdf93187e32a9e31dc99",
+      "url": "https://github.com/juwadeLone/256x256A7csimaga/blob/1a23992fe7911a47abf826cf2608898a559bdc3c/ddr_prj.srcs/sources_1/ip/mig_7series_0/mig_a.prj"
+    },
+    "k7-readme": {
+      "repo": "juwadeLone/2048-2048cs-k7-sem",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "path": "README.md",
+      "sha256": "65b4dce7cba677749aae446b90ff800fa15403c915826395f51d5c7c44b0199a",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/README.md"
+    },
+    "k7-mig": {
+      "repo": "juwadeLone/2048-2048cs-k7-sem",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "path": "vivado/ip/k7_mig/k7_mig_axi256.prj",
+      "sha256": "2c598e2390e4aaa13354a8eb3912884b5557b41e6fb2f19051408d8352ed85bf",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/vivado/ip/k7_mig/k7_mig_axi256.prj"
+    },
+    "k7-historical-run": {
+      "repo": "juwadeLone/2048-2048cs-k7-sem",
+      "commit": "b9c7ece95b6882c0872890720a81a64072540c25",
+      "path": "results/k7_port/gf3_board_run.json",
+      "sha256": "361f8853b585c57cf6423adeef72ea1a5782ad28160c83a7fd83eb2761becf61",
+      "url": "https://github.com/juwadeLone/2048-2048cs-k7-sem/blob/b9c7ece95b6882c0872890720a81a64072540c25/results/k7_port/gf3_board_run.json"
+    },
+    "v7-readme": {
+      "repo": "juwadeLone/csa4096x4096",
+      "commit": "d6bb2134af5253f488a338d6ae0423c4e99cbf89",
+      "path": "README.md",
+      "sha256": "67590bfe46a17dd048ec958eb32c0d080c0321103fe610194384051748154755",
+      "url": "https://github.com/juwadeLone/csa4096x4096/blob/d6bb2134af5253f488a338d6ae0423c4e99cbf89/README.md"
+    },
+    "v7-ddr": {
+      "repo": "juwadeLone/csa4096x4096",
+      "commit": "d6bb2134af5253f488a338d6ae0423c4e99cbf89",
+      "path": "bd/design_ddr/hw_handoff/design_ddr_bd.tcl",
+      "sha256": "bd059b265cf090791f6daa8f251e9502d4c5fbbf5186edd710a1d28a2555311d",
+      "url": "https://github.com/juwadeLone/csa4096x4096/blob/d6bb2134af5253f488a338d6ae0423c4e99cbf89/bd/design_ddr/hw_handoff/design_ddr_bd.tcl"
+    },
+    "v7-pcie": {
+      "repo": "juwadeLone/csa4096x4096",
+      "commit": "d6bb2134af5253f488a338d6ae0423c4e99cbf89",
+      "path": "bd/design_xdma/hw_handoff/design_xdma_bd.tcl",
+      "sha256": "2bcd0cd8f94df413068ec26e0f3aa93337471173865eaea5452384e9c9de9b36",
+      "url": "https://github.com/juwadeLone/csa4096x4096/blob/d6bb2134af5253f488a338d6ae0423c4e99cbf89/bd/design_xdma/hw_handoff/design_xdma_bd.tcl"
+    },
+    "bp-readme": {
+      "repo": "juwadeLone/BP_FT_platform",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "path": "README.md",
+      "sha256": "e0c0abf4480143d891e167581190a497a563416a43edfb50412a8702debf2b59",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/README.md"
+    },
+    "bp-v4-run": {
+      "repo": "juwadeLone/BP_FT_platform",
+      "commit": "32ef587a1f01ea0fe4c151bfe9c14775e78eb82c",
+      "path": "experiments/bp_k7/results/board_run_V4.json",
+      "sha256": "60b913803249f2cc8b2227ed9b91bbdeeff2254df6c17ab7527b98f5bc1789d2",
+      "url": "https://github.com/juwadeLone/BP_FT_platform/blob/32ef587a1f01ea0fe4c151bfe9c14775e78eb82c/experiments/bp_k7/results/board_run_V4.json"
+    },
+    "fft-readme": {
+      "repo": "juwadeLone/fault_tolerant_SDF_FFT_designs",
+      "commit": "f805c32ebcd03edb26b9ad95d074f2d285985287",
+      "path": "README.md",
+      "sha256": "d95e3a45235a8babd1f1a664298b6133dd348d9c634662754dcc685598708e1b",
+      "url": "https://github.com/juwadeLone/fault_tolerant_SDF_FFT_designs/blob/f805c32ebcd03edb26b9ad95d074f2d285985287/README.md"
+    },
+    "cordic-rtl": {
+      "repo": "juwadeLone/cordic_seu",
+      "commit": "c72a856c9c104a5205a3860a591ff9ca3278a897",
+      "path": "rtl/dut/cordic_sin_pipe.sv",
+      "sha256": "4a2d573f4e587630d770d6df63f41bc4e662ec1217187819ff32ae15ad82ba2a",
+      "url": "https://github.com/juwadeLone/cordic_seu/blob/c72a856c9c104a5205a3860a591ff9ca3278a897/rtl/dut/cordic_sin_pipe.sv"
+    },
+    "simulation-readme": {
+      "repo": "juwadeLone/seu_platform",
+      "commit": "9a906e7f28b8ca6f1dbff3116a60b27ff25c1eb4",
+      "path": "README.md",
+      "sha256": "e7a53361a140ac352d6fbd7d9844065efb17deb1b20c01c45a14e64a9827b321",
+      "url": "https://github.com/juwadeLone/seu_platform/blob/9a906e7f28b8ca6f1dbff3116a60b27ff25c1eb4/README.md"
+    },
+    "simulation-orbit": {
+      "repo": "juwadeLone/seu_platform",
+      "commit": "9a906e7f28b8ca6f1dbff3116a60b27ff25c1eb4",
+      "path": "docs/media/orbit.webp",
+      "sha256": "1b5624ff0ff4ba46f0d8633354cae497574fbccb090f33938a49b692c6e37ee9",
+      "url": "https://github.com/juwadeLone/seu_platform/blob/9a906e7f28b8ca6f1dbff3116a60b27ff25c1eb4/docs/media/orbit.webp"
+    },
+    "simulation-effects": {
+      "repo": "juwadeLone/seu_platform",
+      "commit": "9a906e7f28b8ca6f1dbff3116a60b27ff25c1eb4",
+      "path": "docs/media/effects.png",
+      "sha256": "11f84ecb2ac40d8bd6be97d5bf8b9c90af3b20f99f78b751b11e1f0b010e3503",
+      "url": "https://github.com/juwadeLone/seu_platform/blob/9a906e7f28b8ca6f1dbff3116a60b27ff25c1eb4/docs/media/effects.png"
+    }
+  },
+  "memory": {
+    "a7": {
+      "source_id": "a7-mig",
+      "data_width_bits": [
+        16
+      ],
+      "row_bits": [
+        15
+      ],
+      "column_bits": [
+        10
+      ],
+      "bank_bits": [
+        3
+      ],
+      "channel_bytes": [
+        536870912
+      ],
+      "total_bytes": 536870912,
+      "basis": "MIG configuration geometry; not physical capacity acceptance testing"
+    },
+    "k7": {
+      "source_id": "k7-mig",
+      "data_width_bits": [
+        64
+      ],
+      "row_bits": [
+        15
+      ],
+      "column_bits": [
+        10
+      ],
+      "bank_bits": [
+        3
+      ],
+      "channel_bytes": [
+        2147483648
+      ],
+      "total_bytes": 2147483648,
+      "basis": "MIG configuration geometry; not physical capacity acceptance testing"
+    },
+    "v7": {
+      "source_id": "v7-ddr",
+      "data_width_bits": [
+        64,
+        64
+      ],
+      "row_bits": [
+        16,
+        16
+      ],
+      "column_bits": [
+        10,
+        10
+      ],
+      "bank_bits": [
+        3,
+        3
+      ],
+      "channel_bytes": [
+        4294967296,
+        4294967296
+      ],
+      "total_bytes": 8589934592,
+      "basis": "MIG configuration geometry; not physical capacity acceptance testing"
+    }
+  },
+  "bp_v4": {
+    "source_id": "bp-v4-run",
+    "runs": [
+      {
+        "run": 0,
+        "ok": true,
+        "run_s": 4.291789299983066,
+        "read_s": 0.8722847000462934,
+        "pixels_differing": 0
+      },
+      {
+        "run": 1,
+        "ok": true,
+        "run_s": 4.290650700044353,
+        "read_s": 0.8707772999769077,
+        "pixels_differing": 0
+      }
+    ]
+  },
+  "k7_historical_run": {
+    "source_id": "k7-historical-run",
+    "pass_gate": false,
+    "used_as_benchmark": false
+  }
+}
