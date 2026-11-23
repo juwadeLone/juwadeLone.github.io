@@ -128,36 +128,50 @@ The wrapper adds upstream's desktop import path without editing either source re
 Use the platform README for its own model/data setup. The platform UI is Chinese.
 The service is an existing simulation viewer, not new board or radiation testing.
 
-## Corporate storefront and public SAR scenes
+## Editorial storefront and measured-paper imagery
 
-The homepage uses an original corporate product-portal layout: full-width SAR
-banner, product center, application imagery, engineering capabilities, downloads,
-and technical enquiry. The layout takes inspiration from the Milianke reference
-site; its branding, images, claims and page code are not copied.
+The original design combines an engineering-first hero, task-first navigation,
+technical editorial cards and restrained dark-field motion. Reference-site ideas
+come from tscircuit (product clarity), Near Field Notes (problem-first discovery),
+and Da7_Tech (typography, scroll reveals and layered contrast). Their code,
+branding, images and performance claims are not copied.
 
-Three **real-world** NASA/JPL SIR-C/X-SAR scenes show San Francisco Bay, the
-Manaus/Amazon region, and Death Valley. They illustrate SAR applications, **not
-juwade board output, validation data, or a CSA/BP performance comparison**.
-Cards and the hero crop thumbnails; the linked local images keep the complete
-frame, resized proportionally and WebP-compressed without recoloring. Each
-caption credits its NASA/JPL source; the site links the image-use policy and
-states that credits do not imply endorsement. No NASA/JPL logos are used.
+The former NASA/JPL scene assets and importer have been removed. Three
+**measured-paper figures** now come from papers in the owner's Second Brain:
 
-`assets/sar/scenes/provenance.json` records official source/download URLs,
-caption credits, image-use policy, transformations, dimensions, and SHA-256
-digests for both original downloads and local files. To reproduce, install
-Pillow in your Python environment and run:
+- Lan, Sun et al., *A Nonorthogonal Cartesian Fast BP Algorithm for High-Squint
+  Spaceborne SAR Imaging*, IEEE TGRS 2026, Fig. 21:
+  Smartsat-X1 imagery of Dubai. DOI: https://doi.org/10.1109/TGRS.2026.3672193
+- Sun et al., *A Real-Time Unified Focusing Algorithm (RT-UFA) for Multi-Mode SAR
+  via Azimuth Sub-Aperture Complex-Valued Image Combining and Scaling*,
+  IEEE TGRS 2022, Figs. 19 and 22: airborne spotlight and Ku-band TOPS imagery.
+  DOI: https://doi.org/10.1109/TGRS.2021.3104598
+
+These are literature excerpts, **not this site's board outputs or benchmarks**.
+Copyright remains with IEEE and the respective authors; no open license or
+endorsement is claimed. The PDFs and raw echoes are not redistributed.
+No GF-3 figures are selected. Original embedded pixels are retained exactly:
+no recoloring, contrast enhancement, upscaling or crop. Full-image links preserve
+the complete raster. The hero's light/grid treatment is outside the image.
+
+`assets/sar/papers/provenance.json` records the pinned source repository,
+PDF paths and hashes, DOI, authors, page/figure numbers, PDF object IDs,
+embedded-image hashes and delivered-image hashes. To reproduce the import:
 
 ```sh
-python3 scripts/import_public_sar.py
+python3 -m pip install PyMuPDF==1.24.14 Pillow
+python3 scripts/import_paper_sar.py --paper-root ../juwade-second-brain
+python3 scripts/import_paper_sar.py --check
 ```
 
-The script rejects changed original-source bytes when a manifest exists.
-The static site itself has no Pillow, package, external-image or build dependency.
-Use the local server above for preview: it explicitly serves WebP as `image/webp`
-even on Python VMs without an installed system MIME database, so full-image links
-open as images instead of accidental downloads. GitHub Pages serves these files
-directly; the helper is only for local/session previews.
+Only importing requires those Python libraries. The site has no build or runtime
+package dependency and no external-image/font request. The existing local server
+serves WebP with the correct MIME type.
+
+Scroll reveals are progressive enhancement: content is visible without JS or
+IntersectionObserver, keyboard focus reveals its card, and reduced-motion changes
+disable the effect. Hero entrance finishes once; there is no perpetual movement,
+parallax, autoplay video, tracking or animation over the measured image.
 
 ## SAR algorithms and board-validation images
 
