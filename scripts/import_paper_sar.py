@@ -42,7 +42,7 @@ def main():
     parser.add_argument("--check", action="store_true", help="Check delivered image hashes without importing PDFs")
     args = parser.parse_args()
     if args.check:
-        manifest = json.loads((DEST / "provenance.json").read_text())
+        manifest = json.loads((DEST / "provenance.json").read_text(encoding="utf-8"))
         for scene in manifest["scenes"]:
             assert sha((DEST / scene["file"]).read_bytes()) == scene["sha256"], scene["file"]
         print("Measured-paper figure hashes match.")
@@ -83,7 +83,7 @@ def main():
                 "context": context,
             })
         doc.close()
-    (DEST / "provenance.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+    (DEST / "provenance.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("Extracted three measured figures; decoded pixels unchanged.")
 
 
