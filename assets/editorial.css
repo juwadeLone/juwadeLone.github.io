@@ -66,7 +66,7 @@ body{background:#fbfcfd}
 .validation-section{background:#f0f4f7}.case-card h3{font-size:22px}.resource-card{background:#fff}
 .process-grid li{border-top:1px solid #cad7e3;padding-top:24px}.process-grid li>span{font-size:28px;font-weight:400;color:#287295}.process-grid h3{margin-top:24px}
 .inquiry-section{background:#10213a}.corporate-footer{background:#091321}.footer-bottom{border-color:#ffffff26}
-.inquiry-copy h2{color:#f3f7ff}.inquiry-copy>p{color:#c3d2e5}.inquiry-copy>.eyebrow{color:#a4efd1}
+.inquiry-copy h2{color:#f3f7ff}.inquiry-copy>p:not(.eyebrow){color:#c3d2e5}.inquiry-copy>.eyebrow{color:#a4efd1}
 .inquiry-copy .email-link{color:#b3f3d7}.inquiry-copy .contact-note{background:#ffffff08;border-color:#ffffff29;color:#c3d2e5}
 .inquiry-copy .contact-note p{color:#c3d2e5}.inquiry-copy .contact-note>span{color:#a4efd1}
 .motion-ready [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms)}
