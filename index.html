@@ -23,11 +23,13 @@
   <link rel="stylesheet" href="assets/catalog.css">
   <link rel="stylesheet" href="assets/editorial.css">
   <link rel="stylesheet" href="assets/services.css">
+  <link rel="stylesheet" href="assets/platform.css">
   <script defer src="assets/catalog-sources.js"></script>
   <script defer src="assets/catalog.js"></script>
   <script defer src="assets/solution-translations.js"></script>
   <script defer src="assets/catalog-render.js"></script>
   <script defer src="assets/site.js"></script>
+  <script defer src="assets/platform.js"></script>
   <script defer src="assets/editorial.js"></script>
 </head>
 <body>
@@ -39,7 +41,7 @@
       <a href="#services" data-i18n="navServices">服务</a>
       <a href="#products" data-i18n="navProducts">板卡</a>
       <a href="#algorithms" data-i18n="navAlgorithms">成像算法</a>
-      <a href="#radiation-platform" data-i18n="navResearch">可靠性评估</a>
+      <a class="nav-feature" href="#radiation-platform" data-i18n="navResearch">辐射仿真平台</a>
       <a href="#validation" data-i18n="navValidation">项目案例</a>
       <a href="#sar-imaging" data-i18n="navSAR">实测成像</a>
     </nav>
@@ -62,13 +64,52 @@
           <figcaption><strong>Dubai · Smartsat-X1</strong><p data-i18n="heroSceneCredit">星载大斜视 · NO-CFBP 聚焦</p></figcaption>
         </figure>
       </div>
-      <div class="wrap hero-tech"><div><strong>A7 / K7 / V7</strong><span data-i18n="heroSpecImage">FPGA 板卡平台</span></div><div><strong>CSA / BP</strong><span data-i18n="heroSpecAlgorithms">SAR 成像上板</span></div><div><strong>SEU</strong><span data-i18n="heroSpecReliability">抗辐射可靠性评估</span></div></div>
+      <div class="wrap hero-tech"><div><strong>A7 / K7 / V7</strong><span data-i18n="heroSpecImage">FPGA 板卡平台</span></div><div><strong>CSA / BP</strong><span data-i18n="heroSpecAlgorithms">SAR 成像上板</span></div><div><strong>SEU</strong><span data-i18n="heroSpecReliability">在轨辐射效应仿真</span></div></div>
     </section>
     <section class="section services-section" id="services" aria-labelledby="services-title"><div class="wrap">
       <div class="section-heading"><div><p class="eyebrow" data-i18n="servicesEyebrow">SERVICES / 服务</p><h2 id="services-title" data-i18n="servicesTitle">从需求，到上板运行。</h2></div><p class="section-intro" data-i18n="servicesIntro">每个项目由开发者直接对接。<br>先梳理需求，再书面约定交付物与周期。</p></div>
       <div class="service-grid" id="service-grid"></div>
     </div></section>
-    <section class="section wrap" id="products" aria-labelledby="products-title">
+    <section class="section platform-section" id="radiation-platform" aria-labelledby="simulation-title"><div class="wrap">
+      <div class="section-heading platform-heading"><div><p class="eyebrow"><span class="feature-badge" data-i18n="featureBadge">特色服务</span><span data-i18n="simulationEyebrow">在轨辐射效应仿真平台</span></p><h2 id="simulation-title" data-i18n="simulationTitle">上天之前，<br>先看清辐射会对你的 FPGA 做什么。</h2></div><p class="section-intro" data-i18n="simulationIntro">自研仿真平台把整条链路连起来：轨道辐射环境 → 每一位的翻转率 → 离子打在真实 Vivado 布局上 → 落到哪个模块 → 成像等功能受到什么影响。</p></div>
+      <dl class="platform-metrics">
+        <div><dt data-i18n="metricRateLabel">整片翻转率</dt><dd><strong>46.2</strong><span data-i18n="metricRateUnit">次 / 天</span></dd></div>
+        <div><dt data-i18n="metricIntervalLabel">平均翻转间隔</dt><dd><strong>≈ 31</strong><span data-i18n="metricIntervalUnit">分钟</span></dd></div>
+        <div><dt data-i18n="metricAgreeLabel">与公开文献数据偏差</dt><dd><strong>&lt; 10</strong><span>%</span></dd></div>
+        <div><dt data-i18n="metricViewsLabel">联动视图</dt><dd><strong>5</strong><span data-i18n="metricViewsUnit">个</span></dd></div>
+      </dl>
+      <p class="platform-basis" data-i18n="metricBasis">参考算例：Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳活动低年）· 100 mil 铝屏蔽。CRAM 20.8、BRAM 25.3、FF 0.09 次 / 天。</p>
+      <div class="platform-viewer">
+        <div class="platform-tabs" role="tablist" aria-label="仿真平台视图" data-label="platformTabsLabel">
+          <button type="button" role="tab" id="view-tab-strike" aria-controls="view-strike" aria-selected="true" data-view-tab><span>01</span><span data-i18n="viewStrikeTab">离子打击</span></button>
+          <button type="button" role="tab" id="view-tab-orbit" aria-controls="view-orbit" aria-selected="false" tabindex="-1" data-view-tab><span>02</span><span data-i18n="viewOrbitTab">轨道环境</span></button>
+          <button type="button" role="tab" id="view-tab-sar" aria-controls="view-sar" aria-selected="false" tabindex="-1" data-view-tab><span>03</span><span data-i18n="viewSarTab">SAR 后果</span></button>
+          <button type="button" role="tab" id="view-tab-device" aria-controls="view-device" aria-selected="false" tabindex="-1" data-view-tab><span>04</span><span data-i18n="viewDeviceTab">器件内部</span></button>
+          <button type="button" role="tab" id="view-tab-effects" aria-controls="view-effects" aria-selected="false" tabindex="-1" data-view-tab><span>05</span><span data-i18n="viewEffectsTab">效应总览</span></button>
+        </div>
+        <figure class="platform-view" id="view-strike" role="tabpanel" aria-labelledby="view-tab-strike"><a class="platform-media" href="assets/simulation/strike.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/strike.webp" width="960" height="570" loading="lazy" alt="在 Vivado 布局上模拟一次离子打击并判定效应类型" data-alt="viewStrikeAlt"></a><figcaption><h3 data-i18n="viewStrikeTitle">一颗离子，打在你的布局上。</h3><p data-i18n="viewStrikeBody">在真实的 Vivado 布局上发射离子：显示翻了几位、落在哪个模块，自动判定 SEU、MCU、SET、SEFI、SEL，并演示配置刷新后的恢复过程。</p></figcaption></figure>
+        <figure class="platform-view" id="view-orbit" role="tabpanel" aria-labelledby="view-tab-orbit" hidden><a class="platform-media" href="assets/simulation/orbit.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/orbit.webp" width="760" height="467" loading="lazy" alt="卫星沿轨道穿过辐射带，按截止刚度着色并累计翻转次数" data-alt="viewOrbitAlt"></a><figcaption><h3 data-i18n="viewOrbitTitle">沿着轨道，累计每一次翻转。</h3><p data-i18n="viewOrbitBody">卫星穿过内外辐射带与南大西洋异常区，轨道按地磁截止刚度着色，实时统计实际翻转次数与期望值。</p></figcaption></figure>
+        <figure class="platform-view" id="view-sar" role="tabpanel" aria-labelledby="view-tab-sar" hidden><a class="platform-media" href="assets/simulation/sar.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/sar.webp" width="960" height="600" loading="lazy" alt="SAR 单机从发射脉冲到出图的时间线，以及翻转后的成像结果" data-alt="viewSarAlt"></a><figcaption><h3 data-i18n="viewSarTitle">一次翻转，图像会坏成什么样。</h3><p data-i18n="viewSarBody">SAR 卫星从发射脉冲到出图的完整时间线。在距离向 FFT 中注入一次翻转，点目标立刻被拉成拖尾，功能后果直接可见。</p></figcaption></figure>
+        <figure class="platform-view" id="view-device" role="tabpanel" aria-labelledby="view-tab-device" hidden><a class="platform-media" href="assets/simulation/device.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/device.webp" width="1280" height="575" loading="lazy" alt="存储单元反相器对在收集电荷超过临界值时发生翻转" data-alt="viewDeviceAlt"></a><figcaption><h3 data-i18n="viewDeviceTitle">翻转，从一对反相器讲起。</h3><p data-i18n="viewDeviceBody">LUT、FF、BRAM 的每一位都是一对首尾相接的反相器。收集电荷超过临界电荷，这一位就翻了，适合向团队和学生讲清原理。</p></figcaption></figure>
+        <figure class="platform-view" id="view-effects" role="tabpanel" aria-labelledby="view-tab-effects" hidden><a class="platform-media" href="assets/simulation/effects.png" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/effects.png" width="1280" height="580" loading="lazy" alt="整片翻转率与各类辐射效应的计算状态总览" data-alt="viewEffectsAlt"></a><figcaption><h3 data-i18n="viewEffectsTitle">算了什么、没算什么，一目了然。</h3><p data-i18n="viewEffectsBody">整片翻转率按 CRAM、BRAM、FF 拆分；各类辐射效应标明“已计算”“缺数据”“不适用”，评估边界清清楚楚。</p></figcaption></figure>
+      </div>
+      <div class="platform-detail">
+        <div class="platform-offer"><h3 data-i18n="offerTitle">你能拿到什么</h3><ol>
+          <li><strong data-i18n="offer1Title">在轨翻转率报告</strong><p data-i18n="offer1Body">按你的轨道、屏蔽厚度与器件，给出 CRAM、BRAM、FF 每天的翻转次数和任务期统计。</p></li>
+          <li><strong data-i18n="offer2Title">敏感模块定位</strong><p data-i18n="offer2Body">导入你的 Vivado 设计，按层级自动划分模块，找出最容易出问题的部分。</p></li>
+          <li><strong data-i18n="offer3Title">功能后果评估</strong><p data-i18n="offer3Body">把翻转注入你的处理链路，看输出图像或数据会受到多大影响。</p></li>
+          <li><strong data-i18n="offer4Title">加固方案对比</strong><p data-i18n="offer4Body">结合 TMR、ECC、配置刷新与板级 SEM 故障注入，对比加固前后的效果。</p></li>
+        </ol></div>
+        <div class="platform-side">
+          <h3 data-i18n="whoTitle">适合谁</h3>
+          <ul class="platform-who"><li data-i18n="who1">星载在轨处理的 FPGA 团队</li><li data-i18n="who2">可靠性建模与评估人员</li><li data-i18n="who3">束流试验前的预评估</li><li data-i18n="who4">教学与原理演示</li></ul>
+          <h3 data-i18n="methodTitle">模型基础</h3>
+          <ul class="platform-methods"><li>SPENVIS / CREME96</li><li>Bethe-Bloch LET</li><li data-i18n="methodWeibull">Weibull 截面</li><li data-i18n="methodCutoff">IGRF-13 截止刚度</li><li data-i18n="methodPoisson">泊松任务统计</li><li data-i18n="methodBatch">固定种子批量仿真</li></ul>
+          <button class="button" type="button" data-quote="reliability" data-i18n="simulationCta">用我的轨道和设计评估 →</button>
+          <p class="platform-limits" data-i18n="simulationLimits">当前参考模型尚未包含太阳粒子事件、俘获质子与总剂量效应。仿真用于设计阶段评估，不替代束流试验。</p>
+        </div>
+      </div>
+    </div></section>    <section class="section wrap" id="products" aria-labelledby="products-title">
       <div class="section-heading"><div><p class="eyebrow" data-i18n="productsEyebrow">PRODUCT CENTER / 产品中心</p><h2 id="products-title" data-i18n="productsTitle">面向信号处理的硬件与算法</h2></div><p class="section-intro" data-i18n="productsIntro">从研究平台出发，围绕任务选型。<br>板卡配置、算法授权与交付范围逐项确认。</p></div>
       <div class="catalog-toolbar"><span id="product-count" class="catalog-count" aria-live="polite">3 款板卡</span></div>
       <div class="product-grid" id="product-grid"></div>
@@ -93,11 +134,6 @@
       <div class="section-heading"><div><p class="eyebrow" data-i18n="operatorEyebrow">PRIMITIVES / 基本算子</p><h2 id="operators-title" data-i18n="operatorTitle">可复用的计算核，不是整套算法。</h2></div><p class="section-intro" data-i18n="operatorIntro">计算核与完整算法分层展示。</p></div>
       <div class="product-grid operator-grid" id="operator-grid"></div>
     </section>
-    <section class="section simulation-section" id="radiation-platform" aria-labelledby="simulation-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="simulationEyebrow">RADIATION / 辐射效应仿真</p><h2 id="simulation-title" data-i18n="simulationTitle">从轨道环境，到器件与成像后果。</h2></div></div>
-      <div class="simulation-layout"><figure><a href="assets/simulation/orbit.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/orbit.webp" width="760" height="467" loading="lazy" alt="辐射效应仿真平台轨道环境视图" data-alt="simulationAlt"></a><figcaption data-i18n="simulationCaption">已有平台实跑截图 · 仿真可视化，非束流试验照片</figcaption><a href="assets/simulation/effects.png" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/effects.png" width="1280" height="580" loading="lazy" alt="辐射效应总览" data-alt="simulationEffectsAlt"></a></figure>
-      <div class="simulation-copy"><p class="lead" data-i18n="simulationIntro">五个视图覆盖从轨道到功能后果的建模链路。</p><p class="simulation-flow" data-i18n="simulationFlow">轨道谱与屏蔽 → 器件翻转 → 功能后果</p><p data-i18n="simulationScope">参考器件 Virtex-7 XC7VX690T。</p><p data-i18n="simulationLimits">仿真用于设计阶段评估，最终以束流试验为准。</p><button class="button" type="button" data-quote="reliability" data-i18n="simulationCta">咨询可靠性评估 →</button></div></div>
-    </div></section>
     <section class="section validation-section" id="validation" aria-labelledby="validation-title"><div class="wrap">
       <div class="section-heading"><div><p class="eyebrow" data-i18n="validationEyebrow">VALIDATION / 独立验证案例</p><h2 id="validation-title" data-i18n="validationTitle">处理规模与耗时，放回具体实现。</h2></div><p class="section-intro" data-i18n="validationIntro">记录按输入规模和实现配置分别呈现。</p></div>
       <div class="case-grid" id="case-grid"></div>

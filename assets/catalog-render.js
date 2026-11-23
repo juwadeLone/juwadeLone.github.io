@@ -6,7 +6,7 @@ function catalogCard(product){
 }
 function serviceCard(service,index){
   const s=service[language];
-  return `<article class="service-card" data-service="${service.id}"><span class="service-number">${String(index+1).padStart(2,"0")}</span><h3>${s.title}</h3><p class="service-who"><strong>${t("serviceWho")}</strong>${s.who}</p><ul>${s.items.map(item=>`<li>${item}</li>`).join("")}</ul><button type="button" data-quote="${service.id}" aria-label="${s.title} — ${t("serviceCta")}">${t("serviceCta")}</button></article>`;
+  return `<article class="service-card${service.featured?" featured":""}" data-service="${service.id}"><span class="service-number">${String(index+1).padStart(2,"0")}</span>${service.featured?`<span class="service-badge">${t("serviceFeatured")}</span>`:""}<h3>${s.title}</h3><p class="service-who"><strong>${t("serviceWho")}</strong>${s.who}</p><ul>${s.items.map(item=>`<li>${item}</li>`).join("")}</ul>${service.featured?`<a class="service-link" href="#radiation-platform">${t("serviceFeatureLink")}</a>`:""}<button type="button" data-quote="${service.id}" aria-label="${s.title} — ${t("serviceCta")}">${t("serviceCta")}</button></article>`;
 }
 function renderProducts(){
   const boards=products.filter(product=>product.category==="board");
