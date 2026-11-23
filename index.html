@@ -81,20 +81,109 @@
         <div><dt data-i18n="metricAgreeLabel">与公开文献数据偏差</dt><dd><strong>&lt; 10</strong><span>%</span></dd></div>
         <div><dt data-i18n="metricViewsLabel">联动视图</dt><dd><strong>5</strong><span data-i18n="metricViewsUnit">个</span></dd></div>
       </dl>
-      <p class="platform-basis" data-i18n="metricBasis">参考算例：Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳活动低年）· 100 mil 铝屏蔽。CRAM 20.8、BRAM 25.3、FF 0.09 次 / 天。</p>
-      <div class="platform-viewer">
-        <div class="platform-tabs" role="tablist" aria-label="仿真平台视图" data-label="platformTabsLabel">
+      <p class="platform-basis" data-i18n="metricBasis">既有平台参考算例（模型计算，非辐照实测）：Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳活动低年）· 100 mil 铝屏蔽。CRAM 20.8、BRAM 25.3、FF 0.09 次 / 天。</p>
+      <div class="platform-viewer" data-radiation-viewer>
+        <div class="platform-viewer-intro"><span class="scene-indicator" aria-hidden="true"></span><p data-i18n="sceneIntro">直接在网页里探索原理 · 示意图，不是模型计算或辐照实测</p></div>
+        <div class="platform-tabs" role="tablist" aria-label="仿真平台视图" data-label="platformTabsLabel" hidden>
           <button type="button" role="tab" id="view-tab-strike" aria-controls="view-strike" aria-selected="true" data-view-tab><span>01</span><span data-i18n="viewStrikeTab">离子打击</span></button>
           <button type="button" role="tab" id="view-tab-orbit" aria-controls="view-orbit" aria-selected="false" tabindex="-1" data-view-tab><span>02</span><span data-i18n="viewOrbitTab">轨道环境</span></button>
           <button type="button" role="tab" id="view-tab-sar" aria-controls="view-sar" aria-selected="false" tabindex="-1" data-view-tab><span>03</span><span data-i18n="viewSarTab">SAR 后果</span></button>
           <button type="button" role="tab" id="view-tab-device" aria-controls="view-device" aria-selected="false" tabindex="-1" data-view-tab><span>04</span><span data-i18n="viewDeviceTab">器件内部</span></button>
           <button type="button" role="tab" id="view-tab-effects" aria-controls="view-effects" aria-selected="false" tabindex="-1" data-view-tab><span>05</span><span data-i18n="viewEffectsTab">效应总览</span></button>
         </div>
-        <figure class="platform-view" id="view-strike" role="tabpanel" aria-labelledby="view-tab-strike"><a class="platform-media" href="assets/simulation/strike.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/strike.webp" width="960" height="570" loading="lazy" alt="在 Vivado 布局上模拟一次离子打击并判定效应类型" data-alt="viewStrikeAlt"></a><figcaption><h3 data-i18n="viewStrikeTitle">一颗离子，打在你的布局上。</h3><p data-i18n="viewStrikeBody">在真实的 Vivado 布局上发射离子：显示翻了几位、落在哪个模块，自动判定 SEU、MCU、SET、SEFI、SEL，并演示配置刷新后的恢复过程。</p></figcaption></figure>
-        <figure class="platform-view" id="view-orbit" role="tabpanel" aria-labelledby="view-tab-orbit" hidden><a class="platform-media" href="assets/simulation/orbit.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/orbit.webp" width="760" height="467" loading="lazy" alt="卫星沿轨道穿过辐射带，按截止刚度着色并累计翻转次数" data-alt="viewOrbitAlt"></a><figcaption><h3 data-i18n="viewOrbitTitle">沿着轨道，累计每一次翻转。</h3><p data-i18n="viewOrbitBody">卫星穿过内外辐射带与南大西洋异常区，轨道按地磁截止刚度着色，实时统计实际翻转次数与期望值。</p></figcaption></figure>
-        <figure class="platform-view" id="view-sar" role="tabpanel" aria-labelledby="view-tab-sar" hidden><a class="platform-media" href="assets/simulation/sar.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/sar.webp" width="960" height="600" loading="lazy" alt="SAR 单机从发射脉冲到出图的时间线，以及翻转后的成像结果" data-alt="viewSarAlt"></a><figcaption><h3 data-i18n="viewSarTitle">一次翻转，图像会坏成什么样。</h3><p data-i18n="viewSarBody">SAR 卫星从发射脉冲到出图的完整时间线。在距离向 FFT 中注入一次翻转，点目标立刻被拉成拖尾，功能后果直接可见。</p></figcaption></figure>
-        <figure class="platform-view" id="view-device" role="tabpanel" aria-labelledby="view-tab-device" hidden><a class="platform-media" href="assets/simulation/device.webp" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/device.webp" width="1280" height="575" loading="lazy" alt="存储单元反相器对在收集电荷超过临界值时发生翻转" data-alt="viewDeviceAlt"></a><figcaption><h3 data-i18n="viewDeviceTitle">翻转，从一对反相器讲起。</h3><p data-i18n="viewDeviceBody">LUT、FF、BRAM 的每一位都是一对首尾相接的反相器。收集电荷超过临界电荷，这一位就翻了，适合向团队和学生讲清原理。</p></figcaption></figure>
-        <figure class="platform-view" id="view-effects" role="tabpanel" aria-labelledby="view-tab-effects" hidden><a class="platform-media" href="assets/simulation/effects.png" target="_blank" rel="noopener noreferrer"><img src="assets/simulation/effects.png" width="1280" height="580" loading="lazy" alt="整片翻转率与各类辐射效应的计算状态总览" data-alt="viewEffectsAlt"></a><figcaption><h3 data-i18n="viewEffectsTitle">算了什么、没算什么，一目了然。</h3><p data-i18n="viewEffectsBody">整片翻转率按 CRAM、BRAM、FF 拆分；各类辐射效应标明“已计算”“缺数据”“不适用”，评估边界清清楚楚。</p></figcaption></figure>
+        <figure class="platform-view" id="view-strike" role="tabpanel" tabindex="0" aria-labelledby="view-tab-strike">
+          <div class="platform-canvas strike-canvas" data-strike-scene>
+            <div class="scene-overline"><span data-i18n="sceneSchematic">原理示意 / 不按比例</span><span aria-hidden="true">01 / STRIKE</span></div>
+            <svg class="strike-diagram" viewBox="0 0 520 310" role="img" aria-labelledby="strike-svg-title">
+              <title id="strike-svg-title" data-i18n="strikeGraphic">粒子经过屏蔽与封装，可能使示意存储阵列中的一个或多个单元翻转。</title>
+              <defs><pattern id="strike-grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9cb9d0" stroke-opacity=".07"/></pattern></defs>
+              <rect width="520" height="310" fill="url(#strike-grid)"/>
+              <path class="particle-guide" d="M139 18L224 198"/>
+              <g class="shield-layer"><path d="M65 72L91 55H455L430 72Z"/><path d="M65 72H430V98H65Z"/><path d="M430 72L455 55V81L430 98Z"/></g>
+              <path class="chip-outline" d="M119 137H400V282H119Z"/>
+              <g class="memory-cells" aria-hidden="true">
+                <g data-cell transform="translate(151 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(203 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+                <g data-cell transform="translate(255 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(307 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+                <g data-cell transform="translate(151 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+                <g data-cell transform="translate(203 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+                <g data-cell transform="translate(255 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(307 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(151 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(203 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+                <g data-cell transform="translate(255 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+                <g data-cell transform="translate(307 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(151 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+                <g data-cell transform="translate(203 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(255 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
+                <g data-cell transform="translate(307 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
+              </g>
+              <g class="strike-particle" aria-hidden="true"><path d="M210 171L224 198"/><circle cx="224" cy="198" r="5"/></g>
+              <circle class="strike-impact" cx="224" cy="198" r="19" aria-hidden="true"/>
+            </svg>
+            <ul class="scene-legend"><li><i class="legend-particle" aria-hidden="true"></i><span data-i18n="strikeParticle">入射粒子</span></li><li><i class="legend-shield" aria-hidden="true"></i><span data-i18n="strikeShield">屏蔽 / 封装</span></li><li><i class="legend-cell" aria-hidden="true"></i><span data-i18n="strikeCells">示意存储单元</span></li></ul>
+          </div>
+          <figcaption>
+            <p class="scene-kicker" data-i18n="sceneInteract">轻量交互 · 原理演示</p><h3 data-i18n="viewStrikeTitle">一颗粒子，可能改变一位状态。</h3>
+            <p data-i18n="viewStrikeBody">粒子在敏感区沉积能量，产生的电荷可能扰动存储状态。这里用一个或多个单元的翻转解释原理，不运行真实设计注入，也不计算翻转概率。</p>
+            <div class="scene-controls" data-strike-controls hidden>
+              <div class="scene-choice" role="group" aria-label="打击示意类型" data-label="strikeModeLabel"><button type="button" data-strike-mode="single" aria-pressed="true" data-i18n="strikeSingle">单单元示例</button><button type="button" data-strike-mode="multiple" aria-pressed="false" data-i18n="strikeMultiple">多单元示例</button></div>
+              <div class="strike-actions"><button type="button" class="scene-play" data-strike-play><span aria-hidden="true">▶</span><span data-i18n="strikePlay">播放一次打击</span></button><button type="button" class="scene-reset" data-strike-reset disabled data-i18n="strikeReset">复位示意</button></div>
+            </div>
+            <p class="scene-status" data-strike-status role="status" data-i18n="strikeReady">示意阵列已就绪。橙色轮廓与数值变化会标出受影响的单元。</p>
+            <p class="scene-footnote" data-i18n="strikeTiming">动画不代表物理时间；单元位置和数量为教学示意。</p>
+          </figcaption>
+        </figure>
+        <figure class="platform-view" id="view-orbit" role="tabpanel" tabindex="0" aria-labelledby="view-tab-orbit">
+          <div class="platform-canvas orbit-canvas" data-orbit-scene="meo">
+            <div class="scene-overline"><span data-i18n="sceneSchematic">原理示意 / 不按比例</span><span aria-hidden="true">02 / ORBIT</span></div>
+            <svg class="orbit-diagram" viewBox="0 0 520 310" role="img" aria-labelledby="orbit-svg-title">
+              <title id="orbit-svg-title" data-i18n="orbitGraphic">地球周围的三类轨道示意；高亮轨道与卫星位置随选择变化，不表示真实辐射带分布。</title>
+              <defs><radialGradient id="orbit-earth"><stop stop-color="#32748a"/><stop offset=".75" stop-color="#174761"/><stop offset="1" stop-color="#102e48"/></radialGradient><clipPath id="earth-clip"><circle cx="260" cy="158" r="60"/></clipPath></defs>
+              <path class="orbit-reference" d="M16 158H504M260 12V300"/>
+              <g class="orbit-tracks" transform="rotate(-20 260 158)"><ellipse data-track="leo" cx="260" cy="158" rx="107" ry="43"/><ellipse data-track="meo" cx="260" cy="158" rx="173" ry="77"/><ellipse data-track="geo" cx="260" cy="158" rx="232" ry="112"/></g>
+              <circle class="earth-halo" cx="260" cy="158" r="67"/>
+              <circle cx="260" cy="158" r="60" fill="url(#orbit-earth)"/>
+              <g class="earth-lines" clip-path="url(#earth-clip)"><ellipse cx="260" cy="158" rx="30" ry="60"/><ellipse cx="260" cy="158" rx="60" ry="20"/><path d="M200 158H320M260 98V218"/><path class="earth-land" d="M222 112L244 115L253 127L244 142L251 153L236 160L234 178L221 173L217 151L205 143ZM273 119L301 128L311 148L291 152L280 166L270 159L263 141ZM273 171L293 181L285 204L273 197Z"/></g>
+              <g class="orbit-satellite" data-orbit-satellite transform="translate(423 99)"><circle r="22" class="satellite-locator"/><path class="satellite-panel" d="M-26-9H-9V9H-26ZM9-9H26V9H9Z"/><path d="M-18-9V9M18-9V9M-26 0H-9M9 0H26" class="satellite-detail"/><rect x="-7" y="-12" width="14" height="24" rx="3" class="satellite-body"/><path d="M0-12V-21M-4-21H4" class="satellite-detail"/></g>
+              <g class="orbit-particles"><path d="M28 54L77 75M18 83L65 104M35 115L80 135"/><circle cx="77" cy="75" r="3"/><circle cx="65" cy="104" r="3"/><circle cx="80" cy="135" r="3"/></g>
+            </svg>
+            <ul class="scene-legend"><li><i class="legend-earth" aria-hidden="true"></i><span data-i18n="orbitEarth">地球</span></li><li><i class="legend-orbit" aria-hidden="true"></i><span data-i18n="orbitSelected">所选轨道</span></li><li><i class="legend-particle" aria-hidden="true"></i><span data-i18n="orbitParticles">空间粒子</span></li></ul>
+          </div>
+          <figcaption>
+            <p class="scene-kicker" data-i18n="sceneInteract">轻量交互 · 原理演示</p><h3 data-i18n="viewOrbitTitle">不同轨道，不同的环境输入。</h3>
+            <p data-i18n="viewOrbitBody">选择一类示意轨道，了解环境评估关注什么。这里不绘制真实辐射带或异常区，不计算粒子通量、剂量与翻转率。</p>
+            <div class="scene-controls" data-orbit-controls hidden><div class="scene-choice orbit-choice" role="group" aria-label="示意轨道类别" data-label="orbitChoiceLabel"><button type="button" data-orbit-choice="leo" aria-pressed="false">LEO</button><button type="button" data-orbit-choice="meo" aria-pressed="true">MEO</button><button type="button" data-orbit-choice="geo" aria-pressed="false">GEO</button></div></div>
+            <div class="orbit-description" role="status"><strong data-orbit-name data-i18n="orbitMeoName">中地球轨道 · MEO</strong><p data-orbit-copy data-i18n="orbitMeoBody">评估需结合轨道位置与俘获粒子环境。图中的轨道只是类别示意，不能用于判断某一高度的辐射强弱。</p></div>
+            <p class="scene-footnote" data-i18n="orbitIndependent">切换示意轨道不会修改上方参考算例，也不会运行后台模型。</p>
+          </figcaption>
+        </figure>
+        <figure class="platform-view" id="view-sar" role="tabpanel" tabindex="0" aria-labelledby="view-tab-sar">
+          <div class="platform-canvas sar-canvas">
+            <div class="scene-overline"><span data-i18n="sceneConcept">概念示意 / 非计算输出</span><span aria-hidden="true">03 / SAR</span></div>
+            <div class="sar-comparison"><div><span data-i18n="sarReference">理想点响应示意</span><svg viewBox="0 0 180 200" role="img" aria-labelledby="sar-reference-title"><title id="sar-reference-title" data-i18n="sarReferenceGraphic">九个聚焦亮点的概念图。</title><path class="sar-crosshair" d="M90 0V200M0 100H180"/><g class="sar-points"><circle cx="40" cy="45" r="3"/><circle cx="90" cy="45" r="3"/><circle cx="140" cy="45" r="3"/><circle cx="40" cy="100" r="3"/><circle cx="90" cy="100" r="3"/><circle cx="140" cy="100" r="3"/><circle cx="40" cy="155" r="3"/><circle cx="90" cy="155" r="3"/><circle cx="140" cy="155" r="3"/></g></svg></div><div><span data-i18n="sarDisturbed">可能的失焦示意</span><svg viewBox="0 0 180 200" role="img" aria-labelledby="sar-disturbed-title"><title id="sar-disturbed-title" data-i18n="sarDisturbedGraphic">亮点扩展为拖尾的概念图，不是仿真或实测结果。</title><path class="sar-crosshair" d="M90 0V200M0 100H180"/><path class="sar-streaks" d="M20 36L60 54M70 36L110 54M120 36L160 54M20 91L60 109M70 91L110 109M120 91L160 109M20 146L60 164M70 146L110 164M120 146L160 164"/></svg></div></div>
+            <p class="scene-inline-note" data-i18n="sarConceptNote">只说明一种可能的后果，不代表所有翻转都会造成失焦。</p>
+          </div>
+          <figcaption><p class="scene-kicker" data-i18n="sceneFromBit">从位状态，到功能后果</p><h3 data-i18n="viewSarTitle">一次翻转，为什么可能影响成像？</h3><p data-i18n="viewSarBody">故障落在不同位置，可能被掩蔽，也可能改变系数、运算或控制流程。左侧用原创点响应示意解释一种失焦后果；具体影响必须结合真实处理链路验证。</p><a class="scene-evidence-link" href="#fault-injection" data-i18n="sceneEvidence">查看独立的板级注入实测 ↓</a></figcaption>
+        </figure>
+        <figure class="platform-view" id="view-device" role="tabpanel" tabindex="0" aria-labelledby="view-tab-device">
+          <div class="platform-canvas device-canvas">
+            <div class="scene-overline"><span data-i18n="sceneSchematic">原理示意 / 不按比例</span><span aria-hidden="true">04 / CELL</span></div>
+            <svg class="cell-diagram" viewBox="0 0 520 260" role="img" aria-labelledby="cell-svg-title"><title id="cell-svg-title" data-i18n="cellGraphic">SRAM 型单元的两个反相器交叉耦合。电荷扰动可能改变存储状态。</title><g class="cell-wires"><path d="M221 130H240V57H400V130H356M400 130H440M299 130H280V203H120V130H164M120 130H82"/></g><g class="cell-gates"><path d="M164 105L207 130L164 155Z"/><circle cx="214" cy="130" r="7"/><path d="M356 105L313 130L356 155Z"/><circle cx="306" cy="130" r="7"/></g><g class="cell-nodes"><circle cx="120" cy="130" r="5"/><circle cx="400" cy="130" r="5"/></g><text class="cell-symbol" x="58" y="136">Q</text><text class="cell-symbol" x="447" y="136">Q̅</text><path class="cell-charge" d="M76 30L112 104M100 94L112 104L115 88"/></svg>
+            <ol class="cell-sequence"><li data-i18n="cellCollect">电荷收集</li><li data-i18n="cellDisturb">状态扰动</li><li data-i18n="cellUpset">可能翻转</li></ol>
+          </div>
+          <figcaption><p class="scene-kicker" data-i18n="scenePhysics">存储单元的物理起点</p><h3 data-i18n="viewDeviceTitle">从一对交叉耦合反相器讲起。</h3><p data-i18n="viewDeviceBody">这里以 SRAM 型存储单元为例：两个反相器维持一个稳定状态。粒子产生的电荷扰动如果足够大，可能使状态翻转。不同 FPGA 资源的具体电路与敏感性并不相同。</p><p class="scene-footnote" data-i18n="cellBoundary">电路为原理简图，不是目标器件的晶体管级版图或电荷输运仿真。</p></figcaption>
+        </figure>
+        <figure class="platform-view" id="view-effects" role="tabpanel" tabindex="0" aria-labelledby="view-tab-effects">
+          <div class="platform-canvas effects-canvas">
+            <div class="scene-overline"><span data-i18n="effectsScope">既有参考模型的范围</span><span aria-hidden="true">05 / SCOPE</span></div>
+            <dl class="effects-list"><div><dt data-i18n="effectsGcr">银河宇宙线重离子翻转</dt><dd class="effect-covered" data-i18n="effectsCovered">参考模型已计算</dd></div><div><dt data-i18n="effectsSpe">太阳粒子事件</dt><dd data-i18n="effectsMissing">未包含</dd></div><div><dt data-i18n="effectsProton">俘获质子</dt><dd data-i18n="effectsMissing">未包含</dd></div><div><dt data-i18n="effectsTid">总电离剂量</dt><dd data-i18n="effectsMissing">未包含</dd></div></dl>
+            <p class="scene-inline-note" data-i18n="effectsNoZero">未包含不等于没有风险，也不等于零。</p>
+          </div>
+          <figcaption><p class="scene-kicker" data-i18n="sceneEvidenceBoundary">模型、演示与实测，分开阅读</p><h3 data-i18n="viewEffectsTitle">算了什么，没算什么。</h3><p data-i18n="viewEffectsBody">上方数值是既有平台在所列条件下的参考模型结果；站内图解只解释原理，不会重新计算这些数值。板级注入实测在下方独立展示，不能等同于辐照鉴定。</p><a class="scene-evidence-link" href="#fault-injection" data-i18n="sceneEvidence">查看独立的板级注入实测 ↓</a></figcaption>
+        </figure>
+        <noscript><p class="scene-no-script">静态原理图已完整展示；启用 JavaScript 后可切换视图、轨道并播放示意。 Static diagrams remain available; enable JavaScript for view controls and animation.</p></noscript>
       </div>
       <div class="platform-detail">
         <div class="platform-offer"><h3 data-i18n="offerTitle">你能拿到什么</h3><ol>
