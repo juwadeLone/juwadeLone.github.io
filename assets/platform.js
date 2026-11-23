@@ -62,9 +62,12 @@
     mode = button.dataset.strikeMode;
     modes.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
   }));
-  reducedMotion.addEventListener("change", event => {
+  const handleMotionChange = event => {
     if (event.matches && running) finish();
-  });
+  };
+  // Older Safari exposes MediaQueryList.addListener rather than addEventListener.
+  if (reducedMotion.addEventListener) reducedMotion.addEventListener("change", handleMotionChange);
+  else reducedMotion.addListener(handleMotionChange);
 
   const orbits = {
     leo: {name: "orbitLeoName", copy: "orbitLeoBody", position: "translate(361 121)"},
