@@ -1,4 +1,5 @@
 /* Distinct hardware, algorithm, primitive, simulation and validation layers. */
+#inquiry .email-link{display:inline-flex;align-items:center;min-height:44px;min-width:44px}
 .header{gap:20px}.header nav{gap:18px}.header nav a{min-height:44px;display:inline-flex;align-items:center}.header nav a:after{bottom:0}
 .catalog-toolbar{justify-content:space-between;gap:24px;flex-wrap:wrap}
 .catalog-specs{margin:22px 0;font-size:13px;line-height:1.7}
