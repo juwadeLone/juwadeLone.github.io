@@ -48,7 +48,6 @@ test("SAR gallery reproduces pinned synthetic-point figures with matching dimens
     assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),figure.sha256);
     assert.equal(bytes.readUInt32BE(16),figure.width);
     assert.equal(bytes.readUInt32BE(20),figure.height);
-    assert.ok(html.includes(figure.url));
     assert.ok(html.includes('src="assets/sar/'+figure.file+'"'));
     assert.ok(figure.url.includes("/blob/"+figure.commit+"/"));
   }
@@ -68,7 +67,7 @@ test("Chinese and English inquiry drafts preserve Unicode and URL-reserved chara
   }
 });
 
-test("measured-paper figures preserve citations, source pins and file digests",()=>{
+test("measured SAR figures keep file digests and show no citations on the page",()=>{
   const crypto=require("node:crypto");
   const folder=path.join(root,"assets/sar/papers");
   const provenance=JSON.parse(fs.readFileSync(path.join(folder,"provenance.json"),"utf8"));
@@ -87,20 +86,33 @@ test("measured-paper figures preserve citations, source pins and file digests",(
     assert.ok(scene.source.includes("/blob/"+provenance.commit+"/"));
     assert.ok(scene.pdf_path.startsWith("文献/SAR成像算法/"));
     assert.ok(scene.authors.includes("Guang-Cai Sun"));
-    assert.equal(new URL(scene.doi).host,"doi.org");
-    assert.ok(html.includes(scene.doi));
     assert.ok(html.includes('src="assets/sar/papers/'+scene.file+'"'));
   }
   assert.doesNotMatch(html,/assets\/sar\/scenes\/|jpl\.nasa\.gov|NASA\/JPL/);
-  for(const locale of ["zh","en"]){
-    assert.ok(catalog.translations[locale].sceneKind.includes(locale==="zh"?"非板卡实测":"NOT OUR BOARD OUTPUT"));
-    assert.ok(catalog.translations[locale].heroSceneCredit.includes(locale==="zh"?"非本板卡输出":"not our board output"));
-  }
+  const visible=html+JSON.stringify(catalog.translations);
+  assert.doesNotMatch(visible,/doi\.org|IEEE|论文|课题组|Second Brain|research group|provenance\.json"[^>]*sceneProvenance/i);
 });
 
-test("buyer-facing catalog labels disclose source access and compute the total",()=>{
+test("visitor-facing page has no links that require private access",()=>{
+  const render=fs.readFileSync(path.join(root,"assets/catalog-render.js"),"utf8");
+  assert.doesNotMatch(render,/repository-link|catalogSources|catalog-provenance/);
+  assert.doesNotMatch(html,/github\.com\/juwadeLone\/[^"]+\/blob\/|devinapps|catalog-provenance\.json|download="juwade-\w+-evidence\.json"/);
+});
+test("services are bilingual, quotable and rendered into the service grid",()=>{
+  assert.ok(html.includes('id="service-grid"'));
+  assert.ok(catalog.catalogData.services.length>=4);
+  for(const service of catalog.catalogData.services){
+    for(const locale of ["zh","en"]){
+      assert.ok(service[locale].title);
+      assert.ok(service[locale].who);
+      assert.ok(service[locale].items.length>=3);
+    }
+  }
+  assert.ok(html.includes('data-quote="reliability"'));
+  assert.ok(catalog.catalogData.services.some(service=>service.id==="reliability"));
+});
+test("buyer-facing catalog labels compute the total",()=>{
   for(const locale of ["zh","en"]){
-    assert.ok(catalog.translations[locale].source.includes(locale==="en"?"repository access required":"仓库访问权限"));
     assert.ok(catalog.translations[locale].filterAll(7).includes("<span>07</span>"));
   }
   const boards=catalog.products.filter(product=>product.category==="board");
@@ -192,12 +204,15 @@ test("catalog parameters resolve to pinned sources and memory/timing retain evid
 test("hardware, algorithms, primitives, simulation, imagery and validation have unique destinations",()=>{
   const ids=Array.from(html.matchAll(/\bid="([^"]+)"/g),m=>m[1]);
   assert.equal(ids.length,new Set(ids).size,"Duplicate HTML id");
-  for(const id of ["products","algorithms","operators","radiation-platform","validation","sar-imaging"]){
+  for(const id of ["services","products","algorithms","operators","radiation-platform","validation","sar-imaging"]){
     assert.ok(ids.includes(id),id);
     assert.ok(html.includes('href="#'+id+'"'),id);
   }
   assert.ok(html.indexOf('id="validation"')<html.indexOf('class="validation-details"'));
   assert.ok(html.indexOf('id="products"')<html.indexOf('id="algorithms"'));
+  assert.ok(html.indexOf('id="services"')<html.indexOf('id="products"'));
+  assert.match(html,/<meta property="og:image" content="https:\/\/juwadelone\.github\.io\/assets\/og-cover\.png">/);
+  assert.ok(fs.existsSync(path.join(root,"assets/og-cover.png")));
   const crypto=require("node:crypto");
   for(const [file,id] of [["orbit.webp","simulation-orbit"],["effects.png","simulation-effects"]]){
     const bytes=fs.readFileSync(path.join(root,"assets/simulation",file));

@@ -2,6 +2,7 @@
 
 // All catalog claims refer to the linked research implementations, not flight qualification.
 const products = catalogData.products;
+const services = catalogData.services;
 
 const translations = {
   zh:{
@@ -216,7 +217,8 @@ const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<"
 
 function renderOptions(){
   const interest=$("#interest"),scenario=$("#scenario"),oldProduct=interest.value,oldScenario=scenario.value;
-  interest.innerHTML=`<option value="">${t("selectProduct")}</option>`+products.map(product=>`<option value="${product.id}">${(product[language].optionTitle||product[language].title)}</option>`).join("")+`<option value="custom">${t("custom")}</option>`;
+  const option=item=>`<option value="${item.id}">${item[language].title}</option>`;
+  interest.innerHTML=`<option value="">${t("selectProduct")}</option><optgroup label="${t("servicesGroup")}">${services.map(option).join("")}</optgroup><optgroup label="${t("productsGroup")}">${products.map(option).join("")}</optgroup><option value="custom">${t("custom")}</option>`;
   scenario.innerHTML=`<option value="">${t("selectScenario")}</option>`+["ground","airborne","space","other"].map(value=>`<option value="${value}">${t(value)}</option>`).join("");
   interest.value=oldProduct; scenario.value=oldScenario;
 }
@@ -232,8 +234,8 @@ function chooseProduct(id){
 }
 function setLanguage(){
   document.documentElement.lang=language==="zh"?"zh-CN":"en";
-  document.title=language==="zh"?"juwade · 抗辐射星载 SAR 设计方案":"juwade · Radiation-tolerant spaceborne SAR design";
-  document.querySelector('meta[name="description"]').content=language==="zh"?"抗辐射星载 SAR 设计方案：A7、K7、V7 板卡，CSA / BP 成像算法，FFT / CORDIC 基本算子与辐射效应仿真。":"Radiation-tolerant spaceborne SAR design: A7, K7 and V7 hardware, CSA/BP algorithms, FFT/CORDIC primitives and radiation-effects simulation.";
+  document.title=t("pageTitle");
+  document.querySelector('meta[name="description"]').content=t("pageDescription");
   document.querySelectorAll("[data-i18n]").forEach(element=>{const value=t(element.dataset.i18n);element.innerHTML=typeof value==="function"?value(products.length):value;});
   document.querySelectorAll("[data-placeholder]").forEach(element=>element.placeholder=t(element.dataset.placeholder));
   document.querySelectorAll("[data-label]").forEach(element=>element.setAttribute("aria-label",t(element.dataset.label)));
@@ -254,7 +256,7 @@ function clearDraft(){
 }
 function prepareDraft(){
   const data=new FormData($("#inquiry-form"));
-  const product=products.find(p=>p.id===data.get("product"));
+  const product=[...services,...products].find(p=>p.id===data.get("product"));
   const productTitle=product?product[language].title:t("custom");
   const draft=buildInquiry(Object.fromEntries(data),translations[language],productTitle,t(data.get("scenario")));
   $("#draft-text").value=draft.text;
@@ -280,6 +282,11 @@ document.addEventListener("click",event=>{
   if(details){activeProduct=products.find(p=>p.id===details.dataset.details);lastDialogTrigger=details;renderDialog(activeProduct);$("#product-dialog").showModal();}
   if(quote)chooseProduct(quote.dataset.quote);
 });
+const header=$(".header"),navToggle=$("#nav-toggle");
+function setNav(open){header.classList.toggle("nav-open",open);navToggle.setAttribute("aria-expanded",String(open));}
+navToggle.addEventListener("click",()=>setNav(!header.classList.contains("nav-open")));
+$("#primary-nav").addEventListener("click",event=>{if(event.target.closest("a"))setNav(false);});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&header.classList.contains("nav-open")){setNav(false);navToggle.focus();}});
 $(".dialog-close").addEventListener("click",()=>$("#product-dialog").close());
 $("#product-dialog").addEventListener("click",event=>{if(event.target===$("#product-dialog")){const r=event.target.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)event.target.close();}});
 $("#product-dialog").addEventListener("close",()=>{activeProduct=null;if(lastDialogTrigger?.isConnected)lastDialogTrigger.focus({preventScroll:true});});
