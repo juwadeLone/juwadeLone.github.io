@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Custom FPGA boards, SAR imaging on FPGA, in-orbit radiation simulation and board-level fault injection, plus 100GbE / NVMe / JESD204 / RFSoC IP licensing.">
+<meta property="og:title" content="JuLone Team · FPGA Signal Processing &amp; High-Speed IP | Custom Boards · SAR Imaging · Radiation Assessment · 100GbE / NVMe">
+<meta property="og:description" content="Custom FPGA boards, SAR imaging on FPGA, in-orbit radiation simulation and board-level fault injection, plus 100GbE / NVMe / JESD204 / RFSoC IP licensing.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://juwadelone.github.io/assets/sar/papers/dubai-no-cfbp.webp">
+<title>JuLone Team · FPGA Signal Processing &amp; High-Speed IP | Custom Boards · SAR Imaging · Radiation Assessment · 100GbE / NVMe</title>
+<style>
+:root{--bg:#fbfcfd;--surface:#fff;--text:#15273d;--muted:#526379;--border:#dce4ec;--pale:#f1f5f8;--accent:#8ac9ff;--primary:#0067c8;--dark:#0c223b;--dark-muted:#b7c6d7;--radius:10px;
+--font:"Segoe UI","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:110px}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+a{color:var(--primary);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;z-index:99;background:#fff;padding:8px}
+/* top bar */
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{font-weight:700;font-size:18px;color:var(--dark);letter-spacing:.02em}.brand span{color:var(--primary);font-weight:600;font-size:12px;letter-spacing:.18em;margin-left:6px}
+.bar-r{display:flex;gap:12px;align-items:center}
+.lang{font-size:13px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:5px 10px}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:10px 18px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-p{background:var(--primary);color:#fff}.btn-p:hover{background:#0056a8}
+.btn-g{border-color:rgba(255,255,255,.35);color:#fff}.btn-g:hover{background:rgba(255,255,255,.08)}
+nav.sec{border-top:1px solid var(--border);overflow-x:auto}
+nav.sec ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;white-space:nowrap}
+nav.sec a{display:block;padding:10px 14px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
+nav.sec a:hover,nav.sec a.on{color:var(--text);border-bottom-color:var(--primary)}
+/* hero */
+.hero{background:radial-gradient(1200px 500px at 85% -10%,#16467a 0,transparent 60%),var(--dark);color:#fff;padding:84px 0 72px}
+.hero-g{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;font-weight:600}
+.hero h1{font-size:44px;line-height:1.2;margin:14px 0 18px;font-weight:600}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{color:var(--dark-muted);font-size:16px;margin:0 0 10px;max-width:600px}
+.cta{display:flex;gap:12px;margin:28px 0 34px;flex-wrap:wrap}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.chip{border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);padding:14px;background:rgba(255,255,255,.04)}
+.chip b{display:block;font-size:22px;color:#fff}.chip span{font-size:12.5px;color:var(--dark-muted)}
+.panel{border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);padding:22px;font-family:Consolas,monospace;font-size:13px;color:var(--dark-muted)}
+.panel .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.12)}
+.panel .row:last-child{border:0}.panel .v{color:var(--accent);font-weight:700}
+.panel .ttl{color:#fff;font-family:var(--font);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80;animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.35}}
+/* sections */
+section.s{padding:76px 0;border-bottom:1px solid var(--border)}
+section.alt{background:var(--pale)}
+.idx{font-size:12px;letter-spacing:.2em;color:var(--primary);font-weight:700;text-transform:uppercase}
+.s h2{font-size:30px;margin:8px 0 10px;line-height:1.3}
+.lead{color:var(--muted);max-width:760px;margin:0 0 36px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px}
+.card h3{margin:0 0 6px;font-size:21px}
+.tag{color:var(--muted);margin:0 0 14px}
+.value{background:#eef6ff;border-left:3px solid var(--primary);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14.5px;margin:0 0 18px}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;list-style:none;padding:0;margin:0 0 20px}
+.feat li{position:relative;padding-left:18px;font-size:14.5px}
+.feat li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--primary)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 18px}
+.kpi{border:1px solid var(--border);border-radius:8px;padding:14px;background:var(--pale)}
+.kpi b{display:block;font-size:24px;color:var(--primary);line-height:1.2}.kpi span{font-size:12.5px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:var(--pale);font-weight:600}
+td.r,th.r{text-align:right}
+.note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.sub{font-size:15px;margin:0 0 8px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:20px 0 0}
+.flow li{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:13.5px}
+.flow li+li:before{content:"→ ";color:var(--primary)}
+.lic{border-top:3px solid var(--primary)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.step i{font-style:normal;font-weight:700;color:var(--primary);font-size:13px}
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1.2fr;gap:28px}
+.who{background:var(--dark);color:#fff;border-radius:14px;padding:30px}
+.who h3{margin:0 0 4px}.who .role{color:var(--accent);font-weight:600;margin:0 0 20px}
+.who p{color:var(--dark-muted);margin:0 0 10px}.who b{color:#fff}
+form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-size:13px;font-weight:600;display:flex;flex-direction:column;gap:6px}
+label.full{grid-column:1/-1}
+input,select,textarea{font:inherit;font-weight:400;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--primary);outline-offset:0;border-color:transparent}
+textarea{min-height:110px;resize:vertical}
+.fnote{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin:0}
+footer{background:var(--dark);color:var(--dark-muted);padding:48px 0 30px;font-size:13.5px}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px}
+footer h4{color:#fff;margin:0 0 12px;font-size:14px}
+footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:6px}
+footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
+.disc{border-top:1px solid rgba(255,255,255,.12);margin-top:32px;padding-top:18px;font-size:12px}
+.reveal{opacity:0;transform:translateY(16px);transition:.6s}.reveal.in{opacity:1;transform:none}
+@media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
+.kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}.lang{display:none}}
+</style>
+<style id="fx">
+/* ===== FX layer: dark tech theme ===== */
+:root{--bg:#060d1a;--surface:rgba(16,30,52,.62);--text:#e6eefb;--muted:#93a6c2;--border:rgba(120,170,255,.16);--pale:#0a1628;--primary:#3aa0ff;--accent:#5ee6ff;--neon:#a35cff}
+body{background:#050b16;color:var(--text)}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:
+ radial-gradient(900px 600px at 10% 10%,rgba(58,160,255,.12),transparent 60%),
+ radial-gradient(800px 600px at 90% 60%,rgba(163,92,255,.10),transparent 60%),#050b16}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+ background-image:linear-gradient(rgba(94,230,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(94,230,255,.05) 1px,transparent 1px);background-size:48px 48px;
+ mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:100;background:linear-gradient(90deg,var(--accent),var(--primary),var(--neon));box-shadow:0 0 12px var(--accent)}
+.top{background:rgba(5,11,22,.72)!important;border-bottom:1px solid var(--border)}
+.brand{color:#fff}.brand span{color:var(--accent)}
+nav.sec{border-top-color:var(--border)}
+nav.sec a{color:var(--muted)}nav.sec a:hover,nav.sec a.on{color:#fff;border-bottom-color:var(--accent);text-shadow:0 0 12px rgba(94,230,255,.6)}
+.lang{color:var(--muted);border-color:var(--border)}
+.btn-p{background:linear-gradient(135deg,#2b8cff,#7a4dff);box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 30px -8px rgba(80,120,255,.8);transition:.25s}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.15),0 12px 40px -6px rgba(120,100,255,.95);background:linear-gradient(135deg,#3aa0ff,#9a5cff)}
+/* hero */
+.hero{position:relative;overflow:hidden;background:transparent!important;min-height:calc(100vh - 106px);display:flex;align-items:center}
+#net{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero .wrap{position:relative;z-index:1;width:100%}
+.hero h1{font-size:56px;font-weight:700;letter-spacing:-.01em}
+.hero h1 em{background:linear-gradient(90deg,#5ee6ff,#3aa0ff,#a35cff,#5ee6ff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.eyebrow{display:inline-block;padding:6px 12px;border:1px solid rgba(94,230,255,.35);border-radius:999px;background:rgba(94,230,255,.06)}
+.typed:after{content:"▍";animation:blink 1s steps(1) infinite;color:var(--accent)}@keyframes blink{50%{opacity:0}}
+.chip,.panel{background:rgba(12,26,48,.55);backdrop-filter:blur(8px);border-color:var(--border)}
+.chip b{background:linear-gradient(90deg,#fff,#9fdcff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.panel{position:relative;box-shadow:0 0 60px -20px rgba(58,160,255,.6)}
+.panel:before{content:"";position:absolute;inset:-1px;border-radius:15px;padding:1px;background:conic-gradient(from var(--a),transparent 0 70%,var(--accent),var(--neon),transparent);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 4s linear infinite;pointer-events:none}
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+.panel .scan{position:absolute;left:0;right:0;height:40px;top:-40px;background:linear-gradient(transparent,rgba(94,230,255,.12),transparent);animation:scan 3.5s linear infinite;pointer-events:none}
+@keyframes scan{to{top:100%}}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:1;width:24px;height:38px;border:2px solid rgba(255,255,255,.3);border-radius:14px}
+.scroll-hint:after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--accent);animation:sh 1.6s infinite}
+@keyframes sh{to{transform:translateY(14px);opacity:0}}
+/* marquee */
+.marquee{overflow:hidden;border-block:1px solid var(--border);background:rgba(10,22,40,.6);padding:14px 0;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marquee div{display:flex;gap:46px;width:max-content;animation:mq 32s linear infinite;font-weight:600;letter-spacing:.12em;color:var(--muted);font-size:14px;white-space:nowrap}
+.marquee span:nth-child(odd){color:var(--accent)}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* sections */
+section.s{border-bottom:1px solid var(--border);background:transparent}
+section.alt{background:rgba(10,22,40,.35)}
+.idx{color:var(--accent)}
+.s h2{font-size:36px;background:linear-gradient(90deg,#fff 30%,#9fc8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card,.step{position:relative;background:var(--surface);backdrop-filter:blur(10px);border-color:var(--border);overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s}
+.card:hover,.step:hover{border-color:rgba(94,230,255,.45);box-shadow:0 20px 60px -25px rgba(58,160,255,.7)}
+.card:after,.step:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+ background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(94,230,255,.13),transparent 45%)}
+.card:hover:after,.step:hover:after{opacity:1}
+.lic{border-top:2px solid transparent;border-image:linear-gradient(90deg,var(--accent),var(--neon)) 1}
+.value{background:linear-gradient(90deg,rgba(58,160,255,.14),rgba(163,92,255,.06));border-left-color:var(--accent);color:#cfe3ff}
+.kpi{background:rgba(5,12,24,.55);border-color:var(--border);transition:.3s}
+.kpi:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 0 24px -6px rgba(94,230,255,.6)}
+.kpi b{background:linear-gradient(90deg,#5ee6ff,#7aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:28px}
+.feat li:before{background:var(--accent);box-shadow:0 0 8px var(--accent);border-radius:50%}
+b{color:#fff}
+th{background:rgba(58,160,255,.1);color:#cfe3ff}
+td,th{border-bottom-color:var(--border)}
+tr{transition:background .2s}tr:hover td{background:rgba(94,230,255,.05)}
+td.r b{color:var(--accent)}
+.flow li{background:rgba(12,26,48,.7);border-color:var(--border);color:var(--text)}
+.flow li+li:before{color:var(--accent)}
+.step i{font-size:30px;background:linear-gradient(135deg,var(--accent),var(--neon));-webkit-background-clip:text;background-clip:text;color:transparent}
+.who{background:linear-gradient(145deg,rgba(43,140,255,.18),rgba(122,77,255,.15)),rgba(10,20,38,.8);border:1px solid var(--border)}
+form{background:var(--surface);border-color:var(--border);backdrop-filter:blur(10px)}
+input,select,textarea{background:rgba(5,12,24,.7);color:var(--text);border-color:var(--border)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);box-shadow:0 0 20px -4px rgba(94,230,255,.6)}
+#cp{color:var(--text)}
+footer{background:#030812;border-top:1px solid var(--border)}
+.reveal{transform:translateY(30px) scale(.98);filter:blur(4px)}.reveal.in{filter:none}
+#glow{position:fixed;width:500px;height:500px;border-radius:50%;pointer-events:none;z-index:-1;left:0;top:0;transform:translate(-50%,-50%);
+ background:radial-gradient(circle,rgba(58,160,255,.10),transparent 65%);transition:transform .08s}
+@media(max-width:900px){.hero h1{font-size:36px}.s h2{font-size:28px}#glow{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style id="fx-merge">
+#cp{background:rgba(255,255,255,.04);color:var(--text)}
+.shot{margin:0;position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 0 80px -20px rgba(58,160,255,.7)}
+.shot img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(.9) contrast(1.05);transition:transform 6s ease}
+.shot:hover img{transform:scale(1.08)}
+.shot figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px;background:linear-gradient(transparent,rgba(3,8,18,.92));display:flex;flex-direction:column}
+.shot figcaption span{font-size:13px;color:var(--muted)}
+.shot:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(transparent 48%,rgba(94,230,255,.18) 50%,transparent 52%);background-size:100% 220%;animation:sweep 4s linear infinite}
+@keyframes sweep{from{background-position:0 120%}to{background-position:0 -120%}}
+.svc{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.svc.three{grid-template-columns:repeat(3,1fr)}
+.svc .card{margin:0}.svc table{font-size:13px}
+.no{display:block;font-style:normal;font-weight:800;font-size:30px;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),var(--neon));-webkit-background-clip:text;background-clip:text;color:transparent}
+.feat.one{grid-template-columns:1fr}
+.card.hot{border-color:rgba(163,92,255,.5);box-shadow:0 0 50px -20px rgba(163,92,255,.8)}
+.badge{font-size:11px;padding:2px 8px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--neon));color:#04101f;vertical-align:middle;margin-left:6px}
+.kpis.five{grid-template-columns:repeat(5,1fr)}
+.bits{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;position:relative}
+.bits span{aspect-ratio:1;display:grid;place-items:center;border:1px solid var(--border);border-radius:6px;font-family:Consolas,monospace;font-size:18px;color:var(--muted);background:rgba(5,12,24,.6);transition:.3s}
+.bits span.hit{color:#ffb547;border-color:#ffb547;box-shadow:0 0 18px rgba(255,181,71,.8);background:rgba(255,140,0,.15)}
+.ion{position:absolute;width:6px;height:6px;border-radius:50%;background:#ffd27a;box-shadow:0 0 14px 4px #ff9d2e;pointer-events:none}
+.bars{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.bars div{position:relative;padding:8px 10px;border-radius:6px;background:rgba(5,12,24,.55);overflow:hidden;font-size:13px;display:flex;justify-content:space-between;gap:10px}
+.bars div:before{content:"";position:absolute;inset:0;width:var(--w,0);background:linear-gradient(90deg,rgba(58,160,255,.45),rgba(163,92,255,.35));transition:width 1.4s cubic-bezier(.2,.8,.2,1);z-index:0}
+.bars div.best:before{background:linear-gradient(90deg,rgba(94,230,255,.7),rgba(74,222,128,.5))}
+.bars span,.bars em{position:relative;z-index:1}.bars em{font-style:normal;color:var(--accent);white-space:nowrap}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.gallery figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:.3s}
+.gallery figure:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 20px 50px -20px rgba(58,160,255,.8)}
+.gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000;transition:transform .6s}
+.gallery figure:hover img{transform:scale(1.06)}
+.gallery figcaption{padding:14px;font-size:13.5px;color:var(--muted)}.gallery figcaption b{display:block;color:#fff;margin-bottom:4px}
+.steps-ol{counter-reset:s;list-style:none;padding:0;margin:14px 0}
+.steps-ol li{counter-increment:s;position:relative;padding:6px 0 6px 40px;font-size:14.5px}
+.steps-ol li:before{content:counter(s);position:absolute;left:0;top:4px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;border:1px solid var(--accent);color:var(--accent)}
+.step h3{margin:6px 0 4px;font-size:17px}
+.steps.four{grid-template-columns:repeat(4,1fr)}
+a.card.dl{display:block;color:var(--text)}a.card.dl:hover{transform:translateY(-4px)}
+@media(max-width:900px){.svc,.svc.three,.gallery,.steps.four,.kpis.five{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.svc,.svc.three,.gallery,.steps.four{grid-template-columns:1fr}}
+</style>
+<style id="calm">
+/* Restrained engineering theme: one accent, no glow, readable contrast */
+:root{--bg:#0b1320;--surface:#111c2d;--text:#e8edf4;--muted:#a9b6c8;--border:#22324a;--pale:#0e1828;--primary:#3b8eea;--accent:#6cb4ff;--neon:#6cb4ff}
+body{background:#0b1320}
+body:before{background:#0b1320}
+body:after{opacity:.18}
+#progress{height:2px;background:var(--primary);box-shadow:none}
+.top{background:rgba(11,19,32,.92)!important}
+.brand span{color:var(--accent)}
+nav.sec a:hover,nav.sec a.on{text-shadow:none;border-bottom-color:var(--primary)}
+.btn-p,.btn-p:hover{background:var(--primary);box-shadow:none;transform:none}
+.btn-p:hover{background:#2f7bd0}
+.hero{min-height:auto;padding:96px 0 84px}
+#net{opacity:.45}
+.hero h1{font-size:48px;font-weight:650}
+.hero h1 em{background:none;color:var(--accent);-webkit-text-fill-color:currentColor;animation:none}
+.eyebrow{border-color:var(--border);background:transparent;color:var(--accent)}
+.chip b,.kpi b,.s h2,.no,.step i{background:none;-webkit-text-fill-color:currentColor;color:inherit}
+.chip b{color:#fff}.kpi b{color:var(--accent);font-size:26px}.s h2{color:#fff}
+.no,.step i{color:var(--accent)}
+.chip,.panel,.card,.step,form{backdrop-filter:none}
+.shot{box-shadow:0 20px 50px -30px rgba(0,0,0,.8)}.shot:before{display:none}.shot:hover img{transform:none}
+.card:after,.step:after{display:none}
+.card:hover,.step:hover{box-shadow:none;border-color:#34507a}
+.card.hot{box-shadow:none;border-color:#34507a}
+.badge{background:var(--primary);color:#fff}
+.lic{border-image:none;border-top:2px solid var(--primary)}
+.value{background:#13233a;color:#d4e3f5;border-left-color:var(--primary)}
+.kpi{background:var(--pale)}.kpi:hover{transform:none;box-shadow:none;border-color:var(--border)}
+.feat li:before{box-shadow:none;background:var(--primary)}
+td.r b{color:#fff}
+.bars div:before{background:#2b5a8f}.bars div.best:before{background:#2f8f6b}
+.gallery figure:hover{transform:none;box-shadow:none}.gallery figure:hover img{transform:none}
+.who{background:var(--surface)}
+input:focus,select:focus,textarea:focus{box-shadow:none;outline-color:var(--primary)}
+.reveal{opacity:1!important;transform:none!important;filter:none!important}
+.marquee,#glow,.scroll-hint{display:none!important}
+.svc.two-col{grid-template-columns:1fr 1fr}
+.copymail{margin-top:8px;border-color:var(--border);background:transparent;color:var(--text)}
+@media(max-width:560px){.svc.two-col{grid-template-columns:1fr}}
+</style>
+<style id="about-css">
+.lead-card{display:flex;gap:22px;align-items:center;max-width:820px}
+.avatar{flex:none;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:24px;color:#fff;background:var(--primary)}
+.lead-card .role{color:var(--accent);font-weight:600;margin:2px 0 10px}
+@media(max-width:560px){.lead-card{flex-direction:column;align-items:flex-start}}
+</style>
+<style id="paper">
+/* Engineering-datasheet look: paper, ink, hairlines, one signal color */
+:root{--bg:#f6f4ef;--surface:#fffefb;--text:#1b1b1a;--muted:#5d5b56;--border:#d9d5cc;--pale:#efece5;--primary:#c2410c;--accent:#c2410c;--radius:2px;
+ --font:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--mono:"Cascadia Mono",Consolas,"SF Mono",monospace}
+html{scroll-padding-top:100px}
+body,body:before{background:var(--bg)!important;color:var(--text)}
+body:after,#net,#progress,.marquee,#glow,.scroll-hint{display:none!important}
+b{color:var(--text)}
+a{color:var(--primary)}
+/* header */
+.top{background:var(--bg)!important;backdrop-filter:none;border-bottom:1px solid var(--text)}
+.brand{color:var(--text);font-weight:700;letter-spacing:0}
+.brand span{color:var(--muted);font-family:var(--mono);font-weight:400;letter-spacing:.04em;font-size:11px}
+nav.sec{border-top:1px solid var(--border)}
+nav.sec a{color:var(--muted);font-size:13.5px;padding:9px 12px}
+nav.sec a:hover,nav.sec a.on{color:var(--text);border-bottom-color:var(--primary);text-shadow:none}
+.lang{border-radius:2px;border-color:var(--border);color:var(--text)}
+.btn{border-radius:2px;font-weight:600}
+.btn-p,.btn-p:hover{background:var(--text);color:var(--bg);box-shadow:none;transform:none}
+.btn-p:hover{background:var(--primary)}
+.btn-g{border-color:var(--text);color:var(--text)}
+.btn-g:hover{background:var(--text);color:var(--bg)}
+/* hero */
+.hero{background:var(--bg)!important;color:var(--text);min-height:auto;padding:64px 0 56px;border-bottom:1px solid var(--text);display:block}
+.hero-g{grid-template-columns:1.1fr 1fr;gap:56px;align-items:start}
+.eyebrow{border:0;background:none;padding:0;border-radius:0;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.02em;text-transform:none}
+.hero h1{font-size:44px;font-weight:700;line-height:1.18;letter-spacing:-.01em;margin:16px 0 20px}
+.hero h1 em{color:var(--muted);font-weight:500;-webkit-text-fill-color:currentColor;background:none}
+.hero p{color:var(--muted)}
+.chips{border-top:1px solid var(--text);gap:0;margin-top:8px}
+.chip{background:none;border:0;border-right:1px solid var(--border);border-radius:0;padding:14px 14px 0 0}
+.chip+.chip{padding-left:14px}.chip:last-child{border-right:0}
+.chip b{white-space:nowrap;color:var(--text);font-family:var(--mono);font-size:18px;font-weight:600;-webkit-text-fill-color:currentColor}
+.chip span{color:var(--muted)}
+.shot{border-radius:0;border:1px solid var(--text);box-shadow:none}
+.shot img{aspect-ratio:auto;filter:none}
+.shot figcaption{position:static;background:var(--surface);border-top:1px solid var(--text);padding:10px 12px;font-size:13px;flex-direction:row;justify-content:space-between;gap:12px}
+.shot figcaption b{color:var(--text)}
+/* sections */
+section.s,section.alt{background:transparent;border-bottom:1px solid var(--border);padding:64px 0}
+.idx{color:var(--primary);font-family:var(--mono);font-size:12px;letter-spacing:.02em;text-transform:none;font-weight:500}
+.s h2{color:var(--text);-webkit-text-fill-color:currentColor;background:none;font-size:30px;font-weight:700;letter-spacing:-.01em}
+.lead{color:var(--muted)}
+.card,.step,form,.who{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:none;backdrop-filter:none}
+.card:hover,.step:hover{border-color:var(--border);box-shadow:none;transform:none!important}
+.card.hot{border-color:var(--text)}
+.card h3{font-size:19px}
+.tag{color:var(--muted)}
+.no,.step i{color:var(--primary);-webkit-text-fill-color:currentColor;background:none;font-family:var(--mono);font-size:14px;font-weight:600}
+.badge{background:none;color:var(--primary);border:1px solid var(--primary);border-radius:2px;font-weight:600}
+.value{background:var(--pale);border-left:3px solid var(--text);border-radius:0;color:var(--text)}
+.kpis{gap:0;border-top:1px solid var(--text);border-bottom:1px solid var(--border)}
+.kpi{background:none;border:0;border-right:1px solid var(--border);border-radius:0;padding:14px 16px}
+.kpi:last-child{border-right:0}
+.kpi:hover{transform:none;box-shadow:none}
+.kpi b{color:var(--text);font-family:var(--mono);font-weight:600;font-size:24px;-webkit-text-fill-color:currentColor}
+.feat li:before{background:var(--text);border-radius:0;width:5px;height:5px;box-shadow:none;top:.7em}
+table{font-variant-numeric:tabular-nums}
+th{background:none;color:var(--muted);font-weight:600;border-bottom:1px solid var(--text);font-size:13px}
+td,th{border-bottom-color:var(--border)}
+tr:hover td{background:none}
+td.r b{color:var(--text);font-family:var(--mono)}
+.flow li{border-radius:2px;background:none;border-color:var(--border);color:var(--text);font-family:var(--mono);font-size:12.5px}
+.flow li+li:before{color:var(--muted)}
+.lic{border-top:3px solid var(--text);border-image:none}
+/* bars: plain horizontal bars */
+.bars div{background:none;border-radius:0;border-bottom:1px solid var(--border);padding:7px 0}
+.bars div:before{background:#d8d3c8;top:auto;bottom:-1px;height:3px}
+.bars div.best:before{background:var(--primary)}
+.bars em{color:var(--text);font-family:var(--mono)}
+/* bits demo */
+.bits span{border-radius:0;background:var(--surface);border-color:var(--border);color:var(--muted)}
+.bits span.hit{color:var(--primary);border-color:var(--primary);box-shadow:none;background:#fbe9df}
+.ion{background:var(--primary);box-shadow:none}
+/* gallery */
+.gallery figure{border-radius:0;border-color:var(--text);background:var(--surface)}
+.gallery figure:hover{transform:none;box-shadow:none;border-color:var(--text)}
+.gallery figure:hover img{transform:none}
+.gallery figcaption{color:var(--muted);border-top:1px solid var(--border)}
+.gallery figcaption b{color:var(--text)}
+.steps-ol li:before{border-radius:0;border-color:var(--text);color:var(--text);font-family:var(--mono)}
+/* about + contact */
+.avatar{border-radius:0;background:var(--text);color:var(--bg);font-family:var(--mono)}
+.lead-card .role{color:var(--primary)}
+.who h3,.who b{color:var(--text)}
+.who p{color:var(--muted)}
+.who .role{color:var(--primary)}
+.who a{color:var(--primary)!important}
+input,select,textarea{border-radius:2px;background:#fff;color:var(--text);border-color:var(--border)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--text);box-shadow:none}
+#cp,.copymail{background:none;color:var(--text);border-color:var(--text);border-radius:2px}
+footer{background:var(--text);color:#bdb8ad;border-top:0}
+footer h4{color:#fff}footer a{color:#bdb8ad}
+.disc{border-top-color:#3a3936}
+.note{color:var(--muted)}
+.reveal{opacity:1!important;transform:none!important;filter:none!important}
+@media(max-width:900px){.hero h1{font-size:32px}.chips{grid-template-columns:1fr 1fr 1fr}.kpi{border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="brand">JuLone Team<span>SIGNAL · HIGH-SPEED SYSTEMS</span></div>
+    <div class="bar-r">
+      <a class="lang" href="index.html">中文</a>
+      <a class="btn btn-p" href="#inquiry">Contact Us</a>
+    </div>
+  </div>
+  <nav class="sec wrap" aria-label="Page sections">
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#radiation">Reliability</a></li>
+      <li><a href="#injection">Fault Injection</a></li>
+      <li><a href="#boards">Boards</a></li>
+      <li><a href="#imaging">Imaging</a></li>
+      <li><a href="#ip">High-Speed IP</a></li>
+      <li><a href="#license">Licensing</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#inquiry">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap hero-g">
+    <div>
+      <div class="eyebrow">FPGA Boards · Imaging Algorithms · Radiation Reliability · High-Speed IP</div>
+      <h1>FPGA Signal Processing &amp; High-Speed IP<br><em>Artix-7 / Kintex-7 / Virtex-7 · Versal · RFSoC</em></h1>
+      <p>Custom FPGA boards, on-board deployment of signal-processing algorithms, radiation reliability assessment, and industrial-grade 100GbE / NVMe / JESD204 / RFSoC IP licensing for research institutes and enterprises.</p>
+      <p>SAR imaging is running on Artix-7, Kintex-7 and Virtex-7 boards; high-speed IP covers AMD Versal / RFSoC / UltraScale+.</p>
+      <div class="cta">
+        <a class="btn btn-p" href="#inquiry">Discuss a Project</a>
+        <a class="btn btn-g" href="#services">View Services</a>
+      </div>
+      <div class="chips">
+        <div class="chip"><b>12,000</b><span>Board-level fault injections</span></div>
+        <div class="chip"><b>98.9 Gb/s</b><span>100GbE TCP line-rate TX</span></div>
+        <div class="chip"><b>4096²</b><span>V7 fixed-point CSA imaging</span></div>
+      </div>
+    </div>
+    <figure class="shot">
+      <img src="assets/sar/dubai-no-cfbp.webp" alt="Smartsat-X1 Dubai spaceborne SAR focused image">
+      <figcaption><b>Dubai · Smartsat-X1</b><span>Spaceborne high-squint · NO-CFBP focusing · 2026</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="s" id="services">
+  <div class="wrap reveal">
+    <div class="idx">Services</div>
+    <h2>From requirements to running on board.</h2>
+    <p class="lead">Every project is handled directly by the developer. Requirements first, then deliverables and schedule agreed in writing.</p>
+    <div class="svc">
+      <article class="card"><i class="no">01</i><h3>Custom FPGA Boards &amp; Bring-up</h3><p class="tag">For teams needing dedicated FPGA hardware, or stuck with a board that won't come up.</p>
+        <ul class="feat one"><li>Requirements and device selection (A7 / K7 / V7)</li><li>Schematic and PCB design</li><li>DDR3, Gigabit Ethernet, PCIe, UART bring-up</li><li>Power-on debug and test report</li></ul></article>
+      <article class="card"><i class="no">02</i><h3>Algorithm Deployment on FPGA</h3><p class="tag">You have a MATLAB / Python algorithm and need it running in real time on FPGA.</p>
+        <ul class="feat one"><li>Fixed-point modeling and accuracy evaluation</li><li>RTL implementation and timing closure</li><li>On-board validation, point-by-point match against the model</li><li>Host-side data I/O and control software</li></ul></article>
+      <article class="card"><i class="no">03</i><h3>Compute &amp; High-Speed Interface IP</h3><p class="tag">Ready-to-integrate compute kernels or high-speed networking / storage IP.</p>
+        <ul class="feat one"><li>FFT, CORDIC, optional ECC / TMR fault-tolerant variants</li><li>100GbE TCP/UDP, NVMe Host, AXI DMA</li><li>JESD204B/C RF link integration</li><li>Netlist or source licensing</li></ul></article>
+      <article class="card hot"><i class="no">04</i><h3>Radiation Reliability Assessment <span class="badge">Featured</span></h3><p class="tag">For spaceborne and airborne projects assessing single-event upsets.</p>
+        <ul class="feat one"><li>In-orbit radiation simulation: upset rates, sensitive modules, functional impact</li><li>SEM-based configuration memory fault injection</li><li>TMR, ECC and other hardening designs</li><li>Fault statistics and assessment report</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<section class="s alt" id="radiation">
+  <div class="wrap reveal">
+    <div class="idx">Radiation Platform · Featured</div>
+    <h2>In-Orbit Radiation Effects Simulation Platform</h2>
+    <p class="lead">See what radiation will do to your FPGA before launch. Orbit environment → per-bit upset rate → ion strikes on your real Vivado layout → affected module → impact on imaging and other functions.</p>
+    <div class="kpis five">
+      <div class="kpi"><b>46.2</b><span>Device upsets per day</span></div>
+      <div class="kpi"><b>≈ 31</b><span>Mean interval (minutes)</span></div>
+      <div class="kpi"><b>&lt; 10%</b><span>Deviation from published data</span></div>
+      <div class="kpi"><b>&lt; 20%</b><span>Deviation in Geant4 cross-check</span></div>
+      <div class="kpi"><b>6</b><span>Linked views</span></div>
+    </div>
+    <p class="note" style="margin-bottom:24px">Reference case (model calculation, not beam test): Virtex-7 XC7VX690T · MEO 20200 km / 55° · galactic cosmic rays (solar minimum) · 100 mil Al shielding. CRAM 20.8, BRAM 25.3, FF 0.09 upsets/day.</p>
+    <div class="two">
+      <article class="card">
+        <h3>One particle can flip one bit</h3>
+        <p class="tag">Principle demo: a particle deposits charge in the sensitive region and disturbs the stored state.</p>
+        <div class="bits" id="bits" aria-hidden="true"></div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-p" type="button" id="strike">▶ Play a strike</button>
+          <button class="btn" type="button" id="multi" style="border-color:var(--border);color:var(--text)">Multi-cell example</button>
+        </div>
+        <p class="note">Illustrative only; not physical timing or real upset probability.</p>
+      </article>
+      <article class="card">
+        <h3>What you get</h3>
+        <ul class="feat one" style="margin-top:12px">
+          <li><b>In-orbit upset report:</b> daily CRAM, BRAM and FF upsets and mission statistics for your orbit, shielding and device</li>
+          <li><b>Sensitive module ranking:</b> import your Vivado design, split by hierarchy, find the weakest parts</li>
+          <li><b>Functional impact:</b> inject upsets into your processing chain and measure output degradation</li>
+          <li><b>Hardening comparison:</b> TMR, ECC, scrubbing and board-level SEM injection, before vs after</li>
+        </ul>
+        <ul class="flow"><li>SPENVIS / CREME96</li><li>Bethe-Bloch LET</li><li>Weibull cross-section</li><li>IGRF-13</li><li>Poisson mission stats</li></ul>
+        <p class="note">The current model excludes solar particle events, trapped protons and total dose. Simulation supports design-phase assessment and does not replace beam testing.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="injection">
+  <div class="wrap reveal">
+    <div class="idx">Board-Level Fault Injection</div>
+    <h2>Does hardening work? 12,000 real injections answer.</h2>
+    <p class="lead">Configuration memory bits are flipped one at a time on a Kintex-7 board; each run performs a full 2048 × 2048 image and is compared bit-by-bit with the fault-free output. Two SAR chains, 10 design versions, all measured on hardware.</p>
+    <div class="kpis">
+      <div class="kpi"><b>12,000</b><span>Valid board-level injections</span></div>
+      <div class="kpi"><b>10</b><span>Design versions tested</span></div>
+      <div class="kpi"><b>15×</b><span>CSA full-TMR sensitive bits reduction</span></div>
+      <div class="kpi"><b>11×</b><span>BP runtime-check reduction</span></div>
+    </div>
+    <div class="two">
+      <article class="card">
+        <h3>CSA 2048 × 2048 · Seven hardening schemes</h3>
+        <p class="tag">XC7K325T · 1200 injections per version · equivalent sensitive bits (shorter is better)</p>
+        <div class="bars" data-max="588206">
+          <div data-v="588206"><span>Unprotected baseline W17</span><em>588,206 · baseline</em></div>
+          <div data-v="38554" class="best"><span>Full TMR TMR17</span><em>38,554 · ↓15.3×</em></div>
+          <div data-v="139183"><span>Grouped reduced-precision GR17</span><em>139,183 · ↓4.2×</em></div>
+          <div data-v="219733"><span>Replica −2 bits GR17M2</span><em>219,733 · ↓2.7×</em></div>
+          <div data-v="327804"><span>Replica −1 bit GR17M1A</span><em>327,804 · ↓1.8×</em></div>
+          <div data-v="334344"><span>Replica +1 bit GR17P1</span><em>334,344 · ↓1.8×</em></div>
+          <div data-v="389326"><span>Replica +2 bits GR17P2</span><em>389,326 · ↓1.5×</em></div>
+        </div>
+      </article>
+      <article class="card">
+        <h3>BP 2048 × 2048 · Three reliability configurations</h3>
+        <p class="tag">XC7K325T · 1200 injections per version</p>
+        <div class="bars" data-max="588206">
+          <div data-v="396090"><span>Unprotected baseline V7</span><em>396,090 · baseline</em></div>
+          <div data-v="53270"><span>Full TMR T7</span><em>53,270 · ↓7.4×</em></div>
+          <div data-v="35176" class="best"><span>Runtime check + auto re-run P7C</span><em>35,176 · ↓11.3×</em></div>
+        </div>
+        <h4 class="sub" style="margin-top:22px">Key findings</h4>
+        <ul class="feat one">
+          <li>Unprotected, 5.8% (BP) to 6.9% (CSA) of random configuration upsets cause imaging failure or hang</li>
+          <li>Full TMR works best (~1/15) but raises DSP usage from 173 to 493</li>
+          <li>Reduced-precision redundancy adds no DSP; best scheme ~1/4. Any replica width off the computed value is worse</li>
+          <li>BP runtime check: all 71 alarms recovered by automatic re-run, no hangs</li>
+        </ul>
+      </article>
+    </div>
+    <p class="note">Fault injection emulates single configuration-bit upsets, not irradiation. Combined with the simulated upset rates above, it supports design-phase in-orbit risk estimates.</p>
+  </div>
+</section>
+
+<section class="s alt" id="boards">
+  <div class="wrap reveal">
+    <div class="idx">Hardware · Board Platforms</div>
+    <h2>A7, K7 and V7 Board Platforms</h2>
+    <p class="lead">From compact prototypes to very large imaging, chosen by data size and interface needs. Interfaces, memory and devices can be customized.</p>
+    <div class="svc three">
+      <article class="card"><i class="no">A7</i><h3>Artix-7 Board</h3><p class="tag">XC7A35T · FGG484-2 · small/medium processing and prototyping</p>
+        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>Host link</td><td class="r">Ethernet / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
+      <article class="card"><i class="no">K7</i><h3>Kintex-7 Board</h3><p class="tag">XC7K325T · FFG900-2 · large-scale SAR imaging</p>
+        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>Host link</td><td class="r">GbE / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
+      <article class="card"><i class="no">V7</i><h3>Virtex-7 Board</h3><p class="tag">XC7VX690T · FFG1927-2 · very large imaging</p>
+        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>Host link</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>Auxiliary</td><td class="r">GbE, JTAG</td></tr></table></article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="imaging">
+  <div class="wrap reveal">
+    <div class="idx">Field Imagery</div>
+    <h2>Real echoes, focused images.</h2>
+    <p class="lead">Spaceborne and airborne SAR imaging from measured data, covering high-squint, spotlight and TOPS modes.</p>
+    <div class="gallery">
+      <figure><a href="assets/sar/dubai-no-cfbp.webp" target="_blank" rel="noopener"><img src="assets/sar/dubai-no-cfbp.webp" alt="Dubai spaceborne SAR image" loading="lazy"></a>
+        <figcaption><b>01 / Dubai · Spaceborne high-squint</b>Smartsat-X1, acquired 2025-07-28, focused with NO-CFBP; roads and buildings clearly resolved.</figcaption></figure>
+      <figure><a href="assets/sar/airborne-spotlight.webp" target="_blank" rel="noopener"><img src="assets/sar/airborne-spotlight.webp" alt="Airborne spotlight SAR image" loading="lazy"></a>
+        <figcaption><b>02 / Airborne spotlight</b>Processed with real-time unified focusing (RT-UFA); regular features and linear structures stay sharp.</figcaption></figure>
+      <figure><a href="assets/sar/airborne-tops.webp" target="_blank" rel="noopener"><img src="assets/sar/airborne-tops.webp" alt="Airborne Ku-band TOPS SAR image" loading="lazy"></a>
+        <figcaption><b>03 / Airborne TOPS</b>Ku-band TOPS mode processed with RT-UFA, focusing a wide scene.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s alt" id="algorithms">
+  <div class="wrap reveal">
+    <div class="idx">Algorithms &amp; Primitives</div>
+    <h2>CSA and BP: two imaging paths running on board.</h2>
+    <p class="lead">Both algorithms are implemented on FPGA; FFT, CORDIC and other kernels can be licensed separately.</p>
+    <div class="two">
+      <article class="card"><h3>CSA · Chirp Scaling</h3><p class="tag">Frequency-domain phase compensation for migration correction and focusing, built around FFTs, complex multiplies and external memory scheduling.</p>
+        <ol class="steps-ol"><li>Azimuth FFT into range-Doppler domain</li><li>Chirp scaling phase compensation</li><li>Range FFT, compression, migration correction, IFFT</li><li>Azimuth compression and residual phase, complex image out</li></ol>
+        <p class="note">Fixed-point CSA implemented at 256², 2048² and 4096².</p></article>
+      <article class="card"><h3>BP · Back-Projection</h3><p class="tag">Computes slant range per pixel from the trajectory, samples and phase-corrects echoes, and accumulates coherently along the aperture.</p>
+        <ol class="steps-ol"><li>Range compression</li><li>Pixel–pulse pairing, slant range</li><li>Interpolation and phase compensation</li><li>Coherent accumulation along the aperture</li></ol>
+        <p class="note">Implemented at 2048², with unprotected / TMR / runtime-check configurations.</p></article>
+      <article class="card"><h3>FFT · Streaming Transform</h3><p class="tag">1024-point, 4-way, 10-stage parallel SDF FFT in pure SystemVerilog RTL.</p>
+        <table><tr><td>Protection</td><td class="r">None / ECC / TMR</td></tr><tr><td>Clock constraint</td><td class="r">125 MHz · Vivado 2022.1</td></tr></table></article>
+      <article class="card"><h3>CORDIC · Phase to Sine</h3><p class="tag">Fully unrolled pipelined rotation CORDIC: 12-bit phase → 12-bit sine, 13 iterations.</p>
+        <table><tr><td>Internal X/Y</td><td class="r">19 bit, no DSP</td></tr><tr><td>Latency</td><td class="r">15 CE cycles (RTL)</td></tr></table></article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="cases">
+  <div class="wrap reveal">
+    <div class="idx">Cases</div>
+    <h2>Implementations running on real boards.</h2>
+    <p class="lead">Each case maps to a specific board, algorithm version and processing size.</p>
+    <div class="steps">
+      <div class="step"><i>A7</i><h3>CSA · 256 × 256</h3><p>Complex fixed-point over Ethernet. Board output matches the fixed-point model point by point (max error 0).</p></div>
+      <div class="step"><i>K7</i><h3>CSA · 2048 × 2048</h3><p>int32 I/Q · 125 MHz · 2 GiB DDR3; on-board imaging plus 2051 SEM fault injections.</p></div>
+      <div class="step"><i>K7</i><h3>BP · 2048 × 2048</h3><p>Direct back-projection, 8-tap sinc interpolation; 4.29 s compute, pixel-exact against reference in both runs.</p></div>
+      <div class="step"><i>V7</i><h3>CSA · 4096 × 4096</h3><p>Fixed-point CSA · PCIe Gen2 ×8 · dual DDR3, large-scale imaging with fast host exchange.</p></div>
+      <div class="step"><i>V·P</i><h3>100GbE · 60-min soak</h3><p>On Versal Premium: 39.8 TB mixed traffic with zero drops and zero errors.</p></div>
+      <div class="step"><i>NV</i><h3>NVMe · 4 TB full drive</h3><p>8× 990 PRO passed; 4 TB continuous write/readback with 100% byte-level match.</p></div>
+    </div>
+    <div class="gallery" style="margin-top:28px">
+      <figure><img src="assets/sar/point-target-board.png" alt="Nine-point target FPGA imaging" loading="lazy"><figcaption><b>Nine-point target</b>FPGA fixed-point imaging with center zoom</figcaption></figure>
+      <figure><img src="assets/sar/point-target-focus.png" alt="CSA point target focus profiles" loading="lazy"><figcaption><b>Point-target focus</b>Peak zoom with range / azimuth profiles</figcaption></figure>
+      <figure><img src="assets/sar/point-target-injection.png" alt="Fault injection golden, faulty and difference images" loading="lazy"><figcaption><b>Fault injection</b>Golden, faulty and log-difference images</figcaption></figure>
+    </div>
+  </div>
+</section>
+<section class="s" id="ip">
+  <div class="wrap reveal">
+    <div class="idx">High-Speed IP Cores</div>
+    <h2>Flagship High-Performance FPGA IP Cores</h2>
+    <p class="lead">Fully in-house RTL, stress-tested on real hardware, delivered as netlist or complete source.</p>
+
+    <article class="card">
+      <h3>100GbE TCP/UDP Full-Hardware Protocol Stack IP</h3>
+      <p class="tag">All-RTL line-rate processing completely offloading host CPU overhead with nanosecond-level latency</p>
+      <div class="value"><b>Application Value:</b> Engineered for AI cluster interconnects, ultra-low latency algorithmic trading, and line-rate network monitoring. Delivers zero-CPU footprint and deterministic microsecond forwarding.</div>
+      <ul class="feat">
+        <li>Target platform: AMD Versal Premium (integrated MRMAC; portable to other SerDes platforms)</li>
+        <li>Full hardware pipeline: TCP/UDP/IPv4 entirely handled in RTL logic with 0% CPU consumption</li>
+        <li>Independent multi-session engine: 16 concurrent TCP sessions (scalable), non-blocking architecture</li>
+        <li>Dual-mode operation: Complete support for both Server and Client connection modes</li>
+        <li>Comprehensive protocol suite: VLAN, Jumbo frames, ARP, ICMP, IGMP multicast, 802.3x PAUSE</li>
+        <li>Industrial-grade reliability: Window scaling, timestamps, SACK, fast retransmit, SYN cookie anti-attack</li>
+        <li>Seamless interface: Standard AXI4-Stream user interface with complete multi-channel examples</li>
+        <li>Delivery formats: Hardware-validated Netlist or fully commented pure RTL source code</li>
+      </ul>
+      <table>
+        <tr><th>Benchmark &amp; Test Condition</th><th class="r">Verified Performance Result</th></tr>
+        <tr><td>TCP Line-Rate Transmit (On-board hardware, MTU 9000)</td><td class="r"><b>98.9 Gb/s</b> (Physical wire-speed achieved)</td></tr>
+        <tr><td>TCP Hardware Receive (On-board hardware, MTU 9000)</td><td class="r"><b>74.0 Gb/s</b> (Ultra-high throughput)</td></tr>
+        <tr><td>Simultaneous Full-Duplex TX &amp; RX (On-board hardware)</td><td class="r"><b>99.6 Gb/s combined</b> (Saturated bi-directional)</td></tr>
+        <tr><td>60-Minute Mixed-Traffic Stress Soak Test</td><td class="r"><b>Zero data errors, zero drops</b> (<b>39.8 TB</b> TCP transferred)</td></tr>
+      </table>
+      <p class="note">Note: Results verified on AMD Versal Premium evaluation platform with physical optical transceivers.</p>
+    </article>
+
+    <article class="card" id="nvme">
+      <h3>NVMe Host High-Performance Controller IP</h3>
+      <p class="tag">Native FPGA NVMe host controller removing host PC bottlenecks in high-speed data recording &amp; AI ingestion</p>
+      <div class="value"><b>Application Value:</b> Tailored for lossless radar data logging, ultra-fast machine vision capture, and NVMe-over-Fabrics acceleration nodes. Directly controls NVMe SSD arrays without industrial PC intervention.</div>
+      <ul class="feat">
+        <li>Target platforms: AMD Versal Premium, Virtex/Kintex UltraScale+</li>
+        <li>Host interface: PCIe Gen4 (16 GT/s) x4 delivering exceptional storage bandwidth</li>
+        <li>Storage topology: Multi-drive concurrent read/write and deep hardware pipeline dispatch</li>
+        <li>Direct streaming: Native AXI4-Stream host interface bridging high-speed sensors to flash</li>
+        <li>High-reliability design: Multi-level configurable buffers with automated timeout recovery</li>
+        <li>Comprehensive command set: Full NVMe compliance with native Deallocate / TRIM support</li>
+        <li>Rigorous verification: Automated regression testbench built with SystemVerilog/UVM</li>
+        <li>Delivery formats: Hardware-tested netlist package or fully maintainable RTL source code</li>
+      </ul>
+      <table>
+        <tr><th>Benchmark &amp; Test Condition</th><th class="r">Verified Performance Result</th></tr>
+        <tr><td>Single-Drive Sequential Hardware Write</td><td class="r"><b>6.6 GB/s</b> (Unlocking flash performance limit)</td></tr>
+        <tr><td>Single-Drive Sequential Hardware Read</td><td class="r"><b>7.25 GB/s</b> (Approaching theoretical Gen4 x4 limit)</td></tr>
+        <tr><td>Multi-SSD Compatibility Validation</td><td class="r"><b>8x Samsung 990 PRO SSDs</b> 100% verified</td></tr>
+        <tr><td>Protocol Conformance &amp; Regression Test Suite</td><td class="r"><b>160 / 160 verification items passed</b></td></tr>
+        <tr><td>Full-Capacity Stress Data Integrity Test</td><td class="r"><b>4 TB continuous read/write, byte-by-byte match</b></td></tr>
+      </table>
+    </article>
+  </div>
+</section>
+
+<section class="s alt" id="solutions">
+  <div class="wrap reveal">
+    <div class="idx">Bus &amp; RF</div>
+    <h2>High-Speed Bus &amp; RF Data Acquisition Solutions</h2>
+    <p class="lead">From on-chip DMA to JESD204 RF links and dual-board ultra-wideband transceiver systems.</p>
+
+    <article class="card">
+      <h3>AXI4-Stream to DDR DMA High-Speed Engine IP</h3>
+      <div class="value"><b>Architecture Highlight:</b> Ultra-compact footprint (537 LUTs), sustained 14 GB/s burst transfer, automatic 4KB boundary splitting.</div>
+      <ul class="feat">
+        <li>512-bit AXI4-Full master through the Versal NoC to DDR4 at 300 MHz</li>
+        <li>Independent full-duplex TX/RX datapaths operating concurrently without stalls</li>
+        <li>Hardware 4 KB address boundary splitting conforming strictly to AXI protocol</li>
+        <li>Up to 8 outstanding bursts per direction maximizing DDR efficiency</li>
+        <li>Built-in parameter checking and AXI bus error detection/reporting</li>
+        <li>Ready-to-use Vivado IP: 537 LUTs, 290 Registers</li>
+      </ul>
+      <p style="margin:0"><b>Hardware Verification Result:</b> Continuous 8 GB DDR4 full-memory write-and-readback validation; 2 sessions of 5 full cycles all passed with zero errors, averaging sustained <b>14 GB/s</b> throughput.</p>
+    </article>
+
+    <article class="card">
+      <h3>JESD204B / JESD204C High-Speed RF Transceiver Integration</h3>
+      <div class="two" style="margin-top:14px">
+        <div>
+          <h4 class="sub">ADC Wideband Receiver Integration</h4>
+          <ul class="feat" style="grid-template-columns:1fr">
+            <li>AD9656 JESD204B hardware receiver integration</li>
+            <li>Target platform: Kintex UltraScale hardware family</li>
+            <li>Physical spec: 4 Lanes at 2.4 Gb/s per lane</li>
+            <li>Core features: Deterministic link setup &amp; multi-channel sync</li>
+            <li>Hardware validation: Closed-loop board-level ADC capture verified</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="sub">DAC Ultra-Wideband Transmitter Integration</h4>
+          <ul class="feat" style="grid-template-columns:1fr">
+            <li>DAC39RF20 JESD204C transmitter integration</li>
+            <li>Target platform: AMD Versal Premium series</li>
+            <li>Physical spec: 16 Lanes at 22.6875 Gb/s per lane</li>
+            <li>Core features: Precision GT tuning, training &amp; eye-diagram optimization</li>
+            <li>Hardware validation: RF spectral purity verified via high-bandwidth spectrum analyzer</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>VU9P + RFSoC Wideband Pulse Generation &amp; Capture System</h3>
+      <div class="value"><b>Turnkey System Solution:</b> Seamless pipeline combining 2.4 GSPS 16-bit RF transceiver, 4×25G Aurora inter-board link, and 9.6 GB/s DDR capture.</div>
+      <ul class="feat">
+        <li>Architecture: Virtex UltraScale+ VU9P acceleration card + RFSoC ZU47DR direct RF sampling</li>
+        <li>Host interface: PCIe Gen3 x16 with XDMA engine</li>
+        <li>Inter-board link: Aurora 64B66B over 4×25G bonded lanes with fast auto-recovery</li>
+        <li>Ultra-wideband RF: Complex 2.4 GSPS sampling, 16-bit high-dynamic-range processing</li>
+        <li>Multi-channel synthesis: 8 synchronized DAC channels with runtime nanosecond pulse configuration</li>
+        <li>Real-time capture: ADC streaming at 9.6 GB/s with ping-pong DDR buffering and host readback</li>
+        <li>Massive sample memory: Single waveform up to 4 GB, single capture session up to 8 GB</li>
+        <li>Host suite: Tools for pulse generation, sample capture, FFT analysis, and streaming</li>
+      </ul>
+      <table>
+        <tr><th>Benchmark Scenario &amp; Operating Point</th><th class="r">Hardware Measurement &amp; Simulation Result</th></tr>
+        <tr><td>Hardware RF Loopback (3200 MHz Single Tone)</td><td class="r">20 µs pulse &amp; 50 µs spacing matched; top spur suppression &gt; <b>-49 dBc</b></td></tr>
+        <tr><td>Full-System RTL Simulation Regression</td><td class="r"><b>10/10</b> extreme corner cases passed</td></tr>
+        <tr><td>Zero-Data-Loss Stress Test (Hardware Emulation)</td><td class="r">Downlink 42 frames beat-accurate; uplink 1061 frames <b>zero drop</b></td></tr>
+        <tr><td>Timing Closure &amp; Physical Routing</td><td class="r">Zero-violation timing closure across both large boards</td></tr>
+      </table>
+    </article>
+  </div>
+</section>
+
+<section class="s alt" id="license">
+  <div class="wrap reveal">
+    <div class="idx">Licensing</div>
+    <h2>Commercial Licensing Models</h2>
+    <p class="lead">Pragmatic, risk-mitigated licensing models to streamline your project evaluation.</p>
+    <div class="two">
+      <article class="card lic">
+        <h3>Netlist License</h3>
+        <ul class="feat" style="grid-template-columns:1fr;margin-top:14px">
+          <li>Validated DCP, EDIF, black-box wrappers and gate-level simulation models</li>
+          <li>Integrates into existing FPGA projects with zero source-code overhead</li>
+          <li>Ideal for equipment manufacturers focused on rapid time-to-market</li>
+          <li><b>Node/time-limited evaluation netlists for zero-risk on-board evaluation before commitment</b></li>
+        </ul>
+      </article>
+      <article class="card lic">
+        <h3>Source RTL License</h3>
+        <ul class="feat" style="grid-template-columns:1fr;margin-top:14px">
+          <li>Fully synthesizable, cleanly structured, heavily commented Verilog / SystemVerilog RTL</li>
+          <li>Full simulation testbenches, test cases and ready-to-run Vivado reference designs</li>
+          <li>Ideal for clients requiring full visibility, long-term maintenance or secondary development</li>
+          <li>Complete User Interface Guides and Hardware Integration Handbooks</li>
+        </ul>
+      </article>
+    </div>
+    <p class="note">Note: Custom feature tailoring and protocol adaptations are supported under flexible project/license agreements.</p>
+  </div>
+</section>
+
+<section class="s" id="downloads">
+  <div class="wrap reveal">
+    <div class="idx">Downloads</div>
+    <h2>Validation Handbooks &amp; Brochures</h2>
+    <p class="lead">CSA / BP SEU validation handbooks are available on request. Read online or save as PDF.</p>
+    <div class="svc two-col">
+      <a class="card dl" href="FPGA_IP_Licensing_EN.pdf?v=20261124c" target="_blank" rel="noopener"><i class="no">IP</i><h3>High-Speed FPGA IP Brochure</h3><p class="tag">100GbE / NVMe / JESD204 / RFSoC · English PDF ↓</p></a>
+      <a class="card dl" href="FPGA_IP_Licensing_CN.pdf?v=20261124c" target="_blank" rel="noopener"><i class="no">CN</i><h3>中文方案手册</h3><p class="tag">Chinese PDF ↓</p></a>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="s alt" id="about">
+  <div class="wrap reveal">
+    <div class="idx">About</div>
+    <h2>Every project is handled by our technical lead.</h2>
+    <div class="card lead-card">
+      <div class="avatar" aria-hidden="true">JL</div>
+      <div>
+        <h3>JuLone</h3>
+        <p class="role">Technical Lead</p>
+        <p class="tag" style="margin:0">Leads requirements, solution design and technical delivery across FPGA boards, signal-processing algorithms on FPGA, radiation reliability assessment and high-speed interface IP.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="inquiry">
+  <div class="wrap reveal">
+    <div class="idx">Contact</div>
+    <h2>Your next experiment starts here.</h2>
+    <p class="lead">The form uploads and stores nothing. It creates an email draft that you send from your own mailbox.</p>
+    <div class="steps four">
+      <div class="step"><i>01</i><h3>Clarify the task</h3><p>Application, signal scale, interfaces and experiment goals.</p></div>
+      <div class="step"><i>02</i><h3>Confirm the plan</h3><p>Platform configuration, algorithm fit and validation scope.</p></div>
+      <div class="step"><i>03</i><h3>Agree on delivery</h3><p>Quote, schedule, documentation and support confirmed in writing.</p></div>
+      <div class="step"><i>04</i><h3>Start validation</h3><p>Integration and acceptance against agreed test cases.</p></div>
+    </div>
+    <div class="contact" style="margin-top:28px">
+      <div>
+        <div class="who">
+          <h3>Project Inquiries &amp; Business Contact</h3>
+          <p class="role">Custom boards · SAR algorithms on FPGA · Radiation assessment · 100GbE / NVMe / JESD204 / RFSoC IP</p>
+          <p><b>Technical Lead:</b> JuLone</p>
+          <p><b>Email:</b> <a href="mailto:zhuao1906233797@gmail.com" style="color:var(--accent)">zhuao1906233797@gmail.com</a></p>
+          <button class="btn copymail" type="button" data-mail="zhuao1906233797@gmail.com">Copy email address</button>
+        </div>
+      </div>
+      <form id="f">
+        <label>Name<input name="name" required></label>
+        <label>Email<input name="email" type="email" required></label>
+        <label>Organization<input name="org"></label>
+        <label>Topic<select name="topic">
+          <optgroup label="Boards · Algorithms · Radiation">
+            <option>Custom FPGA boards &amp; bring-up</option><option>Algorithm deployment on FPGA</option>
+            <option>Radiation assessment / in-orbit simulation</option><option>A7 / K7 / V7 boards</option>
+            <option>CSA / BP imaging algorithms</option><option>FFT / CORDIC kernels</option></optgroup>
+          <optgroup label="High-Speed IP">
+            <option>100GbE TCP/UDP stack</option><option>NVMe Host controller</option>
+            <option>AXI DMA engine</option><option>JESD204B/C integration</option>
+            <option>VU9P + RFSoC system</option></optgroup>
+          <option>Custom / not sure yet</option></select></label>
+        <label class="full">Requirements<textarea name="msg" placeholder="Application, target platform, data size, performance targets, schedule…"></textarea></label>
+        <div class="full" style="grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-p" type="submit">Create Email</button>
+          <button class="btn" type="button" id="cp" style="border-color:var(--border)">Copy Text</button>
+        </div>
+        <p class="fnote" id="st"></p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><h4>FPGA Signal Processing &amp; High-Speed IP</h4><p>Custom boards, SAR imaging on FPGA, radiation reliability assessment, and industrial-grade 100GbE / NVMe / JESD204 / RFSoC IP.</p></div>
+      <div><h4>Products</h4><ul><li><a href="#boards">A7 / K7 / V7 Boards</a></li><li><a href="#radiation">Radiation Simulation</a></li><li><a href="#ip">100GbE / NVMe IP</a></li><li><a href="#solutions">JESD204 / RFSoC</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="FPGA_IP_Licensing_EN.pdf?v=20261124c" target="_blank" rel="noopener">English PDF</a></li><li><a href="FPGA_IP_Licensing_CN.pdf?v=20261124c" target="_blank" rel="noopener">中文手册 PDF</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="#inquiry">Inquiries</a></li><li><a href="#license">Licensing</a></li></ul></div>
+    </div>
+    <p class="disc">Disclaimer: All performance benchmarks reflect empirical results achieved in our specific hardware configurations and stress-test environments. Actual performance may vary depending on target FPGA silicon, board layout and application workload. Third-party trademarks and tools belong to their respective owners.</p>
+  </div>
+</footer>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const links=[...document.querySelectorAll('nav.sec a')];
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
+links.forEach(a=>{const t=document.querySelector(a.getAttribute('href'));t&&so.observe(t)});
+const f=document.getElementById('f'),st=document.getElementById('st');
+const body=()=>{const d=new FormData(f);return `Name: ${d.get('name')}\nEmail: ${d.get('email')}\nOrganization: ${d.get('org')}\nTopic: ${d.get('topic')}\n\nRequirements:\n${d.get('msg')}`};
+f.onsubmit=e=>{e.preventDefault();location.href='mailto:zhuao1906233797@gmail.com?subject='+encodeURIComponent('Project Inquiry - '+new FormData(f).get('topic'))+'&body='+encodeURIComponent(body());st.textContent='Email draft opened in your mail client.'};
+document.getElementById('cp').onclick=()=>navigator.clipboard.writeText(body()).then(()=>st.textContent='Copied to clipboard.');
+</script>
+<div id="progress"></div>
+<script>
+(()=>{
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pg=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.documentElement;pg.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
+/* copy email fallback */
+document.querySelectorAll('.copymail').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.dataset.mail).then(()=>{const o=b.textContent;b.textContent='✓';setTimeout(()=>b.textContent=o,1500)}));
+})();
+</script>
+
+<script>
+(()=>{
+/* SEU bit demo */
+const g=document.getElementById('bits');if(g){
+ const init='1010001110010110'.split('');
+ const reset=()=>{g.innerHTML=init.map(b=>`<span>${b}</span>`).join('')};reset();
+ const strike=n=>{reset();const cells=[...g.children],start=Math.floor(Math.random()*(16-n));
+  const tgt=cells[start],r=g.getBoundingClientRect(),c=tgt.getBoundingClientRect();
+  const ion=document.createElement('div');ion.className='ion';g.append(ion);
+  const x1=c.left-r.left+c.width/2,y1=c.top-r.top+c.height/2;
+  ion.animate([{transform:`translate(${x1-120}px,${y1-160}px)`,opacity:0},{transform:`translate(${x1-3}px,${y1-3}px)`,opacity:1}],{duration:600,easing:'ease-in'}).onfinish=()=>{
+   ion.remove();for(let k=0;k<n;k++){const s=cells[start+k];s.textContent=s.textContent==='1'?'0':'1';s.classList.add('hit')}}};
+ document.getElementById('strike').onclick=()=>strike(1);
+ document.getElementById('multi').onclick=()=>strike(3);
+}
+/* fault-injection bars */
+const bo=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;bo.unobserve(e.target);
+ const max=+e.target.dataset.max;[...e.target.children].forEach((d,i)=>setTimeout(()=>d.style.setProperty('--w',(d.dataset.v/max*100)+'%'),i*120))}),{threshold:.3});
+document.querySelectorAll('.bars').forEach(b=>bo.observe(b));
+})();
+</script>
+</body>
+</html>
