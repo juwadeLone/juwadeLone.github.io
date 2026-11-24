@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>High-Performance FPGA IP Solutions &amp; Design Services</title>
+<style>
+  @page {
+    size: A4;
+    margin: 10mm 17mm 12mm 17mm;
+    @bottom-left {
+      content: "High-Performance FPGA IP Solutions & Licensing";
+      font: 8pt Arial, sans-serif;
+      color: #7a8794;
+    }
+    @bottom-right {
+      content: counter(page);
+      font: 8pt Arial, sans-serif;
+      color: #7a8794;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Arial, "Helvetica Neue", sans-serif;
+    font-size: 8.8pt;
+    line-height: 1.34;
+    color: #2b2f33;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  header { text-align: center; margin-bottom: 5pt; }
+  h1 {
+    font-size: 19pt;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #12283e;
+    margin: 0 0 3.5pt 0;
+  }
+  header p { text-align: center; }
+  .subtitle { font-size: 10.2pt; color: #175d7a; font-weight: bold; margin: 0 0 3.5pt 0; }
+  .byline { font-size: 9.5pt; color: #2b2f33; margin: 0 0 3.5pt 0; }
+  .intro { font-size: 8.8pt; color: #3a4752; margin: 0 auto 1.5pt auto; max-width: 95%; }
+  .rule { width: 62%; margin: 6pt auto 0 auto; border: 0; border-top: 1.4pt solid #217393; }
+
+  h2 {
+    font-size: 13pt;
+    color: #12283e;
+    margin: 7pt 0 3pt 0;
+    padding-bottom: 1.5pt;
+    border-bottom: 0.8pt solid #c5d3dc;
+    break-after: avoid;
+  }
+  h2 .num { color: #217393; }
+  h3 {
+    font-size: 10.6pt;
+    color: #175d7a;
+    margin: 0 0 1.5pt 0;
+    break-after: avoid;
+  }
+  h4 {
+    font-size: 9.1pt;
+    color: #1a2024;
+    margin: 2.5pt 0 1pt 0;
+    break-after: avoid;
+  }
+  p { margin: 0 0 3pt 0; orphans: 3; widows: 3; }
+  b { color: #1a2024; }
+  .tagline { font-weight: bold; color: #20262b; margin-bottom: 2pt; }
+  .value-prop {
+    background: #edf5f9;
+    border-left: 2.5pt solid #217393;
+    padding: 2.5pt 6pt;
+    font-size: 8.4pt;
+    color: #16465c;
+    margin: 1.5pt 0 3.5pt 0;
+    border-radius: 0 2pt 2pt 0;
+  }
+
+  .block { break-inside: avoid; margin: 0 0 4.5pt 0; }
+
+  ul { margin: 1pt 0 3pt 0; padding-left: 13pt; }
+  li { margin: 0 0 0.3pt 0; }
+  .cols { columns: 2; column-gap: 20pt; }
+  .cols li { break-inside: avoid; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2pt 0 2.5pt 0;
+    font-size: 8.5pt;
+    break-inside: avoid;
+  }
+  th, td { padding: 1.5pt 5pt; border-bottom: 0.6pt solid #d3dce2; text-align: left; vertical-align: top; }
+  th { background: #e8f1f5; color: #12283e; }
+  .r { text-align: right; }
+  table.caps td:first-child { width: 110pt; font-weight: bold; color: #1a2024; }
+
+  .note { font-size: 7.6pt; color: #58646d; font-style: italic; margin-top: 1pt; }
+
+  .jesd { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20pt; }
+
+  .licenses { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12pt; margin-bottom: 3.5pt; }
+  .card {
+    border: 0.8pt solid #c5d3dc;
+    border-top: 2.5pt solid #217393;
+    padding: 4.5pt 7pt 3pt 7pt;
+    background: #f7fafc;
+  }
+  .card h3 { margin-bottom: 2pt; font-size: 10pt; }
+
+  .contact {
+    margin-top: 2pt;
+    padding: 5pt 9pt;
+    border-left: 2.5pt solid #217393;
+    background: #edf5f9;
+    break-inside: avoid;
+  }
+  .contact p { margin: 0 0 2pt 0; }
+  .contact .name { font-size: 11pt; font-weight: bold; color: #12283e; margin: 0; }
+  .contact .role { color: #52606a; margin-bottom: 3.5pt; font-weight: bold; }
+
+  .disclaimer {
+    margin-top: 5pt;
+    padding-top: 3.5pt;
+    border-top: 0.6pt solid #d3dce2;
+    font-size: 7.5pt;
+    color: #64707a;
+    font-style: italic;
+    break-inside: avoid;
+  }
+</style>
+</head>
+<body>
+<p style="text-align:center;font-size:8pt;color:#52606a;margin:4pt 0 0 0"><a href="fpga-ip-licensing-cn.html" style="color:#217393">中文</a> · <a href="../index.html" style="color:#217393">Back to juwade</a></p>
+
+<header>
+  <h1>High-Performance FPGA IP Solutions &amp; Design Services</h1>
+  <p class="subtitle">Industrial-Grade FPGA IP for AI Interconnect, Ultra-Fast Storage &amp; Wideband Radar Acquisition</p>
+  <p class="byline"><b>Wang Dongxu &amp; Hardware Acceleration Team / Studio</b></p>
+  <p class="intro">Production-ready FPGA IP licensing, turnkey customization, and full-stack integration support for ultra-high-speed digital systems.</p>
+  <p class="intro">Specializing in AMD/Xilinx flagship platforms (Versal Premium, RFSoC, UltraScale+), custom RTL architecture, protocol implementation and hardware optimization.</p>
+  <hr class="rule">
+</header>
+
+<h2><span class="num">01</span> — Flagship High-Performance FPGA IP Cores</h2>
+
+<section class="block">
+  <h3>100GbE TCP/UDP Full-Hardware Protocol Stack IP</h3>
+  <p class="tagline">All-RTL line-rate processing completely offloading host CPU overhead with nanosecond-level latency</p>
+  <div class="value-prop">
+    <b>Application Value:</b> Engineered for AI cluster interconnects, ultra-low latency algorithmic trading, and line-rate network monitoring. Delivers zero-CPU footprint and deterministic microsecond forwarding.
+  </div>
+  <ul class="cols">
+    <li>Target platform: AMD Versal Premium (integrated MRMAC; portable to other SerDes platforms)</li>
+    <li>Full hardware pipeline: TCP/UDP/IPv4 entirely handled in RTL logic with 0% CPU consumption</li>
+    <li>Independent multi-session engine: 16 concurrent TCP sessions (scalable), non-blocking architecture</li>
+    <li>Dual-mode operation: Complete support for both Server and Client connection modes</li>
+    <li>Comprehensive protocol suite: VLAN, Jumbo frames, ARP, ICMP, IGMP multicast, 802.3x PAUSE</li>
+    <li>Industrial-grade reliability: Window scaling, timestamps, SACK, fast retransmit, SYN cookie anti-attack</li>
+    <li>Seamless interface: Standard AXI4-Stream user interface accompanied by complete multi-channel examples</li>
+    <li>Delivery formats: Hardware-validated Netlist or fully synthesized/commented pure RTL source code</li>
+  </ul>
+  <h4>Hardware-Validated Empirical Test Results</h4>
+  <table>
+    <tr><th>Benchmark &amp; Test Condition</th><th class="r">Verified Performance Result</th></tr>
+    <tr><td>TCP Line-Rate Transmit (On-board hardware, MTU 9000)</td><td class="r"><b>98.9 Gb/s</b> (Physical wire-speed achieved)</td></tr>
+    <tr><td>TCP Hardware Receive (On-board hardware, MTU 9000)</td><td class="r"><b>74.0 Gb/s</b> (Ultra-high throughput)</td></tr>
+    <tr><td>Simultaneous Full-Duplex TX &amp; RX (On-board hardware)</td><td class="r"><b>99.6 Gb/s combined</b> (Saturated bi-directional)</td></tr>
+    <tr><td>60-Minute Mixed-Traffic Stress Soak Test</td><td class="r"><b>Zero data errors, zero drops</b> (<b>39.8 TB</b> TCP transferred)</td></tr>
+  </table>
+  <p class="note">Note: Results verified on AMD Versal Premium evaluation platform with physical optical transceivers.</p>
+</section>
+
+<section class="block">
+  <h3>NVMe Host High-Performance Controller IP</h3>
+  <p class="tagline">Native FPGA NVMe host controller removing host PC bottlenecks in high-speed data recording &amp; AI ingestion</p>
+  <div class="value-prop">
+    <b>Application Value:</b> Tailored for lossless radar data logging, ultra-fast machine vision capture, and NVMe-over-Fabrics acceleration nodes. Directly controls NVMe SSD arrays without industrial PC intervention.
+  </div>
+  <ul class="cols">
+    <li>Target platforms: AMD Versal Premium, Virtex/Kintex UltraScale+</li>
+    <li>Host interface: PCIe Gen4 (16 GT/s) x4 delivering exceptional storage bandwidth</li>
+    <li>Storage topology: Supports multi-drive concurrent read/write and deep hardware pipeline dispatch</li>
+    <li>Direct streaming: Native AXI4-Stream host interface directly bridging high-speed sensors to flash</li>
+    <li>High-reliability design: Multi-level configurable buffers with automated command timeout recovery</li>
+    <li>Comprehensive command set: Full NVMe standard compliance with native Deallocate / TRIM support</li>
+    <li>Rigorous verification: Production-grade automated regression testbench built with SystemVerilog/UVM</li>
+    <li>Delivery formats: Hardware-tested netlist package or fully maintainable RTL source code</li>
+  </ul>
+  <h4>Hardware-Validated Empirical Test Results</h4>
+  <table>
+    <tr><th>Benchmark &amp; Test Condition</th><th class="r">Verified Performance Result</th></tr>
+    <tr><td>Single-Drive Sequential Hardware Write</td><td class="r"><b>6.6 GB/s</b> (Unlocking flash performance limit)</td></tr>
+    <tr><td>Single-Drive Sequential Hardware Read</td><td class="r"><b>7.25 GB/s</b> (Approaching theoretical Gen4 x4 limit)</td></tr>
+    <tr><td>Multi-SSD Compatibility Validation</td><td class="r"><b>8x Samsung 990 PRO SSDs</b> 100% verified</td></tr>
+    <tr><td>Protocol Conformance &amp; Regression Test Suite</td><td class="r"><b>160 / 160 verification items passed</b></td></tr>
+    <tr><td>Full-Capacity Stress Data Integrity Test</td><td class="r"><b>4 TB continuous read/write, byte-by-byte match</b></td></tr>
+  </table>
+</section>
+
+<h2><span class="num">02</span> — High-Speed Bus &amp; RF Data Acquisition Solutions</h2>
+
+<section class="block">
+  <h3>AXI4-Stream to DDR DMA High-Speed Engine IP</h3>
+  <div class="value-prop">
+    <b>Architecture Highlight:</b> Ultra-compact footprint (537 LUTs), sustained 14 GB/s burst transfer, automatic 4KB boundary splitting.
+  </div>
+  <ul class="cols">
+    <li>512-bit AXI4-Full master interconnected through the Versal NoC to DDR4 operating at 300 MHz</li>
+    <li>Completely independent full-duplex TX/RX datapaths operating concurrently without mutual stalls</li>
+    <li>Hardware-level automatic 4 KB address boundary splitting conforming strictly to AXI protocol</li>
+    <li>Up to 8 outstanding bursts per direction maximizing DDR memory controller efficiency</li>
+    <li>Built-in real-time parameter checking and AXI bus error anomaly detection/reporting</li>
+    <li>Packaged as ready-to-use Vivado IP: negligible resource footprint (537 LUTs, 290 Registers)</li>
+  </ul>
+  <p><b>Hardware Verification Result:</b> Continuous 8 GB DDR4 space full memory write-and-readback validation; 2 individual sessions with 5 full cycles all passed with zero errors, averaging sustained <b>14 GB/s</b> throughput.</p>
+</section>
+
+<section class="block">
+  <h3>JESD204B / JESD204C High-Speed RF Transceiver Integration</h3>
+  <div class="jesd">
+    <div>
+      <h4>ADC Wideband Receiver Integration</h4>
+      <ul>
+        <li>AD9656 JESD204B hardware receiver integration</li>
+        <li>Target platform: Kintex UltraScale hardware family</li>
+        <li>Physical spec: 4 Lanes at 2.4 Gb/s per lane</li>
+        <li>Core features: Deterministic link setup &amp; multi-channel sync</li>
+        <li>Hardware validation: Closed-loop board-level ADC capture verified</li>
+      </ul>
+    </div>
+    <div>
+      <h4>DAC Ultra-Wideband Transmitter Integration</h4>
+      <ul>
+        <li>DAC39RF20 JESD204C transmitter integration</li>
+        <li>Target platform: AMD Versal Premium series</li>
+        <li>Physical spec: 16 Lanes running at 22.6875 Gb/s per lane</li>
+        <li>Core features: Precision GT tuning, training &amp; eye-diagram optimization</li>
+        <li>Hardware validation: RF spectral purity verified via high-bandwidth spectrum analyzer</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <h3>VU9P + RFSoC Wideband Pulse Generation &amp; Capture System</h3>
+  <div class="value-prop">
+    <b>Turnkey System Solution:</b> Seamless pipeline combining 2.4 GSPS 16-bit RF transceiver, 4×25G Aurora inter-board link, and 9.6 GB/s DDR capture.
+  </div>
+  <ul class="cols">
+    <li>Heterogeneous architecture: Virtex UltraScale+ VU9P acceleration card + RFSoC ZU47DR direct RF sampling</li>
+    <li>Host interface: High-throughput PCIe Gen3 x16 equipped with XDMA engine</li>
+    <li>Inter-board high-speed link: Aurora 64B66B protocol across 4×25G bonded lanes with fast auto-recovery</li>
+    <li>Ultra-wideband RF transceiver: Complex 2.4 GSPS sampling rate, 16-bit high-dynamic-range processing</li>
+    <li>Coordinated multi-channel synthesis: 8 synchronized DAC channels with runtime nanosecond pulse configuration</li>
+    <li>Real-time continuous capture: ADC streaming at 9.6 GB/s with ping-pong DDR buffering and host readback</li>
+    <li>Massive sample memory: Single waveform transmission up to 4 GB, single capture session up to 8 GB</li>
+    <li>Host engineering suite: Turnkey tools for pulse generation, sample capture, FFT analysis, and streaming</li>
+  </ul>
+  <h4>Comprehensive System Validation Benchmarks</h4>
+  <table>
+    <tr><th>Benchmark Scenario &amp; Operating Point</th><th class="r">Hardware Measurement &amp; Simulation Result</th></tr>
+    <tr><td>Hardware RF Loopback (3200 MHz Single Tone)</td><td class="r">20 µs pulse &amp; 50 µs spacing matched; Top spur suppression &gt; <b>-49 dBc</b></td></tr>
+    <tr><td>Full-System RTL Simulation Regression</td><td class="r">10/10 extreme corner cases passed with 100% convergence</td></tr>
+    <tr><td>Zero-Data-Loss Stress Test (Hardware Emulation)</td><td class="r">Downlink: 42 frames beat-accurate; Uplink: 1061 frames <b>zero drop</b></td></tr>
+    <tr><td>Timing Closure &amp; Physical Routing</td><td class="r">Strict zero-violation timing closure achieved across both large boards</td></tr>
+  </table>
+</section>
+
+<section class="block">
+  <h2><span class="num">03</span> — Technical Expertise &amp; Engineering Stack</h2>
+  <table class="caps">
+    <tr><th>Technical Domain</th><th>Supported Platforms &amp; Core Capabilities</th></tr>
+    <tr><td>Target FPGA Devices</td><td>AMD/Xilinx full spectrum of advanced devices (Versal Premium, Kintex/Virtex UltraScale+, Zynq UltraScale+ RFSoC)</td></tr>
+    <tr><td>RTL Development</td><td>Strictly linted, industrial-grade synthesis-ready Verilog and SystemVerilog architecture</td></tr>
+    <tr><td>EDA Tools &amp; Simulators</td><td>AMD Vivado Design Suite, Siemens ModelSim, Questa Advanced Simulator</td></tr>
+    <tr><td>High-Speed Protocols</td><td>100GbE (MRMAC), PCIe Gen4 / NVMe, JESD204B/C, Aurora 64B66B, Transceiver (GT) physical tuning</td></tr>
+    <tr><td>Interconnect &amp; Memory</td><td>AXI4-Full, AXI4-Stream, DDR4 SDRAM, Multi-channel DMA, Versal NoC (Network-on-Chip)</td></tr>
+    <tr><td>Quality Assurance</td><td>UVM-based testbenches, automated regression suites, 4TB+ multi-hour byte-level hardware verification</td></tr>
+    <tr><td>On-Site Hardware Debug</td><td>High-speed GT eye-diagram tuning, timing closure, protocol packet analyzers, complex board bring-up</td></tr>
+  </table>
+  <p><b>Engineering Standard:</b> Requirement Engineering → Architectural Design → Clean RTL Coding → Automated Regression Simulation → FPGA Implementation &amp; Timing Closure → Board-Level Stress Validation.</p>
+</section>
+
+<section class="block">
+  <h2><span class="num">04</span> — Commercial Licensing Models</h2>
+  <p>We provide pragmatic, risk-mitigated licensing models to streamline your project evaluation:</p>
+  <div class="licenses">
+    <div class="card">
+      <h3>Netlist License</h3>
+      <ul>
+        <li>Deliverable package: Extensively validated DCP, EDIF, black-box instantiation wrappers, gate-level simulation models</li>
+        <li>Seamlessly integrates into existing customer FPGA projects with zero source-code overhead</li>
+        <li>Ideal for commercial equipment manufacturers focused on rapid time-to-market</li>
+        <li><b>Evaluation netlists (node/time-limited) available for zero-risk on-board evaluation prior to commitment</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Source RTL License</h3>
+      <ul>
+        <li>Deliverable package: Fully synthesizable, cleanly structured, and heavily commented pure Verilog / SystemVerilog RTL</li>
+        <li>Includes full simulation testbenches, verification test cases, and ready-to-run Vivado reference designs</li>
+        <li>Ideal for enterprise clients requiring full internal visibility, long-term maintenance, or secondary development</li>
+        <li>Complete with comprehensive User Interface Guides and Hardware Integration Handbooks</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">Note: Custom feature tailoring and protocol adaptations are fully supported under flexible project/license agreements.</p>
+</section>
+
+<section class="block">
+  <h2><span class="num">05</span> — Full-Lifecycle Integration &amp; Technical Support</h2>
+  <p>To guarantee 100% operational success in customer hardware, we provide comprehensive, expert-level engineering support:</p>
+  <h4>Scope of Integration Support</h4>
+  <ul class="cols">
+    <li>Architectural evaluation, pinout feasibility review, and peripheral component selection</li>
+    <li>Top-level glue logic adaptation: clock-domain crossing (CDC) and reset sequencing</li>
+    <li>Vivado project generation, synthesis/implementation issue diagnosis, and timing constraints</li>
+    <li>High-speed SerDes GT routing, signal integrity consultation, and timing closure assistance</li>
+    <li>Provision of golden board-level demo projects and interactive joint bring-up assistance</li>
+    <li>Protocol analyzer packet capture analysis and hard-to-reproduce link failure diagnosis</li>
+  </ul>
+  <p>Engineering support is delivered strictly within agreed milestones to ensure prompt customer product delivery.</p>
+</section>
+
+<section class="block">
+  <h2><span class="num">06</span> — Inquiries &amp; Technical Consulting</h2>
+  <div class="contact">
+    <p class="name">Wang Dongxu &amp; Hardware Acceleration Team</p>
+    <p class="role">Principal FPGA Architect / High-Speed Communications &amp; Storage Specialist</p>
+    <p><b>Email:</b> w13772136085@aliyun.com &nbsp;&nbsp;&nbsp;&nbsp; <b>Phone / WeChat:</b> +86 137 7213 6085</p>
+    <p style="margin-top:4pt">Focusing on high-performance FPGA IP licensing, cross-platform architecture migration, and mission-critical high-speed link consulting.</p>
+    <p><b>Core Domains:</b> 100GbE Protocol Offload | NVMe Direct Storage Acceleration | JESD204B/C RF Acquisition | RFSoC Radar Subsystems</p>
+  </div>
+</section>
+
+<p class="disclaimer">Disclaimer: All performance benchmarks reported herein reflect empirical results achieved in our specific hardware configurations and stress-test environments. Actual performance may vary depending on target FPGA silicon, board layout, and application workload. Third-party trademarks and tools belong to their respective owners.</p>
+
+</body>
+</html>

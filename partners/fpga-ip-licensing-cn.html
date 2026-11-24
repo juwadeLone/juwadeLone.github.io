@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>高性能 FPGA IP 解决方案与设计服务</title>
+<style>
+  @page {
+    size: A4;
+    margin: 10mm 17mm 12mm 17mm;
+    @bottom-left {
+      content: "高性能 FPGA IP 解决方案与技术授权";
+      font: 8pt Arial, "Microsoft YaHei", sans-serif;
+      color: #7a8794;
+    }
+    @bottom-right {
+      content: counter(page);
+      font: 8pt Arial, "Microsoft YaHei", sans-serif;
+      color: #7a8794;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Arial, "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+    font-size: 8.9pt;
+    line-height: 1.36;
+    color: #2b2f33;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  header { text-align: center; margin-bottom: 5pt; }
+  h1 {
+    font-size: 20pt;
+    line-height: 1.15;
+    letter-spacing: 0.05em;
+    color: #12283e;
+    margin: 0 0 3.5pt 0;
+  }
+  header p { text-align: center; }
+  .subtitle { font-size: 10.5pt; color: #175d7a; font-weight: bold; margin: 0 0 3.5pt 0; }
+  .byline { font-size: 9.6pt; color: #2b2f33; margin: 0 0 3.5pt 0; }
+  .intro { font-size: 8.9pt; color: #3a4752; margin: 0 auto 1.5pt auto; max-width: 95%; }
+  .rule { width: 62%; margin: 6pt auto 0 auto; border: 0; border-top: 1.4pt solid #217393; }
+
+  h2 {
+    font-size: 13pt;
+    color: #12283e;
+    margin: 7pt 0 3pt 0;
+    padding-bottom: 1.5pt;
+    border-bottom: 0.8pt solid #c5d3dc;
+    break-after: avoid;
+  }
+  h2 .num { color: #217393; }
+  h3 {
+    font-size: 10.6pt;
+    color: #175d7a;
+    margin: 0 0 1.5pt 0;
+    break-after: avoid;
+  }
+  h4 {
+    font-size: 9.2pt;
+    color: #1a2024;
+    margin: 2.5pt 0 1pt 0;
+    break-after: avoid;
+  }
+  p { margin: 0 0 3pt 0; orphans: 3; widows: 3; }
+  b { color: #1a2024; }
+  .tagline { font-weight: bold; color: #20262b; margin-bottom: 2pt; }
+  .value-prop {
+    background: #edf5f9;
+    border-left: 2.5pt solid #217393;
+    padding: 2.5pt 6pt;
+    font-size: 8.5pt;
+    color: #16465c;
+    margin: 1.5pt 0 3.5pt 0;
+    border-radius: 0 2pt 2pt 0;
+  }
+
+  .block { break-inside: avoid; margin: 0 0 4.5pt 0; }
+
+  ul { margin: 1pt 0 3pt 0; padding-left: 13pt; }
+  li { margin: 0 0 0.3pt 0; }
+  .cols { columns: 2; column-gap: 20pt; }
+  .cols li { break-inside: avoid; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2pt 0 2.5pt 0;
+    font-size: 8.6pt;
+    break-inside: avoid;
+  }
+  th, td { padding: 1.5pt 5pt; border-bottom: 0.6pt solid #d3dce2; text-align: left; vertical-align: top; }
+  th { background: #e8f1f5; color: #12283e; }
+  .r { text-align: right; }
+  table.caps td:first-child { width: 95pt; font-weight: bold; color: #1a2024; }
+
+  .note { font-size: 7.6pt; color: #58646d; margin-top: 1pt; }
+
+  .jesd { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20pt; }
+
+  .licenses { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12pt; margin-bottom: 3.5pt; }
+  .card {
+    border: 0.8pt solid #c5d3dc;
+    border-top: 2.5pt solid #217393;
+    padding: 4.5pt 7pt 3pt 7pt;
+    background: #f7fafc;
+  }
+  .card h3 { margin-bottom: 2pt; font-size: 10pt; }
+
+  .contact {
+    margin-top: 2pt;
+    padding: 5pt 9pt;
+    border-left: 2.5pt solid #217393;
+    background: #edf5f9;
+    break-inside: avoid;
+  }
+  .contact p { margin: 0 0 2pt 0; }
+  .contact .name { font-size: 11pt; font-weight: bold; color: #12283e; margin: 0; }
+  .contact .role { color: #52606a; margin-bottom: 3.5pt; font-weight: bold; }
+
+  .disclaimer {
+    margin-top: 5pt;
+    padding-top: 3.5pt;
+    border-top: 0.6pt solid #d3dce2;
+    font-size: 7.5pt;
+    color: #64707a;
+    break-inside: avoid;
+  }
+</style>
+</head>
+<body>
+<p style="text-align:center;font-size:8pt;color:#52606a;margin:4pt 0 0 0"><a href="fpga-ip-licensing-en.html" style="color:#217393">English</a> · <a href="../index.html" style="color:#217393">返回 juwade 主页</a></p>
+
+<header>
+  <h1>高性能 FPGA IP 解决方案与设计服务</h1>
+  <p class="subtitle">面向智算互联、极速存储与宽带雷达采集的工业级 FPGA IP</p>
+  <p class="byline"><b>王东旭 硬件加速团队 / 架构工作室</b></p>
+  <p class="intro">面向高速数字系统，提供可直接量产的自研 FPGA IP 核授权、定制开发与系统级全流程集成支持。</p>
+  <p class="intro">专注于 AMD/Xilinx 高端平台（Versal / RFSoC / UltraScale+），深度聚焦定制 RTL 架构、协议栈实现与硬件级性能优化。</p>
+  <hr class="rule">
+</header>
+
+<h2><span class="num">01</span> — 主打高性能 FPGA IP 核心</h2>
+
+<section class="block">
+  <h3>100GbE TCP/UDP 全硬件协议栈 IP</h3>
+  <p class="tagline">全 RTL 硬件线速处理，彻底卸载 CPU 协议栈负荷，赋能超低时延网络互联</p>
+  <div class="value-prop">
+    <b>应用价值：</b>专为 AI 智算中心分布式互联、量化高频低时延交易及大规模数据中心流量线速捕获设计。零 CPU 开销，纳秒级微架构转发。
+  </div>
+  <ul class="cols">
+    <li>目标平台：AMD Versal Premium（集成 MRMAC 硬核，支持移植其他平台）</li>
+    <li>全硬件流水线：TCP/UDP/IPv4 协议全由 RTL 处理，零 CPU 占用</li>
+    <li>多会话独立收发：支持 16 个并发 TCP 会话（深度可扩展），会话互不阻塞</li>
+    <li>双模工作：支持服务端（Server）与客户端（Client）工作模式</li>
+    <li>完备协议支持：VLAN、巨型帧、ARP、ICMP、IGMP 组播、802.3x PAUSE</li>
+    <li>工业级鲁棒性：窗口缩放、时间戳、SACK、快速重传、SYN Cookie 防攻击</li>
+    <li>友好接口与生态：标准 AXI4-Stream 用户接口，随附多路应用参考范例</li>
+    <li>交付标准：提供经过上板严苛压力测试的 Netlist 网表或全套 RTL 源码</li>
+  </ul>
+  <h4>工业级实测验证结果</h4>
+  <table>
+    <tr><th>测试项与测试场景</th><th class="r">实测验证数据</th></tr>
+    <tr><td>TCP 线速发送（硬件上板实测，MTU 9000）</td><td class="r"><b>98.9 Gb/s</b>（达到物理线速）</td></tr>
+    <tr><td>TCP 硬件接收（硬件上板实测，MTU 9000）</td><td class="r"><b>74.0 Gb/s</b>（超高吞吐接收）</td></tr>
+    <tr><td>全双工收发同时（硬件上板实测）</td><td class="r"><b>合计 99.6 Gb/s</b>（双向饱和传输）</td></tr>
+    <tr><td>60 分钟严苛混合流量连续满载长测</td><td class="r"><b>零丢包、零错误</b>，累计 TCP 传输 <b>39.8 TB</b></td></tr>
+  </table>
+  <p class="note">注：以上测试基于 AMD Versal Premium 平台及实物光模块链路测试环境。</p>
+</section>
+
+<section class="block">
+  <h3>NVMe Host 高性能控制器 IP</h3>
+  <p class="tagline">自研原生 FPGA NVMe 主机控制器，突破雷达高速记录与大模型数据读取瓶颈</p>
+  <div class="value-prop">
+    <b>应用价值：</b>专为宽带雷达无损数据记录、工业高速视觉采集及 NVMe-oF 存储加速节点设计，无需工控机介入即可直驱高速 NVMe SSD 阵列。
+  </div>
+  <ul class="cols">
+    <li>目标平台：AMD Versal Premium / UltraScale+ 系列</li>
+    <li>主机接口：PCIe Gen4（16 GT/s）x4，提供极高数据吞吐带宽</li>
+    <li>存储拓扑：支持多盘并发存储应用，支持多盘并行读写流水线调度</li>
+    <li>极简数据流：原生 AXI4-Stream 主机数据接口，直连前端采集或网络流</li>
+    <li>可靠性设计：具备多级可配置硬件缓冲、完善的超时容错与自愈恢复机制</li>
+    <li>指令完备性：深度支持 NVMe 命令集及 Deallocate / TRIM 存储管理指令</li>
+    <li>验证完备度：内建完备的 UVM/SystemVerilog 仿真环境与自动化回归用例</li>
+    <li>交付物：交付经过商业级固态硬盘批量验证的工程网表或完整 RTL 源码</li>
+  </ul>
+  <h4>工业级实测验证结果</h4>
+  <table>
+    <tr><th>测试项与测试场景</th><th class="r">实测验证数据</th></tr>
+    <tr><td>单盘硬件连续写带宽实测</td><td class="r"><b>6.6 GB/s</b>（饱和释放硬件盘速）</td></tr>
+    <tr><td>单盘硬件连续读带宽实测</td><td class="r"><b>7.25 GB/s</b>（逼近 PCIe Gen4 x4 理论极限）</td></tr>
+    <tr><td>商用多盘阵列兼容性验证</td><td class="r"><b>8 块 Samsung 990 PRO SSD</b> 混测全部通过</td></tr>
+    <tr><td>协议标准一致性与回归验证</td><td class="r"><b>160 项验证项 100% 全部通过</b></td></tr>
+    <tr><td>严苛整盘数据完整性长测</td><td class="r"><b>4 TB 连续擦写与回读，逐字节校验 100% 正确</b></td></tr>
+  </table>
+</section>
+
+<h2><span class="num">02</span> — 高速总线与射频采集工程方案</h2>
+
+<section class="block">
+  <h3>AXI4-Stream 到 DDR DMA 高速传输引擎 IP</h3>
+  <div class="value-prop">
+    <b>微架构亮点：</b>超轻量资源占用（仅 537 LUT），支持 14 GB/s 饱和突发读写，具备 4KB 边界自动切分。
+  </div>
+  <ul class="cols">
+    <li>512 位 AXI4-Full 经典主机架构，经 Versal NoC 互联至 DDR4，工作频率 300 MHz</li>
+    <li>独立全双工读写数据通路，读写流水线并发运行互不干扰</li>
+    <li>硬件实时 4 KB 地址边界自适应切割，完美符合 AXI 协议规范</li>
+    <li>支持每个方向最多 8 个 Burst 在途并发，最大化内存吞吐效率</li>
+    <li>内建严格参数合规校验与 AXI 总线错误侦测告警逻辑</li>
+    <li>开箱即用打包为 Vivado 标准 IP，极度节省逻辑资源（仅 537 LUT、290 Register）</li>
+  </ul>
+  <p><b>实测验证结果：</b>8 GB DDR4 内存全空间满负荷灌入并读回，逐拍比对校验；2 轮独立测试各 5 轮全循环全部零错误通过，实测平均读写速率达 <b>14 GB/s</b>。</p>
+</section>
+
+<section class="block">
+  <h3>JESD204B / JESD204C 射频高速接口集成方案</h3>
+  <div class="jesd">
+    <div>
+      <h4>ADC 宽带高速接收链路</h4>
+      <ul>
+        <li>AD9656 JESD204B 硬件接收端定制集成</li>
+        <li>目标芯片：Kintex UltraScale 硬件平台</li>
+        <li>物理规格：4 Lane 架构，每 Lane 达到 2.4 Gb/s</li>
+        <li>底层特性：快速确定性链路建立与多通道硬同步</li>
+        <li>实体验证：全套完成板级真实 ADC 高速数据采集闭环验证</li>
+      </ul>
+    </div>
+    <div>
+      <h4>DAC 超高速发射链路</h4>
+      <ul>
+        <li>DAC39RF20 JESD204C 硬件发送端高阶集成</li>
+        <li>目标芯片：AMD Versal 系列硬件平台</li>
+        <li>物理规格：16 Lane 架构，单 Lane 速率高达 22.6875 Gb/s</li>
+        <li>底层特性：GT 复杂时钟调优、链路精准训练与眼图优化</li>
+        <li>实体验证：经高带宽射频频谱仪物理级实测验证，输出频谱纯净</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <h3>VU9P + RFSoC 超宽带脉冲发射与采集系统方案</h3>
+  <div class="value-prop">
+    <b>系统级方案：</b>打通 2.4 GSPS 16bit 射频收发、Aurora 4×25G 互联与 9.6 GB/s 实时采集入库全链路。
+  </div>
+  <ul class="cols">
+    <li>系统架构：Virtex UltraScale+ VU9P 计算卡 + RFSoC ZU47DR 射频直采卡</li>
+    <li>主机接口：PCIe Gen3 x16 高吞吐通道，集成 XDMA 驱动引擎</li>
+    <li>板间跨板高速互联：Aurora 64B66B 协议，4×25G 通道捆绑，具备毫秒级链路自愈重连</li>
+    <li>超宽带射频收发：复数 2.4 GSPS 采样率、16 位高动态范围宽带处理</li>
+    <li>多通道并行合成：8 路独立 DAC 协同输出，脉冲周期与脉宽支持在线纳秒级灵活配置</li>
+    <li>海量吞吐实时落地：ADC 全速 9.6 GB/s 乒乓机制高速写入 DDR，支持上位机全速读回</li>
+    <li>超大样本容量：支持单波形最大 4 GB 发射加载，单次连续采集样本上限达 8 GB</li>
+    <li>上位机生产力套件：随附专业波形生成、数据采集落盘、实时频谱分析及连续流接收软件</li>
+  </ul>
+  <h4>全系统综合验证指标</h4>
+  <table>
+    <tr><th>测试项与工况</th><th class="r">物理实测与仿真结果</th></tr>
+    <tr><td>物理板级自环验证（3200 MHz 单音射频）</td><td class="r">脉宽 20 µs、间隔 50 µs 硬件时序高度吻合；最高杂散抑制度优于 <b>-49 dBc</b></td></tr>
+    <tr><td>全系统级 RTL 仿真回归</td><td class="r">10 组典型边界与极端工况测试 <b>100% 全部收敛通过</b></td></tr>
+    <tr><td>全链路抗丢包压力验证（硬件仿真）</td><td class="r">下行 42 帧逐拍严格匹配；上行 1061 帧连续跨帧 <b>零丢包</b></td></tr>
+    <tr><td>时序分析与物理收敛</td><td class="r">双板超大规模工程全面达成时序零违例（Setup/Hold Timing Met）</td></tr>
+  </table>
+</section>
+
+<section class="block">
+  <h2><span class="num">03</span> — 核心技术储备与交付能力</h2>
+  <table class="caps">
+    <tr><th>专业领域</th><th>涵盖平台与核心技术能力</th></tr>
+    <tr><td>FPGA 目标芯片</td><td>AMD/Xilinx 全系列高端器件（Versal Premium、Kintex/Virtex UltraScale+、Zynq UltraScale+ RFSoC）</td></tr>
+    <tr><td>硬件描述语言</td><td>严格遵循工业级规范的 Verilog、SystemVerilog 可综合高品质 RTL 架构</td></tr>
+    <tr><td>设计与验证工具</td><td>Vivado Design Suite、ModelSim、Questa Advanced Simulator 等</td></tr>
+    <tr><td>超高速接口调优</td><td>100GbE (MRMAC)、PCIe Gen4/NVMe、JESD204B/C、Aurora 64B66B、高速 SerDes GT 物理层调校</td></tr>
+    <tr><td>总线与数据互联</td><td>AXI4-Full、AXI4-Stream、DDR4 控制、多通道 DMA、Versal NoC 片上网络互联</td></tr>
+    <tr><td>系统验证保障</td><td>UVM 架构搭建、全功能 RTL 仿真、自动化脚本回归、4TB+ 数据量逐字节硬件一致性校验</td></tr>
+    <tr><td>板级现场攻关</td><td>跨板高速 GT 眼图调试、高频时序分析与收敛、复杂总线协议诊断、实物板级联合联调</td></tr>
+  </table>
+  <p><b>工程交付准则：</b>业务需求分析 → 严谨微架构设计 → RTL 敏捷开发 → 自动化测试平台仿真 → FPGA 实现与时序闭环 → 物理板级高负荷实测验收。</p>
+</section>
+
+<section class="block">
+  <h2><span class="num">04</span> — 商业授权合作方式</h2>
+  <p>我们提供灵活务实的商业合作模式，充分降低您的项目前期评估风险：</p>
+  <div class="licenses">
+    <div class="card">
+      <h3>网表授权（Netlist License）</h3>
+      <ul>
+        <li>交付经过工业级严格验证的网表包：DCP、EDIF、黑盒端口模型及门级仿真库</li>
+        <li>无缝嵌入客户现有 FPGA 顶层工程，保密性高，开箱即用</li>
+        <li>适合快速集成投产、无需维护底层逻辑代码的企业客户</li>
+        <li><b>支持提供带时间/节点绑定的评估网表，先免费上板实测验证，测通再合作</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>源码授权（Source RTL License）</h3>
+      <ul>
+        <li>交付清晰完备、带详尽注释的自研 Verilog / SystemVerilog 纯 RTL 源码</li>
+        <li>随附完备的仿真 Testbench、验证脚本及 Vivado 参考工程</li>
+        <li>适合需要做自主二次开发、深度定制维护或承担国家级科研攻关的单位</li>
+        <li>交付规范完整的《用户接口手册》与《硬件集成指导书》</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">注：支持根据项目特定需求进行功能裁剪与接口协议定制，商务合作模式灵活支持项目制与授权制。</p>
+</section>
+
+<section class="block">
+  <h2><span class="num">05</span> — 全流程工程集成与技术支持保障</h2>
+  <p>为确保 IP 在客户产品中 100% 稳定运行，我们提供经验丰富的资深专家级技术支持：</p>
+  <h4>全方位支持范围</h4>
+  <ul class="cols">
+    <li>架构方案评估与目标芯片/外围物料选型指导</li>
+    <li>协助客户完成顶层接口、跨时钟域处理及复位逻辑适配</li>
+    <li>Vivado 工程构建、综合实现报错排查与优化建议</li>
+    <li>高速 SerDes 关键时序分析、引脚约束与物理收敛指导</li>
+    <li>提供现成板级 Demo 工程，协助开展联合上板调试</li>
+    <li>现场或远程协议分析仪抓包与疑难通信故障攻关</li>
+  </ul>
+  <p>支持工作严格在双方商定的项目周期与技术规范下高效推进，确保客户产品按期交付验收。</p>
+</section>
+
+<section class="block">
+  <h2><span class="num">06</span> — 商务洽谈与方案咨询</h2>
+  <div class="contact">
+    <p class="name">王东旭 硬件加速团队 / 架构工作室</p>
+    <p class="role">资深 FPGA 架构师 / 高性能通信与存储加速专家</p>
+    <p><b>联系邮箱：</b>w13772136085@aliyun.com &nbsp;&nbsp;&nbsp;&nbsp; <b>电话 / 微信：</b>+86 137 7213 6085</p>
+    <p style="margin-top:4pt">专注于上述高性能 FPGA IP 授权评估、系统级架构移植与关键高速接口调试顾问支持。</p>
+    <p><b>主营技术领域：</b>100GbE 超高速网络卸载 | NVMe 存储直通加速 | JESD204B/C 射频采集 | RFSoC 宽带雷达系统</p>
+  </div>
+</section>
+
+<p class="disclaimer">免责声明：本手册列示的性能数据均源自本团队特定硬件配置与真实板级高负荷测试环境，实际性能表现可能因客户目标平台、系统架构及特定工作负载存在差异。文中引用的第三方芯片型号、商标与工具链归属各自厂商所有。</p>
+
+</body>
+</html>

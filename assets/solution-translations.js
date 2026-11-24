@@ -132,6 +132,11 @@ const solutionTranslations = {
     resourceSAR:"CSA / SEU 验证手册", resourceBP:"BP / SEU 验证手册", resourceFFT:"容错 FFT 参考手册",
     resourceFFTNote:"架构、接口与集成参考。",
     datasheet:"验证手册",
+    partnerEyebrow:"PARTNERS / 生态合作", partnerTitle:"合作方的高性能 FPGA IP，可直接评估。",
+    partnerIntro:"王东旭硬件加速团队为本站合作伙伴，专注高速互联与存储 IP；其方案与本站板卡、算法平台互补，可按需联合对接。",
+    partnerCardTag:"合作方 / IP 授权", partnerCardTitle:"高性能 FPGA IP 授权与设计服务",
+    partnerCardNote:"100GbE 全硬件 TCP/UDP 协议栈、NVMe 主控、JESD204B/C 射频链路、RFSoC 雷达系统；支持网表与源码授权、免费评估网表。",
+    partnerCnLink:"中文方案页 ↗", partnerEnLink:"English ↗",
     footerBrand:"FPGA 信号处理方案", footerProducts:"服务与产品", footerResources:"技术资源",
     footerLine:"板卡定制 · 算法部署 · 计算 IP 核 · 抗辐射评估",
     footerBottom:"抗辐射相关结果为设计阶段评估，不代表器件已通过宇航鉴定；交付内容以双方书面合同为准。"
@@ -268,6 +273,11 @@ const solutionTranslations = {
     resourceSAR:"CSA / SEU validation sheet", resourceBP:"BP / SEU validation sheet", resourceFFT:"Fault-tolerant FFT reference",
     resourceFFTNote:"Architecture, interfaces and integration reference.",
     datasheet:"Validation sheet",
+    partnerEyebrow:"PARTNERS", partnerTitle:"Partner FPGA IP, ready for on-board evaluation.",
+    partnerIntro:"Wang Dongxu's hardware acceleration team is a partner of this site, focused on high-speed interconnect and storage IP. Their cores complement the boards and algorithms here and can be engaged jointly.",
+    partnerCardTag:"Partner / IP licensing", partnerCardTitle:"High-Performance FPGA IP Solutions & Design Services",
+    partnerCardNote:"100GbE all-hardware TCP/UDP stack, NVMe host controller, JESD204B/C RF links, RFSoC radar systems; netlist and source-RTL licensing with free evaluation netlists.",
+    partnerCnLink:"中文方案页 ↗", partnerEnLink:"English ↗",
     footerBrand:"FPGA signal processing", footerProducts:"Services & products", footerResources:"Technical resources",
     footerLine:"Custom boards · Algorithm deployment · IP cores · Radiation reliability",
     footerBottom:"Radiation results are design-stage assessments, not space qualification. Deliverables follow the written contract."
