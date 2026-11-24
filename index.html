@@ -96,6 +96,13 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:6px}
 footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .disc{border-top:1px solid rgba(255,255,255,.12);margin-top:32px;padding-top:18px;font-size:12px}
 .reveal{opacity:0;transform:translateY(16px);transition:.6s}.reveal.in{opacity:1;transform:none}
+.faq{display:grid;gap:12px;max-width:860px}
+.qa{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px}
+.qa summary{cursor:pointer;font-weight:600;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary:after{content:"+";color:var(--primary);font-size:20px;font-weight:400;flex-shrink:0}
+.qa[open] summary:after{content:"\2013"}
+.qa p{color:var(--muted);margin:10px 0 0;font-size:14.5px}
 @media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
 .kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}}
 </style>
@@ -763,6 +770,24 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
 
 
 
+<section class="s" id="audience">
+  <div class="wrap reveal">
+    <div class="idx">Who It's For · 适合谁</div>
+    <h2>如果你是这几种团队，我们大概率能帮上忙。</h2>
+    <p class="lead">从只有一个算法想法，到高速接口赶着量产，按团队处境对号入座。</p>
+    <div class="svc">
+      <article class="card"><i class="no">A</i><h3>科研院所与实验室</h3><p class="tag">星载、机载项目，需要把辐射影响量化说清楚。</p>
+        <ul class="feat one"><li>在轨翻转率与敏感模块定位</li><li>板级故障注入验证加固效果</li><li>交付评估报告，支撑立项与评审</li></ul></article>
+      <article class="card"><i class="no">B</i><h3>硬件产品与量产团队</h3><p class="tag">高速互联 / 存储是短板，量产节点在即。</p>
+        <ul class="feat one"><li>100GbE / NVMe / DMA 成熟 IP 直接集成</li><li>评估网表先上板实测，测通再谈授权</li><li>网表或源码两种授权，随附集成文档</li></ul></article>
+      <article class="card"><i class="no">C</i><h3>算法团队</h3><p class="tag">MATLAB / Python 模型跑通了，但还没上板。</p>
+        <ul class="feat one"><li>定点化评估与逐点比对</li><li>RTL 实现与时序收敛</li><li>主机端收发与控制软件一并交付</li></ul></article>
+      <article class="card"><i class="no">D</i><h3>需要专用板卡的项目组</h3><p class="tag">现成开发板接口不够，或自研板卡调不通。</p>
+        <ul class="feat one"><li>按需求定制 A7 / K7 / V7 板卡</li><li>DDR3、千兆网、PCIe 接口调通</li><li>上电调试并出具测试报告</li></ul></article>
+    </div>
+  </div>
+</section>
+
 <section class="s alt" id="about">
   <div class="wrap reveal">
     <div class="idx">About · 关于我们</div>
@@ -774,6 +799,21 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
         <p class="role">技术负责人</p>
         <p class="tag" style="margin:0">负责项目的需求梳理、方案设计与技术交付，覆盖 FPGA 板卡、信号处理算法上板、抗辐射可靠性评估与高速接口 IP。</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="faq">
+  <div class="wrap reveal">
+    <div class="idx">FAQ · 常见问题</div>
+    <h2>合作前，先把问题问清楚。</h2>
+    <div class="faq">
+      <details class="qa"><summary>评估网表真的免费吗？</summary><p>是。支持带时间或节点绑定的评估网表，先在你自己的板子上免费实测；达到指标后再谈正式授权，测不通不收费。</p></details>
+      <details class="qa"><summary>IP 可以移植到我们用的平台吗？</summary><p>100GbE 协议栈基于 Versal Premium 的 MRMAC 硬核开发，支持移植到其他平台；NVMe 支持 Versal / UltraScale+。具体移植范围在签约前书面确认。</p></details>
+      <details class="qa"><summary>网表授权和源码授权怎么选？</summary><p>快速投产、不改动底层选网表；需要二次开发或承担科研攻关选源码，源码随附 Testbench、验证脚本与参考工程。不确定就先用免费评估网表实测。</p></details>
+      <details class="qa"><summary>辐射仿真能代替束流试验吗？</summary><p>不能，也不应代替。仿真用于设计阶段评估与加固方案对比，配合 SEM 板级注入可覆盖大部分验证需求；最终鉴定仍建议束流试验。</p></details>
+      <details class="qa"><summary>我们只有算法没有 RTL，能做吗？</summary><p>可以。提供 MATLAB / Python 模型即可，我们完成定点化、RTL 实现与上板验证，交付与模型逐点比对的结果。</p></details>
+      <details class="qa"><summary>周期和报价怎么定？</summary><p>梳理需求后书面约定交付物、周期与报价，由技术负责人直接对接，没有中间销售环节。</p></details>
     </div>
   </div>
 </section>
@@ -832,7 +872,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
       <div><h4>FPGA 信号处理与高速 IP</h4><p>板卡定制、SAR 成像算法上板、抗辐射可靠性评估，以及 100GbE / NVMe / JESD204 / RFSoC 工业级 IP。</p></div>
       <div><h4>产品与方案</h4><ul><li><a href="#boards">A7 / K7 / V7 板卡</a></li><li><a href="#radiation">在轨辐射仿真</a></li><li><a href="#ip">100GbE / NVMe IP</a></li><li><a href="#solutions">JESD204 / RFSoC</a></li></ul></div>
       <div><h4>技术资源</h4><ul><li><a href="FPGA_IP_Licensing_CN.pdf?v=20261124c" target="_blank" rel="noopener">中文手册 PDF</a></li><li><a href="FPGA_IP_Licensing_EN.pdf?v=20261124c" target="_blank" rel="noopener">English PDF</a></li></ul></div>
-      <div><h4>联系</h4><ul><li><a href="#inquiry">商务咨询</a></li><li><a href="#license">授权方式</a></li></ul></div>
+      <div><h4>联系</h4><ul><li><a href="#inquiry">商务咨询</a></li><li><a href="#faq">常见问题</a></li><li><a href="#license">授权方式</a></li></ul></div>
     </div>
     <p class="disc">免责声明：本页列示的性能数据均源自本团队特定硬件配置与真实板级高负荷测试环境，实际性能可能因客户目标平台、系统架构及特定工作负载存在差异。文中引用的第三方芯片型号、商标与工具链归属各自厂商所有。</p>
   </div>
