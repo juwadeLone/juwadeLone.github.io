@@ -96,6 +96,13 @@ footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:6px}
 footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .disc{border-top:1px solid rgba(255,255,255,.12);margin-top:32px;padding-top:18px;font-size:12px}
 .reveal{opacity:0;transform:translateY(16px);transition:.6s}.reveal.in{opacity:1;transform:none}
+.faq{display:grid;gap:12px;max-width:860px}
+.qa{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px}
+.qa summary{cursor:pointer;font-weight:600;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary:after{content:"+";color:var(--primary);font-size:20px;font-weight:400;flex-shrink:0}
+.qa[open] summary:after{content:"\2013"}
+.qa p{color:var(--muted);margin:10px 0 0;font-size:14.5px}
 @media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
 .kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}}
 </style>
@@ -763,6 +770,24 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
 
 
 
+<section class="s" id="audience">
+  <div class="wrap reveal">
+    <div class="idx">Who It's For</div>
+    <h2>If your team looks like one of these, we can probably help.</h2>
+    <p class="lead">From a single algorithm idea to a production deadline on high-speed interfaces.</p>
+    <div class="svc">
+      <article class="card"><i class="no">A</i><h3>Research institutes &amp; labs</h3><p class="tag">Spaceborne or airborne projects that need radiation effects quantified.</p>
+        <ul class="feat one"><li>In-orbit upset rates and sensitive-module mapping</li><li>Board-level fault injection to validate hardening</li><li>Assessment reports that hold up in reviews</li></ul></article>
+      <article class="card"><i class="no">B</i><h3>Hardware product teams</h3><p class="tag">High-speed interconnect or storage is the gap, and the deadline is real.</p>
+        <ul class="feat one"><li>Proven 100GbE / NVMe / DMA IP ready to integrate</li><li>Evaluate netlists on your board before any commitment</li><li>Netlist or source licenses with integration docs</li></ul></article>
+      <article class="card"><i class="no">C</i><h3>Algorithm teams</h3><p class="tag">Your MATLAB / Python model works — it just isn't on hardware yet.</p>
+        <ul class="feat one"><li>Fixed-point evaluation with point-by-point comparison</li><li>RTL implementation and timing closure</li><li>Host-side transfer and control software included</li></ul></article>
+      <article class="card"><i class="no">D</i><h3>Projects needing custom boards</h3><p class="tag">Off-the-shelf boards lack the interfaces, or a custom board won't come up.</p>
+        <ul class="feat one"><li>Custom A7 / K7 / V7 boards to your requirements</li><li>DDR3, gigabit Ethernet, PCIe bring-up</li><li>Power-on debug with a test report</li></ul></article>
+    </div>
+  </div>
+</section>
+
 <section class="s alt" id="about">
   <div class="wrap reveal">
     <div class="idx">About</div>
@@ -774,6 +799,21 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
         <p class="role">Technical Lead</p>
         <p class="tag" style="margin:0">Leads requirements, solution design and technical delivery across FPGA boards, signal-processing algorithms on FPGA, radiation reliability assessment and high-speed interface IP.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="faq">
+  <div class="wrap reveal">
+    <div class="idx">FAQ</div>
+    <h2>Fair questions, before you sign anything.</h2>
+    <div class="faq">
+      <details class="qa"><summary>Is the evaluation netlist really free?</summary><p>Yes. Evaluation netlists are time- or node-locked — you test on your own board first, at no cost. A paid license only comes after it meets your targets.</p></details>
+      <details class="qa"><summary>Can the IP be ported to our platform?</summary><p>The 100GbE stack targets Versal Premium's MRMAC hard block and is portable; NVMe supports Versal / UltraScale+. The exact porting scope is confirmed in writing before signing.</p></details>
+      <details class="qa"><summary>Netlist license or source license?</summary><p>Pick netlist for fast integration without touching the internals; pick source RTL for further development or research programs — it ships with testbenches, scripts and a reference project.</p></details>
+      <details class="qa"><summary>Can simulation replace beam testing?</summary><p>No — and it shouldn't. Simulation covers design-stage assessment and hardening trade-offs; with SEM board-level injection it covers most verification needs. Final qualification still calls for beam time.</p></details>
+      <details class="qa"><summary>We only have an algorithm, no RTL. Can you still help?</summary><p>Yes. A MATLAB / Python model is enough — we handle fixed-point conversion, RTL implementation and on-board verification with point-by-point comparison against your model.</p></details>
+      <details class="qa"><summary>How are schedule and pricing decided?</summary><p>After scoping, deliverables, timeline and pricing are agreed in writing. You deal directly with the technical lead — no sales layer in between.</p></details>
     </div>
   </div>
 </section>
@@ -831,7 +871,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
       <div><h4>FPGA Signal Processing &amp; High-Speed IP</h4><p>Custom boards, SAR imaging on FPGA, radiation reliability assessment, and industrial-grade 100GbE / NVMe / JESD204 / RFSoC IP.</p></div>
       <div><h4>Products</h4><ul><li><a href="#boards">A7 / K7 / V7 Boards</a></li><li><a href="#radiation">Radiation Simulation</a></li><li><a href="#ip">100GbE / NVMe IP</a></li><li><a href="#solutions">JESD204 / RFSoC</a></li></ul></div>
       <div><h4>Resources</h4><ul><li><a href="FPGA_IP_Licensing_EN.pdf?v=20261124c" target="_blank" rel="noopener">English PDF</a></li><li><a href="FPGA_IP_Licensing_CN.pdf?v=20261124c" target="_blank" rel="noopener">中文手册 PDF</a></li></ul></div>
-      <div><h4>Contact</h4><ul><li><a href="#inquiry">Inquiries</a></li><li><a href="#license">Licensing</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="#inquiry">Inquiries</a></li><li><a href="#faq">FAQ</a></li><li><a href="#license">Licensing</a></li></ul></div>
     </div>
     <p class="disc">Disclaimer: All performance benchmarks reflect empirical results achieved in our specific hardware configurations and stress-test environments. Actual performance may vary depending on target FPGA silicon, board layout and application workload. Third-party trademarks and tools belong to their respective owners.</p>
   </div>

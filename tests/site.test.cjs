@@ -226,10 +226,10 @@ test("catalog parameters resolve to pinned sources and memory/timing retain evid
 test("hardware, algorithms, primitives, simulation, imagery and validation have unique destinations",()=>{
   const ids=Array.from(html.matchAll(/\bid="([^"]+)"/g),m=>m[1]);
   assert.equal(ids.length,new Set(ids).size,"Duplicate HTML id");
-  for(const id of ["services","radiation","injection","boards","imaging","algorithms","cases","ip","solutions","license","downloads","about","inquiry"]){
+  for(const id of ["services","radiation","injection","boards","imaging","algorithms","cases","ip","solutions","license","downloads","audience","about","faq","inquiry"]){
     assert.ok(ids.includes(id),id);
   }
-  for(const id of ["services","radiation","injection","boards","imaging","ip","license","about","inquiry"]){
+  for(const id of ["services","radiation","injection","boards","imaging","ip","license","about","faq","inquiry"]){
     assert.ok(html.includes('href="#'+id+'"'),id);
   }
   assert.ok(html.indexOf('id="services"')<html.indexOf('id="radiation"'));
