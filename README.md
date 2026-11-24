@@ -107,11 +107,28 @@ git diff --check
 
 ## Optional radiation simulation service
 
-The homepage introduces the existing `juwadeLone/seu_platform` with original platform
-screenshots, source links, reference conditions and missing-data limits. GitHub Pages
-cannot execute its Python backend. The interactive service runs separately and its
-Devin App link requires organization authorization and the managing session's server;
-the preserved public orbit dashboard remains available at `research.html`.
+The homepage introduces the existing `juwadeLone/seu_platform` through six native,
+bilingual views: a one-shot particle-strike illustration, selectable orbit categories,
+conceptual SAR consequences, an SRAM-type cell circuit, reference-model coverage
+and the existing Geant4 cross-check. The latter retains the reference inputs and
+values already published on main, presenting them as bilingual HTML rather than a screenshot.
+The diagrams use inline SVG and real translated page text, not screenshots, iframes
+or a 3D runtime. Existing reference metrics remain separate from the illustrations.
+Changing LEO/MEO/GEO only changes the diagram and explanation, not the reference case.
+The fixed one-cell / three-cell teaching examples do not run a physical model, sample
+events or calculate rates. The SAR drawings are original concepts, not generated or
+measured imagery; the measured-paper gallery and board-level evidence stay separate.
+
+`assets/platform.js` adds keyboard-operable tabs, orbit choices and play/reset controls.
+Dynamic text keeps `data-i18n` keys so changing language preserves the current state.
+Animation runs only on request, finishes once, and is skipped for reduced motion.
+Changing modes, resetting or leaving the strike view cancels an in-flight animation.
+With JavaScript disabled all six views stay visible and unavailable controls stay
+hidden. No dependencies, third-party requests or build step are added.
+
+GitHub Pages cannot execute the Python backend. The original interactive service
+runs separately, requires authorized access and is not embedded in the public site.
+The preserved research dashboard remains at `research.html`; its UI is Chinese.
 
 For a local interactive service, obtain authorized source checkouts of `seu_platform`
 and `tcas`. The launcher defaults to sibling directories `seu-platform/` and `tcas/`:

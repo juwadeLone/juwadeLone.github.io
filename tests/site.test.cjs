@@ -219,21 +219,29 @@ test("hardware, algorithms, primitives, simulation, imagery and validation have 
     assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),catalog.catalogSources[id].sha256);
   }
 });
-test("radiation simulator is featured with six bilingual views and its own media",()=>{
+test("radiation views use native bilingual diagrams and remain readable without JavaScript",()=>{
   const section=html.slice(html.indexOf('id="radiation-platform"'),html.indexOf('id="fault-injection"'));
   assert.ok(html.indexOf('id="services"')<html.indexOf('id="radiation-platform"'),"Featured platform follows services");
   assert.ok(section.includes('data-i18n="featureBadge"'));
   const tabs=[...section.matchAll(/role="tab" id="([^"]+)" aria-controls="([^"]+)"/g)];
   assert.equal(tabs.length,6);
   for(const [,tab,panel] of tabs){
-    assert.ok(section.includes('id="'+panel+'" role="tabpanel" aria-labelledby="'+tab+'"'),panel);
+    const attributes=section.match(new RegExp('<figure[^>]*id="'+panel+'"[^>]*>'))?.[0]||"";
+    assert.ok(attributes.includes('role="tabpanel"')&&attributes.includes('aria-labelledby="'+tab+'"'),panel);
+    assert.doesNotMatch(attributes,/\bhidden\b/,"Every diagram is readable before enhancement");
   }
   assert.equal((section.match(/aria-selected="true"/g)||[]).length,1);
-  assert.equal((section.match(/role="tabpanel"[^>]*hidden/g)||[]).length,5);
-  for(const file of ["strike.webp","orbit.webp","sar.webp","device.webp","effects.png","geant4.webp"]){
-    assert.ok(section.includes('src="assets/simulation/'+file+'"'),file);
-    assert.ok(fs.statSync(path.join(root,"assets/simulation",file)).size<2.2*2**20,file);
-  }
+  assert.match(section,/<div class="platform-tabs"[^>]* hidden>/,"Unavailable tab controls are hidden without JS");
+  assert.match(section,/data-strike-controls hidden/);
+  assert.match(section,/data-orbit-controls hidden/);
+  assert.doesNotMatch(section,/<(?:img|iframe|canvas)\b|assets\/simulation\//,"No raster or embedded simulator UI");
+  assert.equal((section.match(/<svg\b/g)||[]).length,5);
+  assert.match(section,/class="effects-list"/);
+  assert.match(section,/class="crosscheck-values"/);
+  assert.ok(section.includes("9.04 × 10")&&section.includes("9.54 × 10"),"Retain the existing Geant4 comparison");
+  assert.match(section,/data-i18n="strikeTiming"/);
+  assert.match(section,/data-i18n="orbitIndependent"/);
+  assert.match(section,/data-i18n="effectsNoZero"/);
   assert.ok(section.includes("46.2")&&section.includes('data-quote="reliability"'));
   assert.ok(catalog.catalogData.services.find(service=>service.id==="reliability").featured);
   assert.doesNotMatch(section,/github\.com|Lee et al/);
