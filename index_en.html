@@ -97,7 +97,7 @@ footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .disc{border-top:1px solid rgba(255,255,255,.12);margin-top:32px;padding-top:18px;font-size:12px}
 .reveal{opacity:0;transform:translateY(16px);transition:.6s}.reveal.in{opacity:1;transform:none}
 @media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
-.kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}.lang{display:none}}
+.kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}}
 </style>
 <style id="fx">
 /* ===== FX layer: dark tech theme ===== */
@@ -364,6 +364,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
 .note{color:var(--muted)}
 .reveal{opacity:1!important;transform:none!important;filter:none!important}
 @media(max-width:900px){.hero h1{font-size:32px}.chips{grid-template-columns:1fr 1fr 1fr}.kpi{border-bottom:1px solid var(--border)}}
+@media(max-width:560px){.bars div{flex-wrap:wrap}.bars em{white-space:normal}}
 </style>
 </head>
 <body>
@@ -457,6 +458,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
           <button class="btn btn-p" type="button" id="strike">▶ Play a strike</button>
           <button class="btn" type="button" id="multi" style="border-color:var(--border);color:var(--text)">Multi-cell example</button>
         </div>
+        <p class="note" id="bits-note" aria-live="polite"></p>
         <p class="note">Illustrative only; not physical timing or real upset probability.</p>
       </article>
       <article class="card">
@@ -797,7 +799,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
           <button class="btn copymail" type="button" data-mail="zhuao1906233797@gmail.com">Copy email address</button>
         </div>
       </div>
-      <form id="f">
+      <form id="f" method="post">
         <label>Name<input name="name" required></label>
         <label>Email<input name="email" type="email" required></label>
         <label>Organization<input name="org"></label>
@@ -836,6 +838,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
 </footer>
 
 <script>
+const cpText=(t,ok)=>{const fb=()=>{const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.append(ta);ta.select();try{document.execCommand('copy')&&ok()}catch(e){}ta.remove()};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok).catch(fb)}else fb()};
 const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.08});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 const links=[...document.querySelectorAll('nav.sec a')];
@@ -844,7 +847,7 @@ links.forEach(a=>{const t=document.querySelector(a.getAttribute('href'));t&&so.o
 const f=document.getElementById('f'),st=document.getElementById('st');
 const body=()=>{const d=new FormData(f);return `Name: ${d.get('name')}\nEmail: ${d.get('email')}\nOrganization: ${d.get('org')}\nTopic: ${d.get('topic')}\n\nRequirements:\n${d.get('msg')}`};
 f.onsubmit=e=>{e.preventDefault();location.href='mailto:zhuao1906233797@gmail.com?subject='+encodeURIComponent('Project Inquiry - '+new FormData(f).get('topic'))+'&body='+encodeURIComponent(body());st.textContent='Email draft opened in your mail client.'};
-document.getElementById('cp').onclick=()=>navigator.clipboard.writeText(body()).then(()=>st.textContent='Copied to clipboard.');
+document.getElementById('cp').onclick=()=>cpText(body(),()=>st.textContent='Copied to clipboard.');
 </script>
 <div id="progress"></div>
 <script>
@@ -853,7 +856,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pg=document.getElementById('progress');
 addEventListener('scroll',()=>{const h=document.documentElement;pg.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
 /* copy email fallback */
-document.querySelectorAll('.copymail').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.dataset.mail).then(()=>{const o=b.textContent;b.textContent='✓';setTimeout(()=>b.textContent=o,1500)}));
+document.querySelectorAll('.copymail').forEach(b=>b.onclick=()=>cpText(b.dataset.mail,()=>{const o=b.textContent;b.textContent='✓';setTimeout(()=>b.textContent=o,1500)}));
 })();
 </script>
 
@@ -868,7 +871,8 @@ const g=document.getElementById('bits');if(g){
   const ion=document.createElement('div');ion.className='ion';g.append(ion);
   const x1=c.left-r.left+c.width/2,y1=c.top-r.top+c.height/2;
   ion.animate([{transform:`translate(${x1-120}px,${y1-160}px)`,opacity:0},{transform:`translate(${x1-3}px,${y1-3}px)`,opacity:1}],{duration:600,easing:'ease-in'}).onfinish=()=>{
-   ion.remove();for(let k=0;k<n;k++){const s=cells[start+k];s.textContent=s.textContent==='1'?'0':'1';s.classList.add('hit')}}};
+   ion.remove();for(let k=0;k<n;k++){const s=cells[start+k];s.textContent=s.textContent==='1'?'0':'1';s.classList.add('hit')}
+   document.getElementById('bits-note').textContent='Simulated strike: '+n+' bit(s) flipped (illustrative).'}};
  document.getElementById('strike').onclick=()=>strike(1);
  document.getElementById('multi').onclick=()=>strike(3);
 }
