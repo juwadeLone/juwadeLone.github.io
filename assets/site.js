@@ -240,6 +240,7 @@ function setLanguage(){
   document.querySelectorAll("[data-placeholder]").forEach(element=>element.placeholder=t(element.dataset.placeholder));
   document.querySelectorAll("[data-label]").forEach(element=>element.setAttribute("aria-label",t(element.dataset.label)));
   document.querySelectorAll("[data-alt]").forEach(element=>element.alt=t(element.dataset.alt));
+  document.querySelectorAll("[data-href-zh],[data-href-en]").forEach(element=>element.setAttribute("href",language==="zh"?element.dataset.hrefZh:element.dataset.hrefEn));
   document.querySelectorAll('a[href^="research.html"]').forEach(link=>link.setAttribute("href","research.html?lang="+language)); $("#language").textContent=language==="zh"?"EN ⌄":"中文 ⌄";
   $("#language").setAttribute("aria-label",language==="zh"?"Switch to English":"切换到中文");
   document.querySelectorAll("input,textarea").forEach(element=>element.setCustomValidity(""));
