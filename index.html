@@ -1,303 +1,883 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b1423">
-  <meta name="description" content="juwade：FPGA 板卡定制、SAR 等信号处理算法的 FPGA 部署、FFT / CORDIC 计算 IP 核与抗辐射可靠性评估。">
-  <title>juwade · FPGA 信号处理方案｜板卡定制 · 算法部署 · 抗辐射评估</title>
-  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
-  <link rel="canonical" href="https://juwadelone.github.io/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="juwade">
-  <meta property="og:title" content="juwade · FPGA 信号处理方案">
-  <meta property="og:description" content="FPGA 板卡定制、信号处理算法上板部署、计算 IP 核与抗辐射可靠性评估。">
-  <meta property="og:url" content="https://juwadelone.github.io/">
-  <meta property="og:image" content="https://juwadelone.github.io/assets/og-cover.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://juwadelone.github.io/assets/og-cover.png">
-  <link rel="stylesheet" href="assets/site.css">
-  <link rel="stylesheet" href="assets/corporate.css">
-  <link rel="stylesheet" href="assets/catalog.css">
-  <link rel="stylesheet" href="assets/editorial.css">
-  <link rel="stylesheet" href="assets/services.css">
-  <link rel="stylesheet" href="assets/platform.css">
-  <link rel="stylesheet" href="assets/injection.css">
-  <script defer src="assets/catalog-sources.js"></script>
-  <script defer src="assets/catalog.js"></script>
-  <script defer src="assets/solution-translations.js"></script>
-  <script defer src="assets/injection-data.js"></script>
-  <script defer src="assets/catalog-render.js"></script>
-  <script defer src="assets/site.js"></script>
-  <script defer src="assets/platform.js"></script>
-  <script defer src="assets/editorial.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="FPGA 板卡定制、SAR 成像算法上板、在轨辐射仿真与板级故障注入评估，以及 100GbE / NVMe / JESD204 / RFSoC 高速 IP 授权。">
+<meta property="og:title" content="JuLone 团队 · FPGA 信号处理与高速 IP｜板卡定制 · SAR 成像 · 抗辐射评估 · 100GbE / NVMe">
+<meta property="og:description" content="FPGA 板卡定制、SAR 成像算法上板、在轨辐射仿真与板级故障注入评估，以及 100GbE / NVMe / JESD204 / RFSoC 高速 IP 授权。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://juwadelone.github.io/assets/sar/papers/dubai-no-cfbp.webp">
+<title>JuLone 团队 · FPGA 信号处理与高速 IP｜板卡定制 · SAR 成像 · 抗辐射评估 · 100GbE / NVMe</title>
+<style>
+:root{--bg:#fbfcfd;--surface:#fff;--text:#15273d;--muted:#526379;--border:#dce4ec;--pale:#f1f5f8;--accent:#8ac9ff;--primary:#0067c8;--dark:#0c223b;--dark-muted:#b7c6d7;--radius:10px;
+--font:"Segoe UI","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:110px}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+a{color:var(--primary);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;z-index:99;background:#fff;padding:8px}
+/* top bar */
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{font-weight:700;font-size:18px;color:var(--dark);letter-spacing:.02em}.brand span{color:var(--primary);font-weight:600;font-size:12px;letter-spacing:.18em;margin-left:6px}
+.bar-r{display:flex;gap:12px;align-items:center}
+.lang{font-size:13px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:5px 10px}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:10px 18px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-p{background:var(--primary);color:#fff}.btn-p:hover{background:#0056a8}
+.btn-g{border-color:rgba(255,255,255,.35);color:#fff}.btn-g:hover{background:rgba(255,255,255,.08)}
+nav.sec{border-top:1px solid var(--border);overflow-x:auto}
+nav.sec ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;white-space:nowrap}
+nav.sec a{display:block;padding:10px 14px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
+nav.sec a:hover,nav.sec a.on{color:var(--text);border-bottom-color:var(--primary)}
+/* hero */
+.hero{background:radial-gradient(1200px 500px at 85% -10%,#16467a 0,transparent 60%),var(--dark);color:#fff;padding:84px 0 72px}
+.hero-g{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;font-weight:600}
+.hero h1{font-size:44px;line-height:1.2;margin:14px 0 18px;font-weight:600}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{color:var(--dark-muted);font-size:16px;margin:0 0 10px;max-width:600px}
+.cta{display:flex;gap:12px;margin:28px 0 34px;flex-wrap:wrap}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.chip{border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);padding:14px;background:rgba(255,255,255,.04)}
+.chip b{display:block;font-size:22px;color:#fff}.chip span{font-size:12.5px;color:var(--dark-muted)}
+.panel{border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);padding:22px;font-family:Consolas,monospace;font-size:13px;color:var(--dark-muted)}
+.panel .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.12)}
+.panel .row:last-child{border:0}.panel .v{color:var(--accent);font-weight:700}
+.panel .ttl{color:#fff;font-family:var(--font);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80;animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.35}}
+/* sections */
+section.s{padding:76px 0;border-bottom:1px solid var(--border)}
+section.alt{background:var(--pale)}
+.idx{font-size:12px;letter-spacing:.2em;color:var(--primary);font-weight:700;text-transform:uppercase}
+.s h2{font-size:30px;margin:8px 0 10px;line-height:1.3}
+.lead{color:var(--muted);max-width:760px;margin:0 0 36px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px}
+.card h3{margin:0 0 6px;font-size:21px}
+.tag{color:var(--muted);margin:0 0 14px}
+.value{background:#eef6ff;border-left:3px solid var(--primary);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14.5px;margin:0 0 18px}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;list-style:none;padding:0;margin:0 0 20px}
+.feat li{position:relative;padding-left:18px;font-size:14.5px}
+.feat li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--primary)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 18px}
+.kpi{border:1px solid var(--border);border-radius:8px;padding:14px;background:var(--pale)}
+.kpi b{display:block;font-size:24px;color:var(--primary);line-height:1.2}.kpi span{font-size:12.5px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:var(--pale);font-weight:600}
+td.r,th.r{text-align:right}
+.note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.sub{font-size:15px;margin:0 0 8px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:20px 0 0}
+.flow li{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:13.5px}
+.flow li+li:before{content:"→ ";color:var(--primary)}
+.lic{border-top:3px solid var(--primary)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.step i{font-style:normal;font-weight:700;color:var(--primary);font-size:13px}
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1.2fr;gap:28px}
+.who{background:var(--dark);color:#fff;border-radius:14px;padding:30px}
+.who h3{margin:0 0 4px}.who .role{color:var(--accent);font-weight:600;margin:0 0 20px}
+.who p{color:var(--dark-muted);margin:0 0 10px}.who b{color:#fff}
+form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-size:13px;font-weight:600;display:flex;flex-direction:column;gap:6px}
+label.full{grid-column:1/-1}
+input,select,textarea{font:inherit;font-weight:400;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--primary);outline-offset:0;border-color:transparent}
+textarea{min-height:110px;resize:vertical}
+.fnote{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin:0}
+footer{background:var(--dark);color:var(--dark-muted);padding:48px 0 30px;font-size:13.5px}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px}
+footer h4{color:#fff;margin:0 0 12px;font-size:14px}
+footer ul{list-style:none;padding:0;margin:0}footer li{margin-bottom:6px}
+footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
+.disc{border-top:1px solid rgba(255,255,255,.12);margin-top:32px;padding-top:18px;font-size:12px}
+.reveal{opacity:0;transform:translateY(16px);transition:.6s}.reveal.in{opacity:1;transform:none}
+@media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
+.kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}.lang{display:none}}
+</style>
+<style id="fx">
+/* ===== FX layer: dark tech theme ===== */
+:root{--bg:#060d1a;--surface:rgba(16,30,52,.62);--text:#e6eefb;--muted:#93a6c2;--border:rgba(120,170,255,.16);--pale:#0a1628;--primary:#3aa0ff;--accent:#5ee6ff;--neon:#a35cff}
+body{background:#050b16;color:var(--text)}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:
+ radial-gradient(900px 600px at 10% 10%,rgba(58,160,255,.12),transparent 60%),
+ radial-gradient(800px 600px at 90% 60%,rgba(163,92,255,.10),transparent 60%),#050b16}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+ background-image:linear-gradient(rgba(94,230,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(94,230,255,.05) 1px,transparent 1px);background-size:48px 48px;
+ mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:100;background:linear-gradient(90deg,var(--accent),var(--primary),var(--neon));box-shadow:0 0 12px var(--accent)}
+.top{background:rgba(5,11,22,.72)!important;border-bottom:1px solid var(--border)}
+.brand{color:#fff}.brand span{color:var(--accent)}
+nav.sec{border-top-color:var(--border)}
+nav.sec a{color:var(--muted)}nav.sec a:hover,nav.sec a.on{color:#fff;border-bottom-color:var(--accent);text-shadow:0 0 12px rgba(94,230,255,.6)}
+.lang{color:var(--muted);border-color:var(--border)}
+.btn-p{background:linear-gradient(135deg,#2b8cff,#7a4dff);box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 30px -8px rgba(80,120,255,.8);transition:.25s}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.15),0 12px 40px -6px rgba(120,100,255,.95);background:linear-gradient(135deg,#3aa0ff,#9a5cff)}
+/* hero */
+.hero{position:relative;overflow:hidden;background:transparent!important;min-height:calc(100vh - 106px);display:flex;align-items:center}
+#net{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero .wrap{position:relative;z-index:1;width:100%}
+.hero h1{font-size:56px;font-weight:700;letter-spacing:-.01em}
+.hero h1 em{background:linear-gradient(90deg,#5ee6ff,#3aa0ff,#a35cff,#5ee6ff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.eyebrow{display:inline-block;padding:6px 12px;border:1px solid rgba(94,230,255,.35);border-radius:999px;background:rgba(94,230,255,.06)}
+.typed:after{content:"▍";animation:blink 1s steps(1) infinite;color:var(--accent)}@keyframes blink{50%{opacity:0}}
+.chip,.panel{background:rgba(12,26,48,.55);backdrop-filter:blur(8px);border-color:var(--border)}
+.chip b{background:linear-gradient(90deg,#fff,#9fdcff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.panel{position:relative;box-shadow:0 0 60px -20px rgba(58,160,255,.6)}
+.panel:before{content:"";position:absolute;inset:-1px;border-radius:15px;padding:1px;background:conic-gradient(from var(--a),transparent 0 70%,var(--accent),var(--neon),transparent);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 4s linear infinite;pointer-events:none}
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+.panel .scan{position:absolute;left:0;right:0;height:40px;top:-40px;background:linear-gradient(transparent,rgba(94,230,255,.12),transparent);animation:scan 3.5s linear infinite;pointer-events:none}
+@keyframes scan{to{top:100%}}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:1;width:24px;height:38px;border:2px solid rgba(255,255,255,.3);border-radius:14px}
+.scroll-hint:after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--accent);animation:sh 1.6s infinite}
+@keyframes sh{to{transform:translateY(14px);opacity:0}}
+/* marquee */
+.marquee{overflow:hidden;border-block:1px solid var(--border);background:rgba(10,22,40,.6);padding:14px 0;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marquee div{display:flex;gap:46px;width:max-content;animation:mq 32s linear infinite;font-weight:600;letter-spacing:.12em;color:var(--muted);font-size:14px;white-space:nowrap}
+.marquee span:nth-child(odd){color:var(--accent)}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* sections */
+section.s{border-bottom:1px solid var(--border);background:transparent}
+section.alt{background:rgba(10,22,40,.35)}
+.idx{color:var(--accent)}
+.s h2{font-size:36px;background:linear-gradient(90deg,#fff 30%,#9fc8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card,.step{position:relative;background:var(--surface);backdrop-filter:blur(10px);border-color:var(--border);overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s}
+.card:hover,.step:hover{border-color:rgba(94,230,255,.45);box-shadow:0 20px 60px -25px rgba(58,160,255,.7)}
+.card:after,.step:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+ background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(94,230,255,.13),transparent 45%)}
+.card:hover:after,.step:hover:after{opacity:1}
+.lic{border-top:2px solid transparent;border-image:linear-gradient(90deg,var(--accent),var(--neon)) 1}
+.value{background:linear-gradient(90deg,rgba(58,160,255,.14),rgba(163,92,255,.06));border-left-color:var(--accent);color:#cfe3ff}
+.kpi{background:rgba(5,12,24,.55);border-color:var(--border);transition:.3s}
+.kpi:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 0 24px -6px rgba(94,230,255,.6)}
+.kpi b{background:linear-gradient(90deg,#5ee6ff,#7aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:28px}
+.feat li:before{background:var(--accent);box-shadow:0 0 8px var(--accent);border-radius:50%}
+b{color:#fff}
+th{background:rgba(58,160,255,.1);color:#cfe3ff}
+td,th{border-bottom-color:var(--border)}
+tr{transition:background .2s}tr:hover td{background:rgba(94,230,255,.05)}
+td.r b{color:var(--accent)}
+.flow li{background:rgba(12,26,48,.7);border-color:var(--border);color:var(--text)}
+.flow li+li:before{color:var(--accent)}
+.step i{font-size:30px;background:linear-gradient(135deg,var(--accent),var(--neon));-webkit-background-clip:text;background-clip:text;color:transparent}
+.who{background:linear-gradient(145deg,rgba(43,140,255,.18),rgba(122,77,255,.15)),rgba(10,20,38,.8);border:1px solid var(--border)}
+form{background:var(--surface);border-color:var(--border);backdrop-filter:blur(10px)}
+input,select,textarea{background:rgba(5,12,24,.7);color:var(--text);border-color:var(--border)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);box-shadow:0 0 20px -4px rgba(94,230,255,.6)}
+#cp{color:var(--text)}
+footer{background:#030812;border-top:1px solid var(--border)}
+.reveal{transform:translateY(30px) scale(.98);filter:blur(4px)}.reveal.in{filter:none}
+#glow{position:fixed;width:500px;height:500px;border-radius:50%;pointer-events:none;z-index:-1;left:0;top:0;transform:translate(-50%,-50%);
+ background:radial-gradient(circle,rgba(58,160,255,.10),transparent 65%);transition:transform .08s}
+@media(max-width:900px){.hero h1{font-size:36px}.s h2{font-size:28px}#glow{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style id="fx-merge">
+#cp{background:rgba(255,255,255,.04);color:var(--text)}
+.shot{margin:0;position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 0 80px -20px rgba(58,160,255,.7)}
+.shot img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(.9) contrast(1.05);transition:transform 6s ease}
+.shot:hover img{transform:scale(1.08)}
+.shot figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px;background:linear-gradient(transparent,rgba(3,8,18,.92));display:flex;flex-direction:column}
+.shot figcaption span{font-size:13px;color:var(--muted)}
+.shot:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(transparent 48%,rgba(94,230,255,.18) 50%,transparent 52%);background-size:100% 220%;animation:sweep 4s linear infinite}
+@keyframes sweep{from{background-position:0 120%}to{background-position:0 -120%}}
+.svc{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.svc.three{grid-template-columns:repeat(3,1fr)}
+.svc .card{margin:0}.svc table{font-size:13px}
+.no{display:block;font-style:normal;font-weight:800;font-size:30px;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),var(--neon));-webkit-background-clip:text;background-clip:text;color:transparent}
+.feat.one{grid-template-columns:1fr}
+.card.hot{border-color:rgba(163,92,255,.5);box-shadow:0 0 50px -20px rgba(163,92,255,.8)}
+.badge{font-size:11px;padding:2px 8px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--neon));color:#04101f;vertical-align:middle;margin-left:6px}
+.kpis.five{grid-template-columns:repeat(5,1fr)}
+.bits{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;position:relative}
+.bits span{aspect-ratio:1;display:grid;place-items:center;border:1px solid var(--border);border-radius:6px;font-family:Consolas,monospace;font-size:18px;color:var(--muted);background:rgba(5,12,24,.6);transition:.3s}
+.bits span.hit{color:#ffb547;border-color:#ffb547;box-shadow:0 0 18px rgba(255,181,71,.8);background:rgba(255,140,0,.15)}
+.ion{position:absolute;width:6px;height:6px;border-radius:50%;background:#ffd27a;box-shadow:0 0 14px 4px #ff9d2e;pointer-events:none}
+.bars{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.bars div{position:relative;padding:8px 10px;border-radius:6px;background:rgba(5,12,24,.55);overflow:hidden;font-size:13px;display:flex;justify-content:space-between;gap:10px}
+.bars div:before{content:"";position:absolute;inset:0;width:var(--w,0);background:linear-gradient(90deg,rgba(58,160,255,.45),rgba(163,92,255,.35));transition:width 1.4s cubic-bezier(.2,.8,.2,1);z-index:0}
+.bars div.best:before{background:linear-gradient(90deg,rgba(94,230,255,.7),rgba(74,222,128,.5))}
+.bars span,.bars em{position:relative;z-index:1}.bars em{font-style:normal;color:var(--accent);white-space:nowrap}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.gallery figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:.3s}
+.gallery figure:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 20px 50px -20px rgba(58,160,255,.8)}
+.gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000;transition:transform .6s}
+.gallery figure:hover img{transform:scale(1.06)}
+.gallery figcaption{padding:14px;font-size:13.5px;color:var(--muted)}.gallery figcaption b{display:block;color:#fff;margin-bottom:4px}
+.steps-ol{counter-reset:s;list-style:none;padding:0;margin:14px 0}
+.steps-ol li{counter-increment:s;position:relative;padding:6px 0 6px 40px;font-size:14.5px}
+.steps-ol li:before{content:counter(s);position:absolute;left:0;top:4px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;border:1px solid var(--accent);color:var(--accent)}
+.step h3{margin:6px 0 4px;font-size:17px}
+.steps.four{grid-template-columns:repeat(4,1fr)}
+a.card.dl{display:block;color:var(--text)}a.card.dl:hover{transform:translateY(-4px)}
+@media(max-width:900px){.svc,.svc.three,.gallery,.steps.four,.kpis.five{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.svc,.svc.three,.gallery,.steps.four{grid-template-columns:1fr}}
+</style>
+<style id="calm">
+/* Restrained engineering theme: one accent, no glow, readable contrast */
+:root{--bg:#0b1320;--surface:#111c2d;--text:#e8edf4;--muted:#a9b6c8;--border:#22324a;--pale:#0e1828;--primary:#3b8eea;--accent:#6cb4ff;--neon:#6cb4ff}
+body{background:#0b1320}
+body:before{background:#0b1320}
+body:after{opacity:.18}
+#progress{height:2px;background:var(--primary);box-shadow:none}
+.top{background:rgba(11,19,32,.92)!important}
+.brand span{color:var(--accent)}
+nav.sec a:hover,nav.sec a.on{text-shadow:none;border-bottom-color:var(--primary)}
+.btn-p,.btn-p:hover{background:var(--primary);box-shadow:none;transform:none}
+.btn-p:hover{background:#2f7bd0}
+.hero{min-height:auto;padding:96px 0 84px}
+#net{opacity:.45}
+.hero h1{font-size:48px;font-weight:650}
+.hero h1 em{background:none;color:var(--accent);-webkit-text-fill-color:currentColor;animation:none}
+.eyebrow{border-color:var(--border);background:transparent;color:var(--accent)}
+.chip b,.kpi b,.s h2,.no,.step i{background:none;-webkit-text-fill-color:currentColor;color:inherit}
+.chip b{color:#fff}.kpi b{color:var(--accent);font-size:26px}.s h2{color:#fff}
+.no,.step i{color:var(--accent)}
+.chip,.panel,.card,.step,form{backdrop-filter:none}
+.shot{box-shadow:0 20px 50px -30px rgba(0,0,0,.8)}.shot:before{display:none}.shot:hover img{transform:none}
+.card:after,.step:after{display:none}
+.card:hover,.step:hover{box-shadow:none;border-color:#34507a}
+.card.hot{box-shadow:none;border-color:#34507a}
+.badge{background:var(--primary);color:#fff}
+.lic{border-image:none;border-top:2px solid var(--primary)}
+.value{background:#13233a;color:#d4e3f5;border-left-color:var(--primary)}
+.kpi{background:var(--pale)}.kpi:hover{transform:none;box-shadow:none;border-color:var(--border)}
+.feat li:before{box-shadow:none;background:var(--primary)}
+td.r b{color:#fff}
+.bars div:before{background:#2b5a8f}.bars div.best:before{background:#2f8f6b}
+.gallery figure:hover{transform:none;box-shadow:none}.gallery figure:hover img{transform:none}
+.who{background:var(--surface)}
+input:focus,select:focus,textarea:focus{box-shadow:none;outline-color:var(--primary)}
+.reveal{opacity:1!important;transform:none!important;filter:none!important}
+.marquee,#glow,.scroll-hint{display:none!important}
+.svc.two-col{grid-template-columns:1fr 1fr}
+.copymail{margin-top:8px;border-color:var(--border);background:transparent;color:var(--text)}
+@media(max-width:560px){.svc.two-col{grid-template-columns:1fr}}
+</style>
+<style id="about-css">
+.lead-card{display:flex;gap:22px;align-items:center;max-width:820px}
+.avatar{flex:none;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:24px;color:#fff;background:var(--primary)}
+.lead-card .role{color:var(--accent);font-weight:600;margin:2px 0 10px}
+@media(max-width:560px){.lead-card{flex-direction:column;align-items:flex-start}}
+</style>
+<style id="paper">
+/* Engineering-datasheet look: paper, ink, hairlines, one signal color */
+:root{--bg:#f6f4ef;--surface:#fffefb;--text:#1b1b1a;--muted:#5d5b56;--border:#d9d5cc;--pale:#efece5;--primary:#c2410c;--accent:#c2410c;--radius:2px;
+ --font:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--mono:"Cascadia Mono",Consolas,"SF Mono",monospace}
+html{scroll-padding-top:100px}
+body,body:before{background:var(--bg)!important;color:var(--text)}
+body:after,#net,#progress,.marquee,#glow,.scroll-hint{display:none!important}
+b{color:var(--text)}
+a{color:var(--primary)}
+/* header */
+.top{background:var(--bg)!important;backdrop-filter:none;border-bottom:1px solid var(--text)}
+.brand{color:var(--text);font-weight:700;letter-spacing:0}
+.brand span{color:var(--muted);font-family:var(--mono);font-weight:400;letter-spacing:.04em;font-size:11px}
+nav.sec{border-top:1px solid var(--border)}
+nav.sec a{color:var(--muted);font-size:13.5px;padding:9px 12px}
+nav.sec a:hover,nav.sec a.on{color:var(--text);border-bottom-color:var(--primary);text-shadow:none}
+.lang{border-radius:2px;border-color:var(--border);color:var(--text)}
+.btn{border-radius:2px;font-weight:600}
+.btn-p,.btn-p:hover{background:var(--text);color:var(--bg);box-shadow:none;transform:none}
+.btn-p:hover{background:var(--primary)}
+.btn-g{border-color:var(--text);color:var(--text)}
+.btn-g:hover{background:var(--text);color:var(--bg)}
+/* hero */
+.hero{background:var(--bg)!important;color:var(--text);min-height:auto;padding:64px 0 56px;border-bottom:1px solid var(--text);display:block}
+.hero-g{grid-template-columns:1.1fr 1fr;gap:56px;align-items:start}
+.eyebrow{border:0;background:none;padding:0;border-radius:0;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.02em;text-transform:none}
+.hero h1{font-size:44px;font-weight:700;line-height:1.18;letter-spacing:-.01em;margin:16px 0 20px}
+.hero h1 em{color:var(--muted);font-weight:500;-webkit-text-fill-color:currentColor;background:none}
+.hero p{color:var(--muted)}
+.chips{border-top:1px solid var(--text);gap:0;margin-top:8px}
+.chip{background:none;border:0;border-right:1px solid var(--border);border-radius:0;padding:14px 14px 0 0}
+.chip+.chip{padding-left:14px}.chip:last-child{border-right:0}
+.chip b{white-space:nowrap;color:var(--text);font-family:var(--mono);font-size:18px;font-weight:600;-webkit-text-fill-color:currentColor}
+.chip span{color:var(--muted)}
+.shot{border-radius:0;border:1px solid var(--text);box-shadow:none}
+.shot img{aspect-ratio:auto;filter:none}
+.shot figcaption{position:static;background:var(--surface);border-top:1px solid var(--text);padding:10px 12px;font-size:13px;flex-direction:row;justify-content:space-between;gap:12px}
+.shot figcaption b{color:var(--text)}
+/* sections */
+section.s,section.alt{background:transparent;border-bottom:1px solid var(--border);padding:64px 0}
+.idx{color:var(--primary);font-family:var(--mono);font-size:12px;letter-spacing:.02em;text-transform:none;font-weight:500}
+.s h2{color:var(--text);-webkit-text-fill-color:currentColor;background:none;font-size:30px;font-weight:700;letter-spacing:-.01em}
+.lead{color:var(--muted)}
+.card,.step,form,.who{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:none;backdrop-filter:none}
+.card:hover,.step:hover{border-color:var(--border);box-shadow:none;transform:none!important}
+.card.hot{border-color:var(--text)}
+.card h3{font-size:19px}
+.tag{color:var(--muted)}
+.no,.step i{color:var(--primary);-webkit-text-fill-color:currentColor;background:none;font-family:var(--mono);font-size:14px;font-weight:600}
+.badge{background:none;color:var(--primary);border:1px solid var(--primary);border-radius:2px;font-weight:600}
+.value{background:var(--pale);border-left:3px solid var(--text);border-radius:0;color:var(--text)}
+.kpis{gap:0;border-top:1px solid var(--text);border-bottom:1px solid var(--border)}
+.kpi{background:none;border:0;border-right:1px solid var(--border);border-radius:0;padding:14px 16px}
+.kpi:last-child{border-right:0}
+.kpi:hover{transform:none;box-shadow:none}
+.kpi b{color:var(--text);font-family:var(--mono);font-weight:600;font-size:24px;-webkit-text-fill-color:currentColor}
+.feat li:before{background:var(--text);border-radius:0;width:5px;height:5px;box-shadow:none;top:.7em}
+table{font-variant-numeric:tabular-nums}
+th{background:none;color:var(--muted);font-weight:600;border-bottom:1px solid var(--text);font-size:13px}
+td,th{border-bottom-color:var(--border)}
+tr:hover td{background:none}
+td.r b{color:var(--text);font-family:var(--mono)}
+.flow li{border-radius:2px;background:none;border-color:var(--border);color:var(--text);font-family:var(--mono);font-size:12.5px}
+.flow li+li:before{color:var(--muted)}
+.lic{border-top:3px solid var(--text);border-image:none}
+/* bars: plain horizontal bars */
+.bars div{background:none;border-radius:0;border-bottom:1px solid var(--border);padding:7px 0}
+.bars div:before{background:#d8d3c8;top:auto;bottom:-1px;height:3px}
+.bars div.best:before{background:var(--primary)}
+.bars em{color:var(--text);font-family:var(--mono)}
+/* bits demo */
+.bits span{border-radius:0;background:var(--surface);border-color:var(--border);color:var(--muted)}
+.bits span.hit{color:var(--primary);border-color:var(--primary);box-shadow:none;background:#fbe9df}
+.ion{background:var(--primary);box-shadow:none}
+/* gallery */
+.gallery figure{border-radius:0;border-color:var(--text);background:var(--surface)}
+.gallery figure:hover{transform:none;box-shadow:none;border-color:var(--text)}
+.gallery figure:hover img{transform:none}
+.gallery figcaption{color:var(--muted);border-top:1px solid var(--border)}
+.gallery figcaption b{color:var(--text)}
+.steps-ol li:before{border-radius:0;border-color:var(--text);color:var(--text);font-family:var(--mono)}
+/* about + contact */
+.avatar{border-radius:0;background:var(--text);color:var(--bg);font-family:var(--mono)}
+.lead-card .role{color:var(--primary)}
+.who h3,.who b{color:var(--text)}
+.who p{color:var(--muted)}
+.who .role{color:var(--primary)}
+.who a{color:var(--primary)!important}
+input,select,textarea{border-radius:2px;background:#fff;color:var(--text);border-color:var(--border)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--text);box-shadow:none}
+#cp,.copymail{background:none;color:var(--text);border-color:var(--text);border-radius:2px}
+footer{background:var(--text);color:#bdb8ad;border-top:0}
+footer h4{color:#fff}footer a{color:#bdb8ad}
+.disc{border-top-color:#3a3936}
+.note{color:var(--muted)}
+.reveal{opacity:1!important;transform:none!important;filter:none!important}
+@media(max-width:900px){.hero h1{font-size:32px}.chips{grid-template-columns:1fr 1fr 1fr}.kpi{border-bottom:1px solid var(--border)}}
+</style>
 </head>
 <body>
-  <a href="#main" class="skip" data-i18n="skip">跳至正文</a>
-  <div class="utility-bar"><div class="wrap"><span data-i18n="utilityIntro">FPGA 板卡 · 信号处理算法 · 实验验证</span><a href="mailto:1906233797@qq.com"><span data-i18n="utilityContact">技术咨询</span>：1906233797@qq.com</a></div></div>
-  <header class="header">
-    <a class="brand" href="#" aria-label="juwade home"><img src="assets/icon.svg" alt="" width="34" height="34"><span>juwade<span class="brand-dot">.</span><small>SIGNAL SYSTEMS</small></span></a>
-    <nav id="primary-nav" aria-label="主导航" data-label="navLabel">
-      <a href="#services" data-i18n="navServices">服务</a>
-      <a href="#products" data-i18n="navProducts">板卡</a>
-      <a href="#algorithms" data-i18n="navAlgorithms">成像算法</a>
-      <a class="nav-feature" href="#radiation-platform" data-i18n="navResearch">辐射仿真平台</a>
-      <a href="#fault-injection" data-i18n="navInjection">注入实测</a>
-      <a href="#validation" data-i18n="navValidation">项目案例</a>
-      <a href="#sar-imaging" data-i18n="navSAR">实测成像</a>
-    </nav>
-    <div class="header-actions"><button class="language" id="language" type="button" aria-label="Switch to English">EN ⌄</button><a class="button small" href="#inquiry" data-i18n="navContact">技术咨询</a><button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="打开菜单" data-label="menuLabel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
-  </header>
-  <main id="main">
-    <section class="hero corporate-hero editorial-hero" aria-labelledby="hero-title">
-      <div class="hero-ambient" aria-hidden="true"></div>
-      <div class="wrap hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow" data-i18n="heroEyebrow">FPGA BOARDS · ALGORITHM DEPLOYMENT · RADIATION RELIABILITY</p>
-          <h1 id="hero-title" data-i18n="heroTitle">FPGA 信号处理<br><span>从算法，到板卡。</span></h1>
-          <p class="hero-description" data-i18n="heroDescription">为科研院所与企业提供 FPGA 板卡定制、信号处理算法上板部署与抗辐射可靠性评估。SAR 成像已在 Artix-7、Kintex-7、Virtex-7 平台完成上板实现。</p>
-          <div class="hero-actions"><a class="button" href="#inquiry" data-i18n="heroPrimary">咨询项目 →</a><a class="text-link" href="#services" data-i18n="heroSecondary">查看服务 →</a></div>
-          <p class="hero-footnote" data-i18n="heroFootnote">板卡定制 · 算法上板 · 可靠性评估 · 按项目报价</p>
+<a class="skip" href="#main">跳至正文</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="brand">JuLone 团队<span>SIGNAL · HIGH-SPEED SYSTEMS</span></div>
+    <div class="bar-r">
+      <a class="lang" href="index_en.html">EN</a>
+      <a class="btn btn-p" href="#inquiry">商务咨询</a>
+    </div>
+  </div>
+  <nav class="sec wrap" aria-label="页面导航">
+    <ul>
+      <li><a href="#services">服务</a></li>
+      <li><a href="#radiation">可靠性评估</a></li>
+      <li><a href="#injection">注入实测</a></li>
+      <li><a href="#boards">板卡</a></li>
+      <li><a href="#imaging">成像与算法</a></li>
+      <li><a href="#ip">高速 IP</a></li>
+      <li><a href="#license">授权</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a href="#inquiry">咨询</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap hero-g">
+    <div>
+      <div class="eyebrow">FPGA 板卡 · 成像算法 · 抗辐射评估 · 高速 IP</div>
+      <h1>FPGA 信号处理与高速 IP<br><em>Artix-7 / Kintex-7 / Virtex-7 · Versal · RFSoC</em></h1>
+      <p>为科研院所与企业提供 FPGA 板卡定制、信号处理算法上板部署、抗辐射可靠性评估，以及 100GbE / NVMe / JESD204 / RFSoC 工业级 IP 授权。</p>
+      <p>SAR 成像已在 Artix-7、Kintex-7、Virtex-7 上板实现；高速 IP 覆盖 AMD Versal / RFSoC / UltraScale+ 平台。</p>
+      <div class="cta">
+        <a class="btn btn-p" href="#inquiry">咨询项目</a>
+        <a class="btn btn-g" href="#services">查看服务</a>
+      </div>
+      <div class="chips">
+        <div class="chip"><b>12,000 次</b><span>板级故障注入实测</span></div>
+        <div class="chip"><b>98.9 Gb/s</b><span>100GbE TCP 线速发送</span></div>
+        <div class="chip"><b>4096²</b><span>V7 定点 CSA 成像规模</span></div>
+      </div>
+    </div>
+    <figure class="shot">
+      <img src="assets/sar/dubai-no-cfbp.webp" alt="Smartsat-X1 迪拜星载 SAR 实测聚焦图">
+      <figcaption><b>Dubai · Smartsat-X1</b><span>星载大斜视 · NO-CFBP 聚焦 · 2026</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="s" id="services">
+  <div class="wrap reveal">
+    <div class="idx">Services · 服务</div>
+    <h2>从需求，到上板运行。</h2>
+    <p class="lead">每个项目由开发者直接对接。先梳理需求，再书面约定交付物与周期。</p>
+    <div class="svc">
+      <article class="card"><i class="no">01</i><h3>FPGA 板卡定制与调试</h3><p class="tag">适合需要专用 FPGA 硬件，或现有板卡调不通的团队。</p>
+        <ul class="feat one"><li>需求梳理与器件选型（A7 / K7 / V7）</li><li>原理图与 PCB 设计</li><li>DDR3、千兆以太网、PCIe、UART 接口调通</li><li>上电调试与测试报告</li></ul></article>
+      <article class="card"><i class="no">02</i><h3>算法 FPGA 部署</h3><p class="tag">已有 MATLAB / Python 算法，需要在 FPGA 上实时运行。</p>
+        <ul class="feat one"><li>定点化建模与精度评估</li><li>RTL 实现与时序收敛</li><li>上板验证，输出与模型逐点比对</li><li>主机端数据收发与控制软件</li></ul></article>
+      <article class="card"><i class="no">03</i><h3>计算 IP 与高速接口 IP</h3><p class="tag">需要可直接集成的计算模块或高速互联 / 存储 IP。</p>
+        <ul class="feat one"><li>FFT、CORDIC，可选 ECC / TMR 容错版本</li><li>100GbE TCP/UDP、NVMe Host、AXI DMA</li><li>JESD204B/C 射频链路集成</li><li>网表 / 源码两种授权</li></ul></article>
+      <article class="card hot"><i class="no">04</i><h3>抗辐射可靠性评估 <span class="badge">特色</span></h3><p class="tag">星载、机载项目评估单粒子翻转对系统的影响。</p>
+        <ul class="feat one"><li>在轨辐射效应仿真：翻转率、敏感模块、功能后果</li><li>基于 SEM 的配置存储器故障注入</li><li>三模冗余、ECC 等加固方案设计</li><li>故障统计与评估报告</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<section class="s alt" id="radiation">
+  <div class="wrap reveal">
+    <div class="idx">Radiation Platform · 特色服务</div>
+    <h2>在轨辐射效应仿真平台</h2>
+    <p class="lead">上天之前，先看清辐射会对你的 FPGA 做什么。轨道辐射环境 → 每一位的翻转率 → 离子打在真实 Vivado 布局上 → 落到哪个模块 → 成像等功能受到什么影响。</p>
+    <div class="kpis five">
+      <div class="kpi"><b>46.2</b><span>整片翻转率（次 / 天）</span></div>
+      <div class="kpi"><b>≈ 31</b><span>平均翻转间隔（分钟）</span></div>
+      <div class="kpi"><b>&lt; 10%</b><span>与公开文献偏差</span></div>
+      <div class="kpi"><b>&lt; 20%</b><span>Geant4 独立复核偏差</span></div>
+      <div class="kpi"><b>6</b><span>联动视图</span></div>
+    </div>
+    <p class="note" style="margin-bottom:24px">参考算例（模型计算，非辐照实测）：Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳活动低年）· 100 mil 铝屏蔽。CRAM 20.8、BRAM 25.3、FF 0.09 次 / 天。</p>
+    <div class="two">
+      <article class="card">
+        <h3>一颗粒子，可能改变一位状态</h3>
+        <p class="tag">原理演示：粒子在敏感区沉积能量，电荷扰动存储状态。</p>
+        <div class="bits" id="bits" aria-hidden="true"></div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-p" type="button" id="strike">▶ 播放一次打击</button>
+          <button class="btn" type="button" id="multi" style="border-color:var(--border);color:var(--text)">多单元示例</button>
         </div>
-        <figure class="hero-instrument">
-          <div class="instrument-bar"><span data-i18n="heroFigureLabel">实测成像</span><span>NO-CFBP / 2026</span></div>
-          <a class="instrument-image" href="assets/sar/papers/dubai-no-cfbp.webp" target="_blank" rel="noopener noreferrer"><img src="assets/sar/papers/dubai-no-cfbp.webp" width="634" height="385" alt="Smartsat-X1 迪拜星载 SAR 实测聚焦图" data-alt="paperDubaiAlt" fetchpriority="high"></a>
-          <figcaption><strong>Dubai · Smartsat-X1</strong><p data-i18n="heroSceneCredit">星载大斜视 · NO-CFBP 聚焦</p></figcaption>
-        </figure>
-      </div>
-      <div class="wrap hero-tech"><div><strong>A7 / K7 / V7</strong><span data-i18n="heroSpecImage">FPGA 板卡平台</span></div><div><strong>CSA / BP</strong><span data-i18n="heroSpecAlgorithms">SAR 成像上板</span></div><div><strong>SEU</strong><span data-i18n="heroSpecReliability">在轨辐射效应仿真</span></div></div>
-    </section>
-    <section class="section services-section" id="services" aria-labelledby="services-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="servicesEyebrow">SERVICES / 服务</p><h2 id="services-title" data-i18n="servicesTitle">从需求，到上板运行。</h2></div><p class="section-intro" data-i18n="servicesIntro">每个项目由开发者直接对接。<br>先梳理需求，再书面约定交付物与周期。</p></div>
-      <div class="service-grid" id="service-grid"></div>
-    </div></section>
-    <section class="section platform-section" id="radiation-platform" aria-labelledby="simulation-title"><div class="wrap">
-      <div class="section-heading platform-heading"><div><p class="eyebrow"><span class="feature-badge" data-i18n="featureBadge">特色服务</span><span data-i18n="simulationEyebrow">在轨辐射效应仿真平台</span></p><h2 id="simulation-title" data-i18n="simulationTitle">上天之前，<br>先看清辐射会对你的 FPGA 做什么。</h2></div><p class="section-intro" data-i18n="simulationIntro">自研仿真平台把整条链路连起来：轨道辐射环境 → 每一位的翻转率 → 离子打在真实 Vivado 布局上 → 落到哪个模块 → 成像等功能受到什么影响。</p></div>
-      <dl class="platform-metrics">
-        <div><dt data-i18n="metricRateLabel">整片翻转率</dt><dd><strong>46.2</strong><span data-i18n="metricRateUnit">次 / 天</span></dd></div>
-        <div><dt data-i18n="metricIntervalLabel">平均翻转间隔</dt><dd><strong>≈ 31</strong><span data-i18n="metricIntervalUnit">分钟</span></dd></div>
-        <div><dt data-i18n="metricAgreeLabel">与公开文献数据偏差</dt><dd><strong>&lt; 10</strong><span>%</span></dd></div>
-        <div><dt data-i18n="metricGeant4Label">Geant4 独立复核偏差</dt><dd><strong>&lt; 20</strong><span>%</span></dd></div>
-        <div><dt data-i18n="metricViewsLabel">联动视图</dt><dd><strong>6</strong><span data-i18n="metricViewsUnit">个</span></dd></div>
-      </dl>
-      <p class="platform-basis" data-i18n="metricBasis">既有平台参考算例（模型计算，非辐照实测）：Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳活动低年）· 100 mil 铝屏蔽。CRAM 20.8、BRAM 25.3、FF 0.09 次 / 天。</p>
-      <div class="platform-viewer" data-radiation-viewer>
-        <div class="platform-viewer-intro"><span class="scene-indicator" aria-hidden="true"></span><p data-i18n="sceneIntro">站内双语图解 · 原理演示与既有模型结果分别标注</p></div>
-        <div class="platform-tabs" role="tablist" aria-label="仿真平台视图" data-label="platformTabsLabel" hidden>
-          <button type="button" role="tab" id="view-tab-strike" aria-controls="view-strike" aria-selected="true" data-view-tab><span>01</span><span data-i18n="viewStrikeTab">离子打击</span></button>
-          <button type="button" role="tab" id="view-tab-orbit" aria-controls="view-orbit" aria-selected="false" tabindex="-1" data-view-tab><span>02</span><span data-i18n="viewOrbitTab">轨道环境</span></button>
-          <button type="button" role="tab" id="view-tab-sar" aria-controls="view-sar" aria-selected="false" tabindex="-1" data-view-tab><span>03</span><span data-i18n="viewSarTab">SAR 后果</span></button>
-          <button type="button" role="tab" id="view-tab-device" aria-controls="view-device" aria-selected="false" tabindex="-1" data-view-tab><span>04</span><span data-i18n="viewDeviceTab">器件内部</span></button>
-          <button type="button" role="tab" id="view-tab-effects" aria-controls="view-effects" aria-selected="false" tabindex="-1" data-view-tab><span>05</span><span data-i18n="viewEffectsTab">效应总览</span></button>
-          <button type="button" role="tab" id="view-tab-geant4" aria-controls="view-geant4" aria-selected="false" tabindex="-1" data-view-tab><span>06</span><span data-i18n="viewGeant4Tab">独立复核</span></button>
+        <p class="note">动画为教学示意，不代表物理时间与真实翻转概率。</p>
+      </article>
+      <article class="card">
+        <h3>你能拿到什么</h3>
+        <ul class="feat one" style="margin-top:12px">
+          <li><b>在轨翻转率报告：</b>按轨道、屏蔽厚度与器件，给出 CRAM、BRAM、FF 每天翻转次数与任务期统计</li>
+          <li><b>敏感模块定位：</b>导入 Vivado 设计，按层级划分模块，找出最易出问题的部分</li>
+          <li><b>功能后果评估：</b>把翻转注入处理链路，看输出图像或数据受多大影响</li>
+          <li><b>加固方案对比：</b>结合 TMR、ECC、配置刷新与板级 SEM 注入，对比加固前后效果</li>
+        </ul>
+        <ul class="flow"><li>SPENVIS / CREME96</li><li>Bethe-Bloch LET</li><li>Weibull 截面</li><li>IGRF-13</li><li>泊松任务统计</li></ul>
+        <p class="note">当前模型尚未包含太阳粒子事件、俘获质子与总剂量效应；仿真用于设计阶段评估，不替代束流试验。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="injection">
+  <div class="wrap reveal">
+    <div class="idx">Board-Level Fault Injection · 板级注入实测</div>
+    <h2>加固有没有用，用上万次实测注入说话。</h2>
+    <p class="lead">在 Kintex-7 板上逐次翻转配置存储器位，每次跑完整 2048 × 2048 成像并与无故障输出逐位比对。两条 SAR 成像链、10 个设计版本，全部实测。</p>
+    <div class="kpis">
+      <div class="kpi"><b>12,000</b><span>有效板级注入（次）</span></div>
+      <div class="kpi"><b>10</b><span>实测设计版本</span></div>
+      <div class="kpi"><b>15×</b><span>CSA 整体 TMR 敏感位下降</span></div>
+      <div class="kpi"><b>11×</b><span>BP 运行时检查敏感位下降</span></div>
+    </div>
+    <div class="two">
+      <article class="card">
+        <h3>CSA 2048 × 2048 · 七种加固方案</h3>
+        <p class="tag">XC7K325T · 每版本 1200 次注入 · 等效敏感位数（越短越好）</p>
+        <div class="bars" data-max="588206">
+          <div data-v="588206"><span>无保护基准 W17</span><em>588,206 · 基准</em></div>
+          <div data-v="38554" class="best"><span>整体三模冗余 TMR17</span><em>38,554 · ↓15.3×</em></div>
+          <div data-v="139183"><span>分组降精度冗余 GR17</span><em>139,183 · ↓4.2×</em></div>
+          <div data-v="219733"><span>副本窄 2 位 GR17M2</span><em>219,733 · ↓2.7×</em></div>
+          <div data-v="327804"><span>副本窄 1 位 GR17M1A</span><em>327,804 · ↓1.8×</em></div>
+          <div data-v="334344"><span>副本宽 1 位 GR17P1</span><em>334,344 · ↓1.8×</em></div>
+          <div data-v="389326"><span>副本宽 2 位 GR17P2</span><em>389,326 · ↓1.5×</em></div>
         </div>
-        <figure class="platform-view" id="view-strike" role="tabpanel" tabindex="0" aria-labelledby="view-tab-strike">
-          <div class="platform-canvas strike-canvas" data-strike-scene>
-            <div class="scene-overline"><span data-i18n="sceneSchematic">原理示意 / 不按比例</span><span aria-hidden="true">01 / STRIKE</span></div>
-            <svg class="strike-diagram" viewBox="0 0 520 310" role="img" aria-labelledby="strike-svg-title">
-              <title id="strike-svg-title" data-i18n="strikeGraphic">粒子经过屏蔽与封装，可能使示意存储阵列中的一个或多个单元翻转。</title>
-              <defs><pattern id="strike-grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9cb9d0" stroke-opacity=".07"/></pattern></defs>
-              <rect width="520" height="310" fill="url(#strike-grid)"/>
-              <path class="particle-guide" d="M139 18L224 198"/>
-              <g class="shield-layer"><path d="M65 72L91 55H455L430 72Z"/><path d="M65 72H430V98H65Z"/><path d="M430 72L455 55V81L430 98Z"/></g>
-              <path class="chip-outline" d="M119 137H400V282H119Z"/>
-              <g class="memory-cells" aria-hidden="true">
-                <g data-cell transform="translate(151 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(203 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-                <g data-cell transform="translate(255 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(307 154)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-                <g data-cell transform="translate(151 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-                <g data-cell transform="translate(203 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-                <g data-cell transform="translate(255 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(307 186)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(151 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(203 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-                <g data-cell transform="translate(255 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-                <g data-cell transform="translate(307 218)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(151 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-                <g data-cell transform="translate(203 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(255 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">1</text></g>
-                <g data-cell transform="translate(307 250)"><rect width="42" height="24" rx="4"/><text x="21" y="17">0</text></g>
-              </g>
-              <g class="strike-particle" aria-hidden="true"><path d="M210 171L224 198"/><circle cx="224" cy="198" r="5"/></g>
-              <circle class="strike-impact" cx="224" cy="198" r="19" aria-hidden="true"/>
-            </svg>
-            <ul class="scene-legend"><li><i class="legend-particle" aria-hidden="true"></i><span data-i18n="strikeParticle">入射粒子</span></li><li><i class="legend-shield" aria-hidden="true"></i><span data-i18n="strikeShield">屏蔽 / 封装</span></li><li><i class="legend-cell" aria-hidden="true"></i><span data-i18n="strikeCells">示意存储单元</span></li></ul>
-          </div>
-          <figcaption>
-            <p class="scene-kicker" data-i18n="sceneInteract">轻量交互 · 原理演示</p><h3 data-i18n="viewStrikeTitle">一颗粒子，可能改变一位状态。</h3>
-            <p data-i18n="viewStrikeBody">粒子在敏感区沉积能量，产生的电荷可能扰动存储状态。这里用一个或多个单元的翻转解释原理，不运行真实设计注入，也不计算翻转概率。</p>
-            <div class="scene-controls" data-strike-controls hidden>
-              <div class="scene-choice" role="group" aria-label="打击示意类型" data-label="strikeModeLabel"><button type="button" data-strike-mode="single" aria-pressed="true" data-i18n="strikeSingle">单单元示例</button><button type="button" data-strike-mode="multiple" aria-pressed="false" data-i18n="strikeMultiple">多单元示例</button></div>
-              <div class="strike-actions"><button type="button" class="scene-play" data-strike-play><span aria-hidden="true">▶</span><span data-i18n="strikePlay">播放一次打击</span></button><button type="button" class="scene-reset" data-strike-reset disabled data-i18n="strikeReset">复位示意</button></div>
-            </div>
-            <p class="scene-status" data-strike-status role="status" data-i18n="strikeReady">示意阵列已就绪。橙色轮廓与数值变化会标出受影响的单元。</p>
-            <p class="scene-footnote" data-i18n="strikeTiming">动画不代表物理时间；单元位置和数量为教学示意。</p>
-          </figcaption>
-        </figure>
-        <figure class="platform-view" id="view-orbit" role="tabpanel" tabindex="0" aria-labelledby="view-tab-orbit">
-          <div class="platform-canvas orbit-canvas" data-orbit-scene="meo">
-            <div class="scene-overline"><span data-i18n="sceneSchematic">原理示意 / 不按比例</span><span aria-hidden="true">02 / ORBIT</span></div>
-            <svg class="orbit-diagram" viewBox="0 0 520 310" role="img" aria-labelledby="orbit-svg-title">
-              <title id="orbit-svg-title" data-i18n="orbitGraphic">地球周围的三类轨道示意；高亮轨道与卫星位置随选择变化，不表示真实辐射带分布。</title>
-              <defs><radialGradient id="orbit-earth"><stop stop-color="#32748a"/><stop offset=".75" stop-color="#174761"/><stop offset="1" stop-color="#102e48"/></radialGradient><clipPath id="earth-clip"><circle cx="260" cy="158" r="60"/></clipPath></defs>
-              <path class="orbit-reference" d="M16 158H504M260 12V300"/>
-              <g class="orbit-tracks" transform="rotate(-20 260 158)"><ellipse data-track="leo" cx="260" cy="158" rx="107" ry="43"/><ellipse data-track="meo" cx="260" cy="158" rx="173" ry="77"/><ellipse data-track="geo" cx="260" cy="158" rx="232" ry="112"/></g>
-              <circle class="earth-halo" cx="260" cy="158" r="67"/>
-              <circle cx="260" cy="158" r="60" fill="url(#orbit-earth)"/>
-              <g class="earth-lines" clip-path="url(#earth-clip)"><ellipse cx="260" cy="158" rx="30" ry="60"/><ellipse cx="260" cy="158" rx="60" ry="20"/><path d="M200 158H320M260 98V218"/><path class="earth-land" d="M222 112L244 115L253 127L244 142L251 153L236 160L234 178L221 173L217 151L205 143ZM273 119L301 128L311 148L291 152L280 166L270 159L263 141ZM273 171L293 181L285 204L273 197Z"/></g>
-              <g class="orbit-satellite" data-orbit-satellite transform="translate(423 99)"><circle r="22" class="satellite-locator"/><path class="satellite-panel" d="M-26-9H-9V9H-26ZM9-9H26V9H9Z"/><path d="M-18-9V9M18-9V9M-26 0H-9M9 0H26" class="satellite-detail"/><rect x="-7" y="-12" width="14" height="24" rx="3" class="satellite-body"/><path d="M0-12V-21M-4-21H4" class="satellite-detail"/></g>
-              <g class="orbit-particles"><path d="M28 54L77 75M18 83L65 104M35 115L80 135"/><circle cx="77" cy="75" r="3"/><circle cx="65" cy="104" r="3"/><circle cx="80" cy="135" r="3"/></g>
-            </svg>
-            <ul class="scene-legend"><li><i class="legend-earth" aria-hidden="true"></i><span data-i18n="orbitEarth">地球</span></li><li><i class="legend-orbit" aria-hidden="true"></i><span data-i18n="orbitSelected">所选轨道</span></li><li><i class="legend-particle" aria-hidden="true"></i><span data-i18n="orbitParticles">空间粒子</span></li></ul>
-          </div>
-          <figcaption>
-            <p class="scene-kicker" data-i18n="sceneInteract">轻量交互 · 原理演示</p><h3 data-i18n="viewOrbitTitle">不同轨道，不同的环境输入。</h3>
-            <p data-i18n="viewOrbitBody">选择一类示意轨道，了解环境评估关注什么。这里不绘制真实辐射带或异常区，不计算粒子通量、剂量与翻转率。</p>
-            <div class="scene-controls" data-orbit-controls hidden><div class="scene-choice orbit-choice" role="group" aria-label="示意轨道类别" data-label="orbitChoiceLabel"><button type="button" data-orbit-choice="leo" aria-pressed="false">LEO</button><button type="button" data-orbit-choice="meo" aria-pressed="true">MEO</button><button type="button" data-orbit-choice="geo" aria-pressed="false">GEO</button></div></div>
-            <div class="orbit-description" role="status"><strong data-orbit-name data-i18n="orbitMeoName">中地球轨道 · MEO</strong><p data-orbit-copy data-i18n="orbitMeoBody">评估需结合轨道位置与俘获粒子环境。图中的轨道只是类别示意，不能用于判断某一高度的辐射强弱。</p></div>
-            <p class="scene-footnote" data-i18n="orbitIndependent">切换示意轨道不会修改上方参考算例，也不会运行后台模型。</p>
-          </figcaption>
-        </figure>
-        <figure class="platform-view" id="view-sar" role="tabpanel" tabindex="0" aria-labelledby="view-tab-sar">
-          <div class="platform-canvas sar-canvas">
-            <div class="scene-overline"><span data-i18n="sceneConcept">概念示意 / 非计算输出</span><span aria-hidden="true">03 / SAR</span></div>
-            <div class="sar-comparison"><div><span data-i18n="sarReference">理想点响应示意</span><svg viewBox="0 0 180 200" role="img" aria-labelledby="sar-reference-title"><title id="sar-reference-title" data-i18n="sarReferenceGraphic">九个聚焦亮点的概念图。</title><path class="sar-crosshair" d="M90 0V200M0 100H180"/><g class="sar-points"><circle cx="40" cy="45" r="3"/><circle cx="90" cy="45" r="3"/><circle cx="140" cy="45" r="3"/><circle cx="40" cy="100" r="3"/><circle cx="90" cy="100" r="3"/><circle cx="140" cy="100" r="3"/><circle cx="40" cy="155" r="3"/><circle cx="90" cy="155" r="3"/><circle cx="140" cy="155" r="3"/></g></svg></div><div><span data-i18n="sarDisturbed">可能的失焦示意</span><svg viewBox="0 0 180 200" role="img" aria-labelledby="sar-disturbed-title"><title id="sar-disturbed-title" data-i18n="sarDisturbedGraphic">亮点扩展为拖尾的概念图，不是仿真或实测结果。</title><path class="sar-crosshair" d="M90 0V200M0 100H180"/><path class="sar-streaks" d="M20 36L60 54M70 36L110 54M120 36L160 54M20 91L60 109M70 91L110 109M120 91L160 109M20 146L60 164M70 146L110 164M120 146L160 164"/></svg></div></div>
-            <p class="scene-inline-note" data-i18n="sarConceptNote">只说明一种可能的后果，不代表所有翻转都会造成失焦。</p>
-          </div>
-          <figcaption><p class="scene-kicker" data-i18n="sceneFromBit">从位状态，到功能后果</p><h3 data-i18n="viewSarTitle">一次翻转，为什么可能影响成像？</h3><p data-i18n="viewSarBody">故障落在不同位置，可能被掩蔽，也可能改变系数、运算或控制流程。左侧用原创点响应示意解释一种失焦后果；具体影响必须结合真实处理链路验证。</p><a class="scene-evidence-link" href="#fault-injection" data-i18n="sceneEvidence">查看独立的板级注入实测 ↓</a></figcaption>
-        </figure>
-        <figure class="platform-view" id="view-device" role="tabpanel" tabindex="0" aria-labelledby="view-tab-device">
-          <div class="platform-canvas device-canvas">
-            <div class="scene-overline"><span data-i18n="sceneSchematic">原理示意 / 不按比例</span><span aria-hidden="true">04 / CELL</span></div>
-            <svg class="cell-diagram" viewBox="0 0 520 260" role="img" aria-labelledby="cell-svg-title"><title id="cell-svg-title" data-i18n="cellGraphic">SRAM 型单元的两个反相器交叉耦合。电荷扰动可能改变存储状态。</title><g class="cell-wires"><path d="M221 130H240V57H400V130H356M400 130H440M299 130H280V203H120V130H164M120 130H82"/></g><g class="cell-gates"><path d="M164 105L207 130L164 155Z"/><circle cx="214" cy="130" r="7"/><path d="M356 105L313 130L356 155Z"/><circle cx="306" cy="130" r="7"/></g><g class="cell-nodes"><circle cx="120" cy="130" r="5"/><circle cx="400" cy="130" r="5"/></g><text class="cell-symbol" x="58" y="136">Q</text><text class="cell-symbol" x="447" y="136">Q̅</text><path class="cell-charge" d="M76 30L112 104M100 94L112 104L115 88"/></svg>
-            <ol class="cell-sequence"><li data-i18n="cellCollect">电荷收集</li><li data-i18n="cellDisturb">状态扰动</li><li data-i18n="cellUpset">可能翻转</li></ol>
-          </div>
-          <figcaption><p class="scene-kicker" data-i18n="scenePhysics">存储单元的物理起点</p><h3 data-i18n="viewDeviceTitle">从一对交叉耦合反相器讲起。</h3><p data-i18n="viewDeviceBody">这里以 SRAM 型存储单元为例：两个反相器维持一个稳定状态。粒子产生的电荷扰动如果足够大，可能使状态翻转。不同 FPGA 资源的具体电路与敏感性并不相同。</p><p class="scene-footnote" data-i18n="cellBoundary">电路为原理简图，不是目标器件的晶体管级版图或电荷输运仿真。</p></figcaption>
-        </figure>
-        <figure class="platform-view" id="view-effects" role="tabpanel" tabindex="0" aria-labelledby="view-tab-effects">
-          <div class="platform-canvas effects-canvas">
-            <div class="scene-overline"><span data-i18n="effectsScope">既有参考模型的范围</span><span aria-hidden="true">05 / SCOPE</span></div>
-            <dl class="effects-list"><div><dt data-i18n="effectsGcr">银河宇宙线重离子翻转</dt><dd class="effect-covered" data-i18n="effectsCovered">参考模型已计算</dd></div><div><dt data-i18n="effectsSpe">太阳粒子事件</dt><dd data-i18n="effectsMissing">未包含</dd></div><div><dt data-i18n="effectsProton">俘获质子</dt><dd data-i18n="effectsMissing">未包含</dd></div><div><dt data-i18n="effectsTid">总电离剂量</dt><dd data-i18n="effectsMissing">未包含</dd></div></dl>
-            <p class="scene-inline-note" data-i18n="effectsNoZero">未包含不等于没有风险，也不等于零。</p>
-          </div>
-          <figcaption><p class="scene-kicker" data-i18n="sceneEvidenceBoundary">模型、演示与实测，分开阅读</p><h3 data-i18n="viewEffectsTitle">算了什么，没算什么。</h3><p data-i18n="viewEffectsBody">上方数值是既有平台在所列条件下的参考模型结果；站内图解只解释原理，不会重新计算这些数值。板级注入实测在下方独立展示，不能等同于辐照鉴定。</p><a class="scene-evidence-link" href="#fault-injection" data-i18n="sceneEvidence">查看独立的板级注入实测 ↓</a></figcaption>
-        </figure>
-        <figure class="platform-view" id="view-geant4" role="tabpanel" tabindex="0" aria-labelledby="view-tab-geant4">
-          <div class="platform-canvas geant4-canvas">
-            <div class="scene-overline"><span data-i18n="crosscheckReference">既有复核算例 / 非本页计算</span><span aria-hidden="true">06 / CHECK</span></div>
-            <ol class="crosscheck-setup"><li><span data-i18n="crosscheckParticle">入射离子</span><strong>Fe-56</strong></li><li><span data-i18n="crosscheckShield">铝屏蔽</span><strong>2 mm</strong></li><li><span data-i18n="crosscheckTarget">硅敏感体</span><strong>10 µm</strong></li></ol>
-            <dl class="crosscheck-values"><div><dt data-i18n="crosscheckPlatform">原平台</dt><dd>9.04 × 10<sup>−8</sup></dd></div><div><dt>Geant4</dt><dd>9.54 × 10<sup>−8</sup></dd></div></dl>
-            <p class="crosscheck-unit" data-i18n="crosscheckUnit">翻转 / bit / 天</p><p class="scene-inline-note" data-i18n="crosscheckNote">此处复述既有复核结果，不重新运行 Geant4，也不是束流试验。</p>
-          </div>
-          <figcaption><p class="scene-kicker" data-i18n="crosscheckKicker">独立计算路径的对照</p><h3 data-i18n="viewGeant4Title">换一条计算路径，把数再算一遍。</h3><p data-i18n="viewGeant4Body">用独立的 Geant4 蒙特卡洛仿真复核平台结果：Fe-56 穿过 2mm 铝屏蔽打到 10µm 硅敏感体，沉积能量换算 LET 谱，叠 Lee 2014 实测 Weibull 得 9.54×10⁻⁸ 翻转/bit/天，与平台 9.04×10⁻⁸ 相差约 5%。两套独立实现收敛到同一量级。</p></figcaption>
-        </figure>
-        <noscript><p class="scene-no-script">静态图解已完整展示；启用 JavaScript 后可切换视图、轨道并播放示意。 Static diagrams remain available; enable JavaScript for view controls and animation.</p></noscript>
-      </div>
-      <div class="platform-detail">
-        <div class="platform-offer"><h3 data-i18n="offerTitle">你能拿到什么</h3><ol>
-          <li><strong data-i18n="offer1Title">在轨翻转率报告</strong><p data-i18n="offer1Body">按你的轨道、屏蔽厚度与器件，给出 CRAM、BRAM、FF 每天的翻转次数和任务期统计。</p></li>
-          <li><strong data-i18n="offer2Title">敏感模块定位</strong><p data-i18n="offer2Body">导入你的 Vivado 设计，按层级自动划分模块，找出最容易出问题的部分。</p></li>
-          <li><strong data-i18n="offer3Title">功能后果评估</strong><p data-i18n="offer3Body">把翻转注入你的处理链路，看输出图像或数据会受到多大影响。</p></li>
-          <li><strong data-i18n="offer4Title">加固方案对比</strong><p data-i18n="offer4Body">结合 TMR、ECC、配置刷新与板级 SEM 故障注入，对比加固前后的效果。</p></li>
-        </ol></div>
-        <div class="platform-side">
-          <h3 data-i18n="whoTitle">适合谁</h3>
-          <ul class="platform-who"><li data-i18n="who1">星载在轨处理的 FPGA 团队</li><li data-i18n="who2">可靠性建模与评估人员</li><li data-i18n="who3">束流试验前的预评估</li><li data-i18n="who4">教学与原理演示</li></ul>
-          <h3 data-i18n="methodTitle">模型基础</h3>
-          <ul class="platform-methods"><li>SPENVIS / CREME96</li><li>Bethe-Bloch LET</li><li data-i18n="methodWeibull">Weibull 截面</li><li data-i18n="methodCutoff">IGRF-13 截止刚度</li><li data-i18n="methodPoisson">泊松任务统计</li><li data-i18n="methodBatch">固定种子批量仿真</li></ul>
-          <button class="button" type="button" data-quote="reliability" data-i18n="simulationCta">用我的轨道和设计评估 →</button>
-          <p class="platform-limits" data-i18n="simulationLimits">当前参考模型尚未包含太阳粒子事件、俘获质子与总剂量效应。仿真用于设计阶段评估，不替代束流试验。</p>
+      </article>
+      <article class="card">
+        <h3>BP 2048 × 2048 · 三种可靠性配置</h3>
+        <p class="tag">XC7K325T · 每版本 1200 次注入</p>
+        <div class="bars" data-max="588206">
+          <div data-v="396090"><span>无保护基准 V7</span><em>396,090 · 基准</em></div>
+          <div data-v="53270"><span>整体三模冗余 T7</span><em>53,270 · ↓7.4×</em></div>
+          <div data-v="35176" class="best"><span>运行时检查 + 自动重跑 P7C</span><em>35,176 · ↓11.3×</em></div>
+        </div>
+        <h4 class="sub" style="margin-top:22px">实测结论</h4>
+        <ul class="feat one">
+          <li>不加保护时，5.8%（BP）到 6.9%（CSA）的随机配置位翻转会让成像失效或挂死</li>
+          <li>整体 TMR 效果最好（约 1/15），但 DSP 用量从 173 增至 493</li>
+          <li>降精度冗余不增加 DSP，最佳方案约 1/4；副本位宽偏离计算值都会变差</li>
+          <li>BP 运行时检查：71 次报警全部自动重跑恢复，无挂死</li>
+        </ul>
+      </article>
+    </div>
+    <p class="note">故障注入模拟的是配置存储器单位翻转，不是辐照试验；结合仿真平台的翻转率，可做设计阶段在轨风险估算。</p>
+  </div>
+</section>
+
+<section class="s alt" id="boards">
+  <div class="wrap reveal">
+    <div class="idx">Hardware · 板卡平台</div>
+    <h2>A7、K7、V7 板卡平台</h2>
+    <p class="lead">从紧凑原型到超大规模成像，按数据规模与接口需求选型；接口、存储与器件可按项目定制。</p>
+    <div class="svc three">
+      <article class="card"><i class="no">A7</i><h3>Artix-7 板卡</h3><p class="tag">XC7A35T · FGG484-2 · 中小规模处理与算法原型</p>
+        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>主机链路</td><td class="r">以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
+      <article class="card"><i class="no">K7</i><h3>Kintex-7 板卡</h3><p class="tag">XC7K325T · FFG900-2 · 大规模 SAR 成像</p>
+        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>主机链路</td><td class="r">千兆以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
+      <article class="card"><i class="no">V7</i><h3>Virtex-7 板卡</h3><p class="tag">XC7VX690T · FFG1927-2 · 超大规模成像</p>
+        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>主机链路</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>辅助</td><td class="r">千兆以太网、JTAG</td></tr></table></article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="imaging">
+  <div class="wrap reveal">
+    <div class="idx">Field Imagery · 实测成像</div>
+    <h2>真实回波，聚焦成像。</h2>
+    <p class="lead">星载与机载 SAR 实测数据成像，覆盖大斜视、聚束与 TOPS 扫描模式。</p>
+    <div class="gallery">
+      <figure><a href="assets/sar/dubai-no-cfbp.webp" target="_blank" rel="noopener"><img src="assets/sar/dubai-no-cfbp.webp" alt="迪拜星载 SAR 实测聚焦图" loading="lazy"></a>
+        <figcaption><b>01 / 迪拜 · 星载大斜视</b>Smartsat-X1 于 2025-07-28 获取，NO-CFBP 聚焦，城市道路与建筑纹理清晰。</figcaption></figure>
+      <figure><a href="assets/sar/airborne-spotlight.webp" target="_blank" rel="noopener"><img src="assets/sar/airborne-spotlight.webp" alt="机载聚束 SAR 实测成像" loading="lazy"></a>
+        <figcaption><b>02 / 机载聚束 · 细节聚焦</b>RT-UFA 实时统一聚焦算法处理，规则地物与线性结构清晰。</figcaption></figure>
+      <figure><a href="assets/sar/airborne-tops.webp" target="_blank" rel="noopener"><img src="assets/sar/airborne-tops.webp" alt="机载 Ku 波段 TOPS SAR 实测成像" loading="lazy"></a>
+        <figcaption><b>03 / 机载 TOPS · 扫描成像</b>Ku 波段 TOPS 模式，RT-UFA 处理，大场景聚焦。</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s alt" id="algorithms">
+  <div class="wrap reveal">
+    <div class="idx">Algorithms &amp; Primitives · 成像算法与基本算子</div>
+    <h2>CSA 与 BP：两条已上板的成像路径。</h2>
+    <p class="lead">两种算法均已在 FPGA 上实现；FFT、CORDIC 等算子可单独授权。</p>
+    <div class="two">
+      <article class="card"><h3>CSA · 调频变标算法</h3><p class="tag">频域相位补偿完成徙动校正与聚焦，围绕 FFT、复乘与外存调度组织规则数据通路。</p>
+        <ol class="steps-ol"><li>方位向 FFT 到距离-多普勒域</li><li>Chirp Scaling 相位补偿</li><li>距离向 FFT、压缩与徙动补偿、IFFT</li><li>方位压缩与残余相位补偿，输出复图像</li></ol>
+        <p class="note">已实现 256²、2048²、4096² 三种规模定点 CSA。</p></article>
+      <article class="card"><h3>BP · 反投影算法</h3><p class="tag">按轨迹计算每个像素斜距，取样补偿相位，沿合成孔径相干累加。</p>
+        <ol class="steps-ol"><li>距离压缩</li><li>像素与脉冲配对，计算斜距</li><li>插值与相位补偿</li><li>沿孔径相干累加输出</li></ol>
+        <p class="note">已实现 2048²，提供无保护 / TMR / 运行时检查三种配置。</p></article>
+      <article class="card"><h3>FFT · 流式变换算子</h3><p class="tag">1024 点、四路、十级并行 SDF FFT，纯 SystemVerilog RTL。</p>
+        <table><tr><td>保护变体</td><td class="r">无保护 / ECC / TMR</td></tr><tr><td>时钟约束</td><td class="r">125 MHz · Vivado 2022.1</td></tr></table></article>
+      <article class="card"><h3>CORDIC · 相位到正弦</h3><p class="tag">全展开流水旋转 CORDIC，12 位相位 → 12 位 sin，13 次迭代。</p>
+        <table><tr><td>内部 X/Y</td><td class="r">19 位，不使用 DSP</td></tr><tr><td>延迟</td><td class="r">15 个 CE 周期（RTL）</td></tr></table></article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="cases">
+  <div class="wrap reveal">
+    <div class="idx">Cases · 项目案例</div>
+    <h2>已在板上跑通的实现。</h2>
+    <p class="lead">每个案例对应具体板卡、算法版本与处理规模。</p>
+    <div class="steps">
+      <div class="step"><i>A7</i><h3>CSA · 256 × 256</h3><p>复数定点 · 以太网传输。板上输出与定点模型逐点一致（最大误差 0）。</p></div>
+      <div class="step"><i>K7</i><h3>CSA · 2048 × 2048</h3><p>int32 I/Q · 125 MHz · 2 GiB DDR3；完成上板成像并开展 2051 次 SEM 故障注入。</p></div>
+      <div class="step"><i>K7</i><h3>BP · 2048 × 2048</h3><p>直接反投影 · 8 抽头 sinc 插值；成像计算 4.29 s，两次运行与参考逐像素一致。</p></div>
+      <div class="step"><i>V7</i><h3>CSA · 4096 × 4096</h3><p>定点 CSA · PCIe Gen2 ×8 · 双通道 DDR3，大规模成像与主机高速交换。</p></div>
+      <div class="step"><i>V·P</i><h3>100GbE · 60 min 长测</h3><p>Versal Premium 上板，混合流量累计 39.8 TB 零丢包、零错误。</p></div>
+      <div class="step"><i>NV</i><h3>NVMe · 4 TB 整盘</h3><p>8 块 990 PRO 混测通过，4 TB 连续擦写回读逐字节校验 100% 正确。</p></div>
+    </div>
+    <div class="gallery" style="margin-top:28px">
+      <figure><img src="assets/sar/point-target-board.png" alt="九点目标 FPGA 定点成像" loading="lazy"><figcaption><b>九点目标</b>FPGA 定点成像与中心目标放大</figcaption></figure>
+      <figure><img src="assets/sar/point-target-focus.png" alt="CSA 单点目标聚焦剖面" loading="lazy"><figcaption><b>点目标聚焦</b>峰值放大及距离 / 方位剖面</figcaption></figure>
+      <figure><img src="assets/sar/point-target-injection.png" alt="故障注入黄金图、注入后图和差值图" loading="lazy"><figcaption><b>故障注入对比</b>黄金图、注入后图与对数差值</figcaption></figure>
+    </div>
+  </div>
+</section>
+<section class="s" id="ip">
+  <div class="wrap reveal">
+    <div class="idx">High-Speed IP · 高速 IP 核心</div>
+    <h2>主打高性能 FPGA IP 核心</h2>
+    <p class="lead">全 RTL 自研、上板严苛压力测试，可交付网表或全套源码。</p>
+
+    <article class="card">
+      <h3>100GbE TCP/UDP 全硬件协议栈 IP</h3>
+      <p class="tag">全 RTL 硬件线速处理，彻底卸载 CPU 协议栈负荷，赋能超低时延网络互联</p>
+      <div class="value"><b>应用价值：</b>专为 AI 智算中心分布式互联、量化高频低时延交易及大规模数据中心流量线速捕获设计。零 CPU 开销，纳秒级微架构转发。</div>
+      <ul class="feat">
+        <li>目标平台：AMD Versal Premium（集成 MRMAC 硬核，支持移植其他平台）</li>
+        <li>全硬件流水线：TCP/UDP/IPv4 协议全由 RTL 处理，零 CPU 占用</li>
+        <li>多会话独立收发：支持 16 个并发 TCP 会话（深度可扩展），会话互不阻塞</li>
+        <li>双模工作：支持服务端（Server）与客户端（Client）工作模式</li>
+        <li>完备协议支持：VLAN、巨型帧、ARP、ICMP、IGMP 组播、802.3x PAUSE</li>
+        <li>工业级鲁棒性：窗口缩放、时间戳、SACK、快速重传、SYN Cookie 防攻击</li>
+        <li>友好接口与生态：标准 AXI4-Stream 用户接口，随附多路应用参考范例</li>
+        <li>交付标准：提供经过上板严苛压力测试的 Netlist 网表或全套 RTL 源码</li>
+      </ul>
+      <table>
+        <tr><th>测试项与测试场景</th><th class="r">实测验证数据</th></tr>
+        <tr><td>TCP 线速发送（硬件上板实测，MTU 9000）</td><td class="r"><b>98.9 Gb/s</b>（达到物理线速）</td></tr>
+        <tr><td>TCP 硬件接收（硬件上板实测，MTU 9000）</td><td class="r"><b>74.0 Gb/s</b>（超高吞吐接收）</td></tr>
+        <tr><td>全双工收发同时（硬件上板实测）</td><td class="r"><b>合计 99.6 Gb/s</b>（双向饱和传输）</td></tr>
+        <tr><td>60 分钟严苛混合流量连续满载长测</td><td class="r"><b>零丢包、零错误</b>，累计 TCP 传输 <b>39.8 TB</b></td></tr>
+      </table>
+      <p class="note">注：以上测试基于 AMD Versal Premium 平台及实物光模块链路测试环境。</p>
+    </article>
+
+    <article class="card" id="nvme">
+      <h3>NVMe Host 高性能控制器 IP</h3>
+      <p class="tag">自研原生 FPGA NVMe 主机控制器，突破雷达高速记录与大模型数据读取瓶颈</p>
+      <div class="value"><b>应用价值：</b>专为宽带雷达无损数据记录、工业高速视觉采集及 NVMe-oF 存储加速节点设计，无需工控机介入即可直驱高速 NVMe SSD 阵列。</div>
+      <ul class="feat">
+        <li>目标平台：AMD Versal Premium / UltraScale+ 系列</li>
+        <li>主机接口：PCIe Gen4（16 GT/s）x4，提供极高数据吞吐带宽</li>
+        <li>存储拓扑：支持多盘并发存储应用，支持多盘并行读写流水线调度</li>
+        <li>极简数据流：原生 AXI4-Stream 主机数据接口，直连前端采集或网络流</li>
+        <li>可靠性设计：多级可配置硬件缓冲、完善的超时容错与自愈恢复机制</li>
+        <li>指令完备性：深度支持 NVMe 命令集及 Deallocate / TRIM 存储管理指令</li>
+        <li>验证完备度：内建完备的 UVM/SystemVerilog 仿真环境与自动化回归用例</li>
+        <li>交付物：经过商业级固态硬盘批量验证的工程网表或完整 RTL 源码</li>
+      </ul>
+      <table>
+        <tr><th>测试项与测试场景</th><th class="r">实测验证数据</th></tr>
+        <tr><td>单盘硬件连续写带宽实测</td><td class="r"><b>6.6 GB/s</b>（饱和释放硬件盘速）</td></tr>
+        <tr><td>单盘硬件连续读带宽实测</td><td class="r"><b>7.25 GB/s</b>（逼近 PCIe Gen4 x4 理论极限）</td></tr>
+        <tr><td>商用多盘阵列兼容性验证</td><td class="r"><b>8 块 Samsung 990 PRO SSD</b> 混测全部通过</td></tr>
+        <tr><td>协议标准一致性与回归验证</td><td class="r"><b>160 项验证项 100% 全部通过</b></td></tr>
+        <tr><td>严苛整盘数据完整性长测</td><td class="r"><b>4 TB 连续擦写与回读，逐字节校验 100% 正确</b></td></tr>
+      </table>
+    </article>
+  </div>
+</section>
+
+<section class="s alt" id="solutions">
+  <div class="wrap reveal">
+    <div class="idx">Bus &amp; RF · 总线与射频</div>
+    <h2>高速总线与射频采集工程方案</h2>
+    <p class="lead">从片上 DMA 到 JESD204 射频链路，再到双板级超宽带收发系统。</p>
+
+    <article class="card">
+      <h3>AXI4-Stream 到 DDR DMA 高速传输引擎 IP</h3>
+      <div class="value"><b>微架构亮点：</b>超轻量资源占用（仅 537 LUT），支持 14 GB/s 饱和突发读写，具备 4KB 边界自动切分。</div>
+      <ul class="feat">
+        <li>512 位 AXI4-Full 主机架构，经 Versal NoC 互联至 DDR4，工作频率 300 MHz</li>
+        <li>独立全双工读写数据通路，读写流水线并发运行互不干扰</li>
+        <li>硬件实时 4 KB 地址边界自适应切割，符合 AXI 协议规范</li>
+        <li>每个方向最多 8 个 Burst 在途并发，最大化内存吞吐效率</li>
+        <li>内建严格参数合规校验与 AXI 总线错误侦测告警逻辑</li>
+        <li>打包为 Vivado 标准 IP，仅 537 LUT、290 Register</li>
+      </ul>
+      <p style="margin:0"><b>实测验证结果：</b>8 GB DDR4 全空间满负荷灌入并读回，逐拍比对校验；2 轮独立测试各 5 轮全循环全部零错误通过，实测平均读写速率达 <b>14 GB/s</b>。</p>
+    </article>
+
+    <article class="card">
+      <h3>JESD204B / JESD204C 射频高速接口集成方案</h3>
+      <div class="two" style="margin-top:14px">
+        <div>
+          <h4 class="sub">ADC 宽带高速接收链路</h4>
+          <ul class="feat" style="grid-template-columns:1fr">
+            <li>AD9656 JESD204B 硬件接收端定制集成</li>
+            <li>目标芯片：Kintex UltraScale 硬件平台</li>
+            <li>物理规格：4 Lane 架构，每 Lane 达到 2.4 Gb/s</li>
+            <li>底层特性：快速确定性链路建立与多通道硬同步</li>
+            <li>实体验证：完成板级真实 ADC 高速数据采集闭环验证</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="sub">DAC 超高速发射链路</h4>
+          <ul class="feat" style="grid-template-columns:1fr">
+            <li>DAC39RF20 JESD204C 硬件发送端高阶集成</li>
+            <li>目标芯片：AMD Versal 系列硬件平台</li>
+            <li>物理规格：16 Lane 架构，单 Lane 速率高达 22.6875 Gb/s</li>
+            <li>底层特性：GT 复杂时钟调优、链路精准训练与眼图优化</li>
+            <li>实体验证：经高带宽射频频谱仪实测，输出频谱纯净</li>
+          </ul>
         </div>
       </div>
-    </div></section>    <section class="section injection-section" id="fault-injection" aria-labelledby="injection-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="injEyebrow">BOARD-LEVEL FAULT INJECTION / 板级注入实测</p><h2 id="injection-title" data-i18n="injTitle">加固有没有用，<br>用上万次实测注入说话。</h2></div><p class="section-intro" data-i18n="injIntro">在 Kintex-7 板上逐次翻转配置存储器位，每次都跑完整的 2048 × 2048 成像，并与无故障输出逐位比对。两条 SAR 成像链、10 个设计版本，全部实测。</p></div>
-      <dl class="injection-metrics">
-        <div><dt data-i18n="injM1Label">有效板级注入</dt><dd><strong>12,000</strong><span data-i18n="injM1Unit">次</span></dd></div>
-        <div><dt data-i18n="injM2Label">实测设计版本</dt><dd><strong>10</strong><span data-i18n="injM2Unit">个</span></dd></div>
-        <div><dt data-i18n="injM3Label">CSA 整体三模冗余</dt><dd><strong>15×</strong><span data-i18n="injM3Unit">敏感位下降</span></dd></div>
-        <div><dt data-i18n="injM4Label">BP 运行时检查</dt><dd><strong>11×</strong><span data-i18n="injM4Unit">敏感位下降</span></dd></div>
-      </dl>
-      <div class="injection-grid">
-        <article class="injection-card"><header><span class="injection-code">CSA 2048 × 2048</span><h3 data-i18n="injCsaTitle">调频变标成像：七种加固方案对比</h3><p data-i18n="injCsaNote">Kintex-7 XC7K325T · 每个版本 1200 次注入</p></header><ol class="injection-bars" id="injection-csa"></ol></article>
-        <article class="injection-card"><header><span class="injection-code">BP 2048 × 2048</span><h3 data-i18n="injBpTitle">反投影成像：三种可靠性配置</h3><p data-i18n="injBpNote">Kintex-7 XC7K325T · 每个版本 1200 次注入</p></header><ol class="injection-bars" id="injection-bp"></ol>
-          <p class="injection-legend" data-i18n="injLegend">条形长度为等效敏感位数，细线为 95% 置信区间。越短越好。</p></article>
+    </article>
+
+    <article class="card">
+      <h3>VU9P + RFSoC 超宽带脉冲发射与采集系统方案</h3>
+      <div class="value"><b>系统级方案：</b>打通 2.4 GSPS 16bit 射频收发、Aurora 4×25G 互联与 9.6 GB/s 实时采集入库全链路。</div>
+      <ul class="feat">
+        <li>系统架构：Virtex UltraScale+ VU9P 计算卡 + RFSoC ZU47DR 射频直采卡</li>
+        <li>主机接口：PCIe Gen3 x16 高吞吐通道，集成 XDMA 驱动引擎</li>
+        <li>跨板互联：Aurora 64B66B，4×25G 通道捆绑，毫秒级链路自愈重连</li>
+        <li>超宽带射频收发：复数 2.4 GSPS 采样率、16 位高动态范围宽带处理</li>
+        <li>多通道并行合成：8 路 DAC 协同输出，脉冲周期与脉宽在线纳秒级配置</li>
+        <li>实时落地：ADC 全速 9.6 GB/s 乒乓写入 DDR，支持上位机全速读回</li>
+        <li>超大样本：单波形最大 4 GB 发射加载，单次连续采集上限 8 GB</li>
+        <li>上位机套件：波形生成、采集落盘、实时频谱分析及连续流接收软件</li>
+      </ul>
+      <table>
+        <tr><th>测试项与工况</th><th class="r">物理实测与仿真结果</th></tr>
+        <tr><td>物理板级自环验证（3200 MHz 单音射频）</td><td class="r">脉宽 20 µs、间隔 50 µs 时序吻合；杂散抑制优于 <b>-49 dBc</b></td></tr>
+        <tr><td>全系统级 RTL 仿真回归</td><td class="r">10 组边界与极端工况 <b>100% 收敛通过</b></td></tr>
+        <tr><td>全链路抗丢包压力验证（硬件仿真）</td><td class="r">下行 42 帧逐拍匹配；上行 1061 帧 <b>零丢包</b></td></tr>
+        <tr><td>时序分析与物理收敛</td><td class="r">双板工程时序零违例（Setup/Hold Timing Met）</td></tr>
+      </table>
+    </article>
+  </div>
+</section>
+
+<section class="s alt" id="license">
+  <div class="wrap reveal">
+    <div class="idx">Licensing · 授权方式</div>
+    <h2>商业授权合作方式</h2>
+    <p class="lead">灵活务实的商业合作模式，充分降低项目前期评估风险。</p>
+    <div class="two">
+      <article class="card lic">
+        <h3>网表授权（Netlist License）</h3>
+        <ul class="feat" style="grid-template-columns:1fr;margin-top:14px">
+          <li>交付经工业级验证的网表包：DCP、EDIF、黑盒端口模型及门级仿真库</li>
+          <li>无缝嵌入客户现有 FPGA 顶层工程，保密性高，开箱即用</li>
+          <li>适合快速集成投产、无需维护底层逻辑代码的企业客户</li>
+          <li><b>支持带时间/节点绑定的评估网表，先免费上板实测，测通再合作</b></li>
+        </ul>
+      </article>
+      <article class="card lic">
+        <h3>源码授权（Source RTL License）</h3>
+        <ul class="feat" style="grid-template-columns:1fr;margin-top:14px">
+          <li>交付带详尽注释的自研 Verilog / SystemVerilog 纯 RTL 源码</li>
+          <li>随附完备的仿真 Testbench、验证脚本及 Vivado 参考工程</li>
+          <li>适合二次开发、深度定制维护或承担国家级科研攻关的单位</li>
+          <li>交付《用户接口手册》与《硬件集成指导书》</li>
+        </ul>
+      </article>
+    </div>
+    <p class="note">注：支持根据项目需求进行功能裁剪与接口协议定制，商务模式灵活支持项目制与授权制。</p>
+  </div>
+</section>
+
+<section class="s" id="downloads">
+  <div class="wrap reveal">
+    <div class="idx">Downloads · 资料下载</div>
+    <h2>验证手册与方案资料</h2>
+    <p class="lead">CSA / BP 的 SEU 验证手册可在咨询时索取。在线阅读或保存为 PDF。</p>
+    <div class="svc two-col">
+      <a class="card dl" href="FPGA_IP_Licensing_CN.pdf?v=20261124c" target="_blank" rel="noopener"><i class="no">IP</i><h3>高速 FPGA IP 方案手册</h3><p class="tag">100GbE / NVMe / JESD204 / RFSoC · 中文 PDF ↓</p></a>
+      <a class="card dl" href="FPGA_IP_Licensing_EN.pdf?v=20261124c" target="_blank" rel="noopener"><i class="no">EN</i><h3>FPGA IP Brochure</h3><p class="tag">English PDF ↓</p></a>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="s alt" id="about">
+  <div class="wrap reveal">
+    <div class="idx">About · 关于我们</div>
+    <h2>由技术负责人直接对接每个项目。</h2>
+    <div class="card lead-card">
+      <div class="avatar" aria-hidden="true">JL</div>
+      <div>
+        <h3>JuLone</h3>
+        <p class="role">技术负责人</p>
+        <p class="tag" style="margin:0">负责项目的需求梳理、方案设计与技术交付，覆盖 FPGA 板卡、信号处理算法上板、抗辐射可靠性评估与高速接口 IP。</p>
       </div>
-      <div class="injection-findings"><h3 data-i18n="injFindTitle">实测告诉我们什么</h3><ul>
-        <li data-i18n="injFind1">不加保护时，5.8%（BP）到 6.9%（CSA）的随机配置位翻转就会让成像失效或挂死。</li>
-        <li data-i18n="injFind2">整体三模冗余效果最好，等效敏感位降到约 1/15，但 DSP 用量从 173 增加到 493。</li>
-        <li data-i18n="injFind3">降精度冗余不增加 DSP（仍为 173），最佳方案的等效敏感位降到约 1/4。副本位宽偏离计算值，无论加宽还是收窄都会变差。</li>
-        <li data-i18n="injFind4">BP 运行时检查：71 次报警全部自动重跑恢复，没有出现挂死，等效敏感位降到约 1/11。</li>
-      </ul></div>
-      <details class="injection-details"><summary data-i18n="injDetailsSummary">判定方法、资源用量与原始数据</summary>
-        <div class="injection-method"><p data-i18n="injMethod">用 Xilinx SEM 从设计的配置位抽样池中均匀随机抽取 1200 位，逐次翻转；每次运行完整成像并与无故障输出逐位比对，修复后再进行下一次。结果分四类：完全一致、输出改变但 PSNR ≥ 50 dB、低于判定线（PSNR &lt; 50 dB）、挂死或无输出（DUE）。失效 = 低于判定线 + DUE；等效敏感位 = 失效比例 × 抽样池位数。</p>
-        <p class="injection-caption" id="injection-caption" data-i18n="injTableCaption">CSA 七个版本的资源用量（整板设计，布线后）与注入结果</p><div class="table-scroll"><table class="injection-table" aria-describedby="injection-caption"><thead><tr><th scope="col" data-i18n="injColBuild">版本</th><th scope="col">LUT</th><th scope="col">FF</th><th scope="col">BRAM36</th><th scope="col">DSP</th><th scope="col" data-i18n="injColPool">抽样池（位）</th><th scope="col" data-i18n="injColFail">失效</th><th scope="col" data-i18n="injColVuln">等效敏感位</th></tr></thead><tbody id="injection-table"></tbody></table></div>
-        <div class="injection-links"><a href="https://github.com/juwadeLone/xidian-csft/tree/8f85b765041caeedf3b051ae4912fdf7f42af937" target="_blank" rel="noopener noreferrer" data-i18n="injRawCsa">CSA 逐次注入原始记录（GitHub）↗</a><a href="datasheets/bp.html" data-i18n="injRawBp">BP 注入验证手册 ↗</a></div></div>
-      </details>
-      <div class="injection-cta"><p data-i18n="injLimits">故障注入模拟的是配置存储器单位翻转，不是辐照试验。结合上方仿真平台给出的翻转率，可以做设计阶段的在轨风险估算。</p><button class="button" type="button" data-quote="reliability" data-i18n="injCta">为我的设计做注入测评 →</button></div>
-    </div></section>    <section class="section wrap" id="products" aria-labelledby="products-title">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="productsEyebrow">PRODUCT CENTER / 产品中心</p><h2 id="products-title" data-i18n="productsTitle">面向信号处理的硬件与算法</h2></div><p class="section-intro" data-i18n="productsIntro">从研究平台出发，围绕任务选型。<br>板卡配置、算法授权与交付范围逐项确认。</p></div>
-      <div class="catalog-toolbar"><span id="product-count" class="catalog-count" aria-live="polite">3 款板卡</span></div>
-      <div class="product-grid" id="product-grid"></div>
-      <p class="catalog-note" data-i18n="hardwareScope">以上为现有工程配置，接口、存储与器件可按项目需求定制。</p>
-    </section>
-    <section class="section sar-section" id="sar-imaging" aria-labelledby="sar-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="sarEyebrow">FIELD IMAGERY / 实测成像</p><h2 id="sar-title" data-i18n="sarTitle">真实回波，聚焦成像。</h2></div><p class="section-intro" data-i18n="sarIntro">星载与机载 SAR 实测数据成像，覆盖大斜视、聚束与 TOPS 扫描模式。</p></div>
-      <div class="scene-gallery">
-        <figure class="scene-card"><a class="scene-image" href="assets/sar/papers/dubai-no-cfbp.webp" target="_blank" rel="noopener noreferrer"><img src="assets/sar/papers/dubai-no-cfbp.webp" width="634" height="385" loading="lazy" alt="迪拜星载 SAR 实测图" data-alt="paperDubaiAlt"></a><figcaption><h3 data-i18n="paperDubaiTitle">01 / 迪拜 · 星载大斜视</h3><p data-i18n="paperDubaiBody">Smartsat-X1 于 2025 年 7 月 28 日获取的迪拜数据，经非正交笛卡尔快速反投影（NO-CFBP）算法聚焦。城市道路与建筑纹理清晰可辨。</p><p class="scene-credit">Smartsat-X1 · Spaceborne · NO-CFBP</p><div class="figure-links"><a href="assets/sar/papers/dubai-no-cfbp.webp" target="_blank" rel="noopener noreferrer" data-i18n="sceneView">查看完整图像 ↗</a></div></figcaption></figure>
-        <figure class="scene-card"><a class="scene-image" href="assets/sar/papers/airborne-spotlight.webp" target="_blank" rel="noopener noreferrer"><img src="assets/sar/papers/airborne-spotlight.webp" width="886" height="451" loading="lazy" alt="机载聚束 SAR 实测图" data-alt="paperSpotlightAlt"></a><figcaption><h3 data-i18n="paperSpotlightTitle">02 / 机载聚束 · 细节聚焦</h3><p data-i18n="paperSpotlightBody">机载聚束模式实测成像，由实时统一聚焦算法（RT-UFA）处理。规则地物与线性结构清晰，保持原始灰度。</p><p class="scene-credit">Airborne · Spotlight · RT-UFA</p><div class="figure-links"><a href="assets/sar/papers/airborne-spotlight.webp" target="_blank" rel="noopener noreferrer" data-i18n="sceneView">查看完整图像 ↗</a></div></figcaption></figure>
-        <figure class="scene-card"><a class="scene-image" href="assets/sar/papers/airborne-tops.webp" target="_blank" rel="noopener noreferrer"><img src="assets/sar/papers/airborne-tops.webp" width="1286" height="629" loading="lazy" alt="机载 Ku 波段 TOPS SAR 实测图" data-alt="paperTopsAlt"></a><figcaption><h3 data-i18n="paperTopsTitle">03 / 机载 TOPS · 扫描成像</h3><p data-i18n="paperTopsBody">机载 Ku 波段渐进扫描地形观测（TOPS）模式实测成像，由 RT-UFA 处理，展示扫描模式下的大场景聚焦。</p><p class="scene-credit">Airborne · Ku-band TOPS · RT-UFA</p><div class="figure-links"><a href="assets/sar/papers/airborne-tops.webp" target="_blank" rel="noopener noreferrer" data-i18n="sceneView">查看完整图像 ↗</a></div></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="inquiry">
+  <div class="wrap reveal">
+    <div class="idx">Contact · 开启下一次探索</div>
+    <h2>你的下一次实验，从这里开始。</h2>
+    <p class="lead">表单不会上传或保存信息，只生成邮件草稿，由你在邮箱中确认发送。</p>
+    <div class="steps four">
+      <div class="step"><i>01</i><h3>聊清任务</h3><p>应用场景、信号规模、接口与实验目标。</p></div>
+      <div class="step"><i>02</i><h3>确认方案</h3><p>评估平台配置、算法适配与验证范围。</p></div>
+      <div class="step"><i>03</i><h3>约定交付</h3><p>书面确认报价、周期、文档与支持内容。</p></div>
+      <div class="step"><i>04</i><h3>开始验证</h3><p>按约定测试用例完成集成与验收。</p></div>
+    </div>
+    <div class="contact" style="margin-top:28px">
+      <div>
+        <div class="who">
+          <h3>项目咨询与商务联系</h3>
+          <p class="role">板卡定制 · SAR 算法上板 · 抗辐射评估 · 100GbE / NVMe / JESD204 / RFSoC 高速 IP</p>
+          <p><b>技术负责人：</b>JuLone</p>
+          <p><b>邮箱：</b><a href="mailto:zhuao1906233797@gmail.com" style="color:var(--accent)">zhuao1906233797@gmail.com</a></p>
+          <button class="btn copymail" type="button" data-mail="zhuao1906233797@gmail.com">复制邮箱地址</button>
+        </div>
+        
       </div>
-    </div></section>
-    <section class="section algorithm-section" id="algorithms" aria-labelledby="algorithms-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="sarAlgorithmEyebrow">ALGORITHMS / 成像算法</p><h2 id="algorithms-title" data-i18n="sarAlgorithmTitle">CSA 与 BP：只讨论成像。</h2></div><p class="section-intro" data-i18n="sarAlgorithmIntro">成像算法与硬件、算子、测试分开展示。</p></div>
-      <div class="algorithm-grid">
-        <article class="algorithm-card"><span class="algorithm-code">CSA</span><h3 data-i18n="csaTitle">Chirp Scaling · 调频变标算法</h3><p data-i18n="csaIntro">在频域中通过相位补偿完成距离徙动校正与聚焦，适合围绕 FFT、复数乘法和外存调度组织规则的数据通路。</p><ol><li data-i18n="csaStep1">方位向 FFT：将回波变换到距离-多普勒域。</li><li data-i18n="csaStep2">Chirp Scaling 相位补偿：调整不同距离单元的徙动。</li><li data-i18n="csaStep3">距离向 FFT、压缩与徙动补偿，再做距离向 IFFT。</li><li data-i18n="csaStep4">方位压缩与残余相位补偿，方位向 IFFT 输出复图像。</li></ol><p class="algorithm-note" data-i18n="csaNote">当前参考平台：2048 × 2048 定点 CSA。成像参数、定点位宽与处理几何需要联合验证；不是任意任务参数的即插即用承诺。</p><div class="algorithm-links"><a href="datasheets/sar.html" data-i18n="csaDatasheet">CSA / SAR 数据手册 ↗</a><button type="button" data-quote="sar" data-i18n="csaDiscuss">讨论 CSA 方案 →</button></div></article>
-        <article class="algorithm-card"><span class="algorithm-code">BP</span><h3 data-i18n="bpAlgorithmTitle">Back-projection · 反投影算法</h3><p data-i18n="bpAlgorithmIntro">对每个成像像素按平台轨迹计算斜距，从距离压缩后的回波中取样并补偿相位，再沿合成孔径相干累加。</p><ol><li data-i18n="bpStep1">距离压缩：形成各个脉冲的距离向响应。</li><li data-i18n="bpStep2">像素与脉冲配对：由轨迹和像素位置计算斜距。</li><li data-i18n="bpStep3">插值与相位补偿：提取对应距离单元的复数贡献。</li><li data-i18n="bpStep4">沿孔径相干累加：输出每个像素的聚焦结果。</li></ol><p class="algorithm-note" data-i18n="bpAlgorithmNote">适合需要显式处理像素几何的研究，但计算量与访存量需评估。当前 BP 平台另有无保护、三模冗余和运行时检查变体；这些是可靠性配置，不是不同成像分辨率。</p><div class="algorithm-links"><a href="datasheets/bp.html" data-i18n="bpDatasheet">BP 数据手册 ↗</a><button type="button" data-quote="bp" data-i18n="bpDiscuss">讨论 BP 方案 →</button></div></article>
-      </div>
-    </div></section>
-    <section class="section wrap" id="operators" aria-labelledby="operators-title">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="operatorEyebrow">PRIMITIVES / 基本算子</p><h2 id="operators-title" data-i18n="operatorTitle">可复用的计算核，不是整套算法。</h2></div><p class="section-intro" data-i18n="operatorIntro">计算核与完整算法分层展示。</p></div>
-      <div class="product-grid operator-grid" id="operator-grid"></div>
-    </section>
-    <section class="section validation-section" id="validation" aria-labelledby="validation-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="validationEyebrow">VALIDATION / 独立验证案例</p><h2 id="validation-title" data-i18n="validationTitle">处理规模与耗时，放回具体实现。</h2></div><p class="section-intro" data-i18n="validationIntro">记录按输入规模和实现配置分别呈现。</p></div>
-      <div class="case-grid" id="case-grid"></div>
-      <details class="validation-details"><summary data-i18n="pointValidation">板级研究验证：查看点目标、聚焦剖面与故障对比</summary>
-      <div class="sar-gallery">
-        <figure class="sar-figure">
-          <a class="sar-image" href="assets/sar/point-target-board.png" target="_blank" rel="noopener noreferrer"><img src="assets/sar/point-target-board.png" width="1320" height="600" loading="lazy" alt="合成九点目标的 FPGA 定点成像：完整场景与中心目标局部放大" data-alt="sarBoardAlt"></a>
-          <figcaption><span class="figure-kind" data-i18n="sarBoardKind">合成输入 · 板级输出</span><h3 data-i18n="sarBoardTitle">九点目标，检验二维聚焦。</h3><p data-i18n="sarBoardBody">Kintex-7 CSA 平台的 3 × 3 点目标成像。左侧查看目标分布，右侧放大中心点响应；用于检查聚焦形状与目标位置，不代表地物遥感影像。</p><div class="figure-links"><a href="assets/sar/point-target-board.png" target="_blank" rel="noopener noreferrer" data-i18n="sarFullImage">查看原图 ↗</a></div></figcaption>
-        </figure>
-        <figure class="sar-figure">
-          <a class="sar-image" href="assets/sar/point-target-focus.png" target="_blank" rel="noopener noreferrer"><img src="assets/sar/point-target-focus.png" width="1776" height="696" loading="lazy" alt="CSA 单点目标参考图：全场景、峰值局部放大以及距离和方位剖面" data-alt="sarFocusAlt"></a>
-          <figcaption><span class="figure-kind" data-i18n="sarFocusKind">合成输入 · 浮点参考</span><h3 data-i18n="sarFocusTitle">看见主瓣，也看见旁瓣。</h3><p data-i18n="sarFocusBody">单点目标的参考成像、峰值放大及距离/方位剖面。帮助理解二维脉冲响应，供板级结果核对峰位和形状；不是额外的硬件性能测试。</p><div class="figure-links"><a href="assets/sar/point-target-focus.png" target="_blank" rel="noopener noreferrer" data-i18n="sarFullImage">查看原图 ↗</a></div></figcaption>
-        </figure>
-        <figure class="sar-figure">
-          <a class="sar-image" href="assets/sar/point-target-injection.png" target="_blank" rel="noopener noreferrer"><img src="assets/sar/point-target-injection.png" width="2275" height="728" loading="lazy" alt="一次点目标故障注入的黄金图、注入后图和对数差值图" data-alt="sarInjectionAlt"></a>
-          <figcaption><span class="figure-kind" data-i18n="sarInjectionKind">合成输入 · 故障注入个例</span><h3 data-i18n="sarInjectionTitle">图像相似，不等于逐位一致。</h3><p data-i18n="sarInjectionBody">同一实验中的黄金输出、注入后输出与差值可视化。图像看起来接近时，差值仍可能存在；这只是一个个例，完整样本与判定规则见 SAR 数据手册。</p><div class="figure-links"><a href="assets/sar/point-target-injection.png" target="_blank" rel="noopener noreferrer" data-i18n="sarFullImage">查看原图 ↗</a></div></figcaption>
-        </figure>
-      </div>
-      <p class="sar-scope"><span data-i18n="sarScope">三张图分别为板级输出、浮点参考与故障注入对比，输入均为仿真点目标回波。</span></p>
-      </details>
-    </div></section>
-    <section class="section download-section" id="resources" aria-labelledby="resource-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="resourceEyebrow">DOWNLOAD CENTER / 资料下载</p><h2 id="resource-title" data-i18n="resourceTitle">技术选型，从可核对的资料开始。</h2></div><p class="section-intro" data-i18n="resourceIntro">在线阅读、离线保存或核对汇总统计。<br>每份手册说明实验范围与来源。</p></div>
-      <div class="resource-grid"><article class="resource-card"><span class="resource-number">01 / SAR</span><h3 data-i18n="resourceSAR">SAR / CSA 实验数据手册</h3><p data-i18n="resourceSARNote">成像参考配置、SEU 注入统计与判定规则。</p><a href="datasheets/sar.html" data-i18n="readDatasheet">阅读 / 下载手册 ↗</a></article><article class="resource-card"><span class="resource-number">02 / BP</span><h3 data-i18n="resourceBP">BP 成像与可靠性手册</h3><p data-i18n="resourceBPNote">Base-BP、TMR-BP 与 RA-BP 的实验汇总。</p><a href="datasheets/bp.html" data-i18n="readDatasheet">阅读 / 下载手册 ↗</a></article><article class="resource-card"><span class="resource-number">03 / FFT</span><h3 data-i18n="resourceFFT">容错 FFT 参考手册</h3><p data-i18n="resourceFFTNote">架构、接口与集成参考。</p><a href="datasheets/fft.html" data-i18n="readDatasheet">阅读 / 下载手册 ↗</a></article></div>
-    </div></section>
-    <section class="section download-section" id="partners" aria-labelledby="partners-title"><div class="wrap">
-      <div class="section-heading"><div><p class="eyebrow" data-i18n="partnerEyebrow">PARTNERS / 生态合作</p><h2 id="partners-title" data-i18n="partnerTitle">合作方的高性能 FPGA IP，可直接评估。</h2></div><p class="section-intro" data-i18n="partnerIntro">王东旭硬件加速团队为本站合作伙伴，专注高速互联与存储 IP；其方案与本站板卡、算法平台互补，可按需联合对接。</p></div>
-      <div class="scene-gallery"><figure class="scene-card"><a class="scene-image" href="partners/fpga-ip-licensing-cn.html" data-href-zh="partners/fpga-ip-licensing-cn.html" data-href-en="partners/fpga-ip-licensing-en.html"><img src="assets/partners/100gbe.webp" width="1440" height="810" loading="lazy" alt="100GbE TCP/UDP 全硬件协议栈数据通路示意图" data-alt="partner100gbeAlt"></a><figcaption><h3 data-i18n="partner100gbeTitle">01 / 100GbE 全硬件协议栈</h3><p data-i18n="partner100gbeBody">TCP/UDP/IPv4 全 RTL 处理、16 并发会话、零 CPU 占用；上板实测 TCP 发送 98.9 Gb/s，60 分钟混合流量 39.8 TB 零丢包。</p><p class="scene-credit">AMD Versal Premium · MRMAC</p><div class="figure-links"><a href="partners/fpga-ip-licensing-cn.html" data-i18n="partnerCnLink">中文方案页 ↗</a><a href="partners/fpga-ip-licensing-en.html" data-i18n="partnerEnLink">English ↗</a></div></figcaption></figure><figure class="scene-card"><a class="scene-image" href="partners/fpga-ip-licensing-cn.html" data-href-zh="partners/fpga-ip-licensing-cn.html" data-href-en="partners/fpga-ip-licensing-en.html"><img src="assets/partners/nvme.webp" width="1440" height="810" loading="lazy" alt="NVMe Host 高性能控制器数据通路示意图" data-alt="partnerNvmeAlt"></a><figcaption><h3 data-i18n="partnerNvmeTitle">02 / NVMe Host 高性能控制器</h3><p data-i18n="partnerNvmeBody">FPGA 直驱 NVMe SSD 阵列、免工控机；单盘实测读 7.25 GB/s、写 6.6 GB/s，4 TB 逐字节校验全对，160 项回归全部通过。</p><p class="scene-credit">PCIe Gen4 x4 · UltraScale+ / Versal</p><div class="figure-links"><a href="partners/fpga-ip-licensing-cn.html" data-i18n="partnerCnLink">中文方案页 ↗</a><a href="partners/fpga-ip-licensing-en.html" data-i18n="partnerEnLink">English ↗</a></div></figcaption></figure><figure class="scene-card"><a class="scene-image" href="partners/fpga-ip-licensing-cn.html" data-href-zh="partners/fpga-ip-licensing-cn.html" data-href-en="partners/fpga-ip-licensing-en.html"><img src="assets/partners/rfsoc.webp" width="1440" height="810" loading="lazy" alt="VU9P 与 RFSoC 宽带脉冲收发系统架构示意图" data-alt="partnerRfsocAlt"></a><figcaption><h3 data-i18n="partnerRfsocTitle">03 / VU9P + RFSoC 宽带收发系统</h3><p data-i18n="partnerRfsocBody">2.4 GSPS 16bit 射频直采、Aurora 4×25G 板间互联、ADC 9.6 GB/s 实时落盘；JESD204B/C 链路经频谱仪实测，最高杂散优于 -49 dBc。</p><p class="scene-credit">ZU47DR + VU9P · JESD204B/C</p><div class="figure-links"><a href="partners/fpga-ip-licensing-cn.html" data-i18n="partnerCnLink">中文方案页 ↗</a><a href="partners/fpga-ip-licensing-en.html" data-i18n="partnerEnLink">English ↗</a></div></figcaption></figure></div>
-    </div></section>
-    <section class="section wrap process" aria-labelledby="process-title"><div class="section-heading"><div><p class="eyebrow" data-i18n="processEyebrow">04 / 合作方式</p><h2 id="process-title" data-i18n="processTitle">从一个想法，到一次实验。</h2></div><p class="section-intro" data-i18n="processIntro">直接与开发者沟通。<br>先明确需求，再定义交付。</p></div><ol class="process-grid"><li><span>01</span><h3 data-i18n="step1Title">聊清任务</h3><p data-i18n="step1Body">应用场景、信号规模、接口与实验目标。</p></li><li><span>02</span><h3 data-i18n="step2Title">确认方案</h3><p data-i18n="step2Body">评估平台配置、算法适配与验证范围。</p></li><li><span>03</span><h3 data-i18n="step3Title">约定交付</h3><p data-i18n="step3Body">书面确认报价、周期、文档与支持内容。</p></li><li><span>04</span><h3 data-i18n="step4Title">开始验证</h3><p data-i18n="step4Body">按双方约定的测试用例完成集成与验收。</p></li></ol></section>
-    <section class="inquiry-section" id="inquiry" aria-labelledby="inquiry-title"><div class="wrap inquiry-layout"><div class="inquiry-copy"><p class="eyebrow" data-i18n="inquiryEyebrow">05 / 开启下一次探索</p><h2 id="inquiry-title" data-i18n="inquiryTitle">你的下一次实验，<br>从这里开始。</h2><p data-i18n="inquiryIntro">告诉我你正在解决什么问题。<br>我们一起找到合适的硬件与算法路径。</p><a class="email-link" href="mailto:1906233797@qq.com">1906233797@qq.com ↗</a><div class="contact-note"><span aria-hidden="true">+</span><p data-i18n="inquiryNote">按需报价，不设在线支付。<br>所有配置与交付承诺以双方确认为准。</p></div></div>
-      <form id="inquiry-form" class="inquiry-form"><div class="form-row"><label><span data-i18n="nameLabel">你的称呼 *</span><input name="name" autocomplete="name" required maxlength="80" placeholder="如何称呼你" data-placeholder="namePlaceholder"></label><label><span data-i18n="emailLabel">联系邮箱 *</span><input name="email" type="email" autocomplete="email" required maxlength="160" placeholder="you@organization.com"></label></div><label><span data-i18n="organizationLabel">单位 / 团队</span><input name="organization" autocomplete="organization" maxlength="120" placeholder="学校、研究所或公司" data-placeholder="organizationPlaceholder"></label><div class="form-row"><label><span data-i18n="interestLabel">感兴趣的方案 *</span><select name="product" id="interest" required></select></label><label><span data-i18n="scenarioLabel">实验场景 *</span><select name="scenario" id="scenario" required></select></label></div><label><span data-i18n="requirementsLabel">项目需求 *</span><textarea name="requirements" rows="4" required maxlength="2000" placeholder="例如：SAR 实时成像，需要千兆网口，计划先进行地面功能验证……" data-placeholder="requirementsPlaceholder"></textarea></label><p class="privacy-note" data-i18n="privacyNote">表单不会上传或保存你的信息。将生成邮件草稿，由你在邮箱中确认发送。</p><button class="button submit" type="submit" data-i18n="compose">生成询价邮件 ↗</button><p class="form-status" id="form-status" role="status"></p><div id="email-draft" hidden><label><span data-i18n="draftLabel">邮件内容（也可直接复制发送）</span><textarea id="draft-text" readonly rows="7"></textarea></label><div class="draft-actions"><a class="text-link" id="open-email" href="mailto:1906233797@qq.com" data-i18n="openEmail">打开邮箱 →</a><button type="button" class="text-link" id="copy-draft" data-i18n="copy">复制内容</button><button type="button" class="text-link" id="download-draft" data-i18n="download">下载询价单</button></div></div></form>
-    </div></section>
-  </main>
-  <footer class="corporate-footer"><div class="wrap footer-grid"><div><a class="brand" href="#">juwade<span class="brand-dot">.</span></a><p data-i18n="footerBrand">FPGA 信号处理与可靠计算</p><small data-i18n="footerLine">独立研发 · 板卡与算法协同 · 面向实验评估</small></div><div><h3 data-i18n="footerProducts">产品与方案</h3><a href="#services" data-i18n="navServices">服务</a><a href="#products">A7 / K7 / V7</a><a href="#algorithms">CSA / BP</a><a href="#operators">FFT / CORDIC</a><a href="#radiation-platform" data-i18n="navResearch">辐射仿真</a><a href="#fault-injection" data-i18n="navInjection">注入实测</a></div><div><h3 data-i18n="footerResources">技术资源</h3><a href="#sar-imaging" data-i18n="navSAR">SAR 图像</a><a href="#resources" data-i18n="navDatasheets">资料下载</a><a href="https://github.com/juwadeLone" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div><div><h3 data-i18n="footerContact">联系开发者</h3><a class="footer-email" href="mailto:1906233797@qq.com">1906233797@qq.com</a><p data-i18n="footerMailNote">配置、报价与交付范围按项目沟通确认。</p><a href="#inquiry" data-i18n="navContact">技术咨询</a></div></div><div class="wrap footer-bottom"><span>© <span id="year">2026</span> juwade</span><p data-i18n="footerBottom">公开影像用于原理展示；产品适用性与交付以双方书面确认为准。</p></div></footer>
-  <dialog id="product-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" aria-label="关闭" data-label="closeLabel">×</button><div id="dialog-content"></div></dialog>
-  <noscript><div class="noscript">请启用 JavaScript 查看产品和生成询价邮件，或直接联系 <a href="mailto:1906233797@qq.com">1906233797@qq.com</a>。 Enable JavaScript to explore products, or email me directly.</div></noscript>
+      <form id="f">
+        <label>称呼<input name="name" required></label>
+        <label>邮箱<input name="email" type="email" required></label>
+        <label>单位 / 团队<input name="org"></label>
+        <label>感兴趣的方案<select name="topic">
+          <optgroup label="板卡 · 算法 · 抗辐射">
+            <option data-to="zhuao1906233797@gmail.com">FPGA 板卡定制与调试</option><option data-to="zhuao1906233797@gmail.com">算法 FPGA 部署</option>
+            <option data-to="zhuao1906233797@gmail.com">抗辐射可靠性评估 / 在轨仿真</option><option data-to="zhuao1906233797@gmail.com">A7 / K7 / V7 板卡</option>
+            <option data-to="zhuao1906233797@gmail.com">CSA / BP 成像算法</option><option data-to="zhuao1906233797@gmail.com">FFT / CORDIC 算子</option></optgroup>
+          <optgroup label="高速 IP">
+            <option data-to="zhuao1906233797@gmail.com">100GbE TCP/UDP 协议栈</option><option data-to="zhuao1906233797@gmail.com">NVMe Host 控制器</option>
+            <option data-to="zhuao1906233797@gmail.com">AXI DMA 引擎</option><option data-to="zhuao1906233797@gmail.com">JESD204B/C 集成</option>
+            <option data-to="zhuao1906233797@gmail.com">VU9P + RFSoC 系统</option></optgroup>
+          <option data-to="zhuao1906233797@gmail.com">定制 / 暂不确定</option></select></label>
+        <label class="full">项目需求<textarea name="msg" placeholder="应用场景、目标平台、数据规模、性能指标、时间计划……"></textarea></label>
+        <div class="full" style="grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-p" type="submit">生成邮件</button>
+          <button class="btn" type="button" id="cp" style="border-color:var(--border)">复制内容</button>
+        </div>
+        <p class="fnote" id="st"></p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><h4>FPGA 信号处理与高速 IP</h4><p>板卡定制、SAR 成像算法上板、抗辐射可靠性评估，以及 100GbE / NVMe / JESD204 / RFSoC 工业级 IP。</p></div>
+      <div><h4>产品与方案</h4><ul><li><a href="#boards">A7 / K7 / V7 板卡</a></li><li><a href="#radiation">在轨辐射仿真</a></li><li><a href="#ip">100GbE / NVMe IP</a></li><li><a href="#solutions">JESD204 / RFSoC</a></li></ul></div>
+      <div><h4>技术资源</h4><ul><li><a href="FPGA_IP_Licensing_CN.pdf?v=20261124c" target="_blank" rel="noopener">中文手册 PDF</a></li><li><a href="FPGA_IP_Licensing_EN.pdf?v=20261124c" target="_blank" rel="noopener">English PDF</a></li></ul></div>
+      <div><h4>联系</h4><ul><li><a href="#inquiry">商务咨询</a></li><li><a href="#license">授权方式</a></li></ul></div>
+    </div>
+    <p class="disc">免责声明：本页列示的性能数据均源自本团队特定硬件配置与真实板级高负荷测试环境，实际性能可能因客户目标平台、系统架构及特定工作负载存在差异。文中引用的第三方芯片型号、商标与工具链归属各自厂商所有。</p>
+  </div>
+</footer>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const links=[...document.querySelectorAll('nav.sec a')];
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
+links.forEach(a=>{const t=document.querySelector(a.getAttribute('href'));t&&so.observe(t)});
+const f=document.getElementById('f'),st=document.getElementById('st');
+const body=()=>{const d=new FormData(f);return `姓名：${d.get('name')}\n邮箱：${d.get('email')}\n单位：${d.get('org')}\n关注方向：${d.get('topic')}\n\n需求描述：\n${d.get('msg')}`};
+f.onsubmit=e=>{e.preventDefault();const o=f.topic.selectedOptions[0];location.href='mailto:'+o.dataset.to+'?subject='+encodeURIComponent('项目咨询 - '+o.text)+'&body='+encodeURIComponent(body());st.textContent='已打开邮件客户端草稿（发往 '+o.dataset.to+'）。'};
+document.getElementById('cp').onclick=()=>navigator.clipboard.writeText(body()).then(()=>st.textContent='已复制到剪贴板。');
+</script>
+<div id="progress"></div>
+<script>
+(()=>{
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pg=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.documentElement;pg.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
+/* copy email fallback */
+document.querySelectorAll('.copymail').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.dataset.mail).then(()=>{const o=b.textContent;b.textContent='✓';setTimeout(()=>b.textContent=o,1500)}));
+})();
+</script>
+
+<script>
+(()=>{
+/* SEU bit demo */
+const g=document.getElementById('bits');if(g){
+ const init='1010001110010110'.split('');
+ const reset=()=>{g.innerHTML=init.map(b=>`<span>${b}</span>`).join('')};reset();
+ const strike=n=>{reset();const cells=[...g.children],start=Math.floor(Math.random()*(16-n));
+  const tgt=cells[start],r=g.getBoundingClientRect(),c=tgt.getBoundingClientRect();
+  const ion=document.createElement('div');ion.className='ion';g.append(ion);
+  const x1=c.left-r.left+c.width/2,y1=c.top-r.top+c.height/2;
+  ion.animate([{transform:`translate(${x1-120}px,${y1-160}px)`,opacity:0},{transform:`translate(${x1-3}px,${y1-3}px)`,opacity:1}],{duration:600,easing:'ease-in'}).onfinish=()=>{
+   ion.remove();for(let k=0;k<n;k++){const s=cells[start+k];s.textContent=s.textContent==='1'?'0':'1';s.classList.add('hit')}}};
+ document.getElementById('strike').onclick=()=>strike(1);
+ document.getElementById('multi').onclick=()=>strike(3);
+}
+/* fault-injection bars */
+const bo=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;bo.unobserve(e.target);
+ const max=+e.target.dataset.max;[...e.target.children].forEach((d,i)=>setTimeout(()=>d.style.setProperty('--w',(d.dataset.v/max*100)+'%'),i*120))}),{threshold:.3});
+document.querySelectorAll('.bars').forEach(b=>bo.observe(b));
+})();
+</script>
 </body>
 </html>

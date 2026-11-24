@@ -6,6 +6,7 @@ const vm=require("node:vm");
 const root=path.resolve(__dirname,"..");
 const source=fs.readFileSync(path.join(root,"assets/site.js"),"utf8");
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+const htmlEn=fs.readFileSync(path.join(root,"index_en.html"),"utf8");
 // The content and draft builder are pure. Do not simulate or replace browser behavior.
 const prelude=["catalog-sources.js","catalog.js","solution-translations.js"].map(file=>fs.readFileSync(path.join(root,"assets",file),"utf8")).join("\n");
 const catalog=vm.runInNewContext(prelude+'\n'+source.slice(0,source.indexOf('let language="zh";'))+';({products,translations,buildInquiry,catalogData,catalogSources});');
@@ -17,13 +18,29 @@ test("every storefront translation, placeholder and accessible name exists in bo
   }
   assert.deepEqual(Object.keys(catalog.translations.zh).sort(),Object.keys(catalog.translations.en).sort());
 });
-test("all local storefront assets and research entry point resolve",()=>{
-  for(const [,reference] of html.matchAll(/(?:src|href)="([^"]+)"/g)){
-    if(/^(?:https?:|mailto:|#)/.test(reference))continue;
-    assert.ok(fs.existsSync(path.join(root,reference)),reference);
+test("all local page assets and research entry point resolve",()=>{
+  for(const page of [html,htmlEn]){
+    for(const [,raw] of page.matchAll(/(?:src|href)="([^"]+)"/g)){
+      const reference=raw.split("?")[0];
+      if(/^(?:https?:|mailto:|#)/.test(reference))continue;
+      assert.ok(fs.existsSync(path.join(root,reference)),reference);
+    }
   }
   for(const product of catalog.products.filter(p=>p.image))assert.ok(fs.existsSync(path.join(root,"assets",product.image)));
   assert.ok(fs.readFileSync(path.join(root,"research.html"),"utf8").includes("orbit_radiation.json"));
+});
+test("Chinese and English pages mirror section ids, cross-link and share the brochures",()=>{
+  const ids=page=>[...page.matchAll(/<section[^>]*\bid="([^"]+)"/g)].map(m=>m[1]).sort();
+  assert.deepEqual(ids(htmlEn),ids(html));
+  assert.ok(html.includes('<html lang="zh-CN"')&&htmlEn.includes('<html lang="en"'));
+  assert.ok(html.includes('href="index_en.html"'),"CN page links to EN");
+  assert.ok(htmlEn.includes('href="index.html"'),"EN page links to CN");
+  for(const page of [html,htmlEn]){
+    for(const pdf of ["FPGA_IP_Licensing_CN.pdf","FPGA_IP_Licensing_EN.pdf"])assert.ok(page.includes(pdf),pdf);
+  }
+  for(const pdf of ["FPGA_IP_Licensing_CN.pdf","FPGA_IP_Licensing_EN.pdf"]){
+    assert.equal(fs.readFileSync(path.join(root,pdf)).toString("ascii",0,4),"%PDF",pdf);
+  }
 });
 test("each catalog solution has bilingual reference specs and a real source URL",()=>{
   assert.equal(new Set(catalog.products.map(product=>product.id)).size,8);
@@ -86,7 +103,10 @@ test("measured SAR figures keep file digests and show no citations on the page",
     assert.ok(scene.source.includes("/blob/"+provenance.commit+"/"));
     assert.ok(scene.pdf_path.startsWith("文献/SAR成像算法/"));
     assert.ok(scene.authors.includes("Guang-Cai Sun"));
-    assert.ok(html.includes('src="assets/sar/papers/'+scene.file+'"'));
+    const displayed=fs.readFileSync(path.join(root,"assets/sar",scene.file));
+    assert.equal(crypto.createHash("sha256").update(displayed).digest("hex"),scene.sha256,scene.file);
+    assert.ok(html.includes('src="assets/sar/'+scene.file+'"'),scene.file);
+    assert.ok(htmlEn.includes('src="assets/sar/'+scene.file+'"'),scene.file);
   }
   assert.doesNotMatch(html,/assets\/sar\/scenes\/|jpl\.nasa\.gov|NASA\/JPL/);
   const visible=html+JSON.stringify(catalog.translations);
@@ -98,8 +118,11 @@ test("visitor-facing page has no links that require private access",()=>{
   assert.doesNotMatch(render,/repository-link|catalogSources|catalog-provenance/);
   assert.doesNotMatch(html,/github\.com\/juwadeLone\/[^"]+\/blob\/|devinapps|catalog-provenance\.json|download="juwade-\w+-evidence\.json"/);
 });
-test("services are bilingual, quotable and rendered into the service grid",()=>{
-  assert.ok(html.includes('id="service-grid"'));
+test("services are bilingual, quotable and rendered into the services section",()=>{
+  assert.ok(html.includes('id="services"'));
+  const section=html.slice(html.indexOf('id="services"'),html.indexOf('id="radiation"'));
+  assert.ok((section.match(/<article class="card/g)||[]).length>=4,"service cards");
+  assert.ok(section.includes("抗辐射"),"featured reliability service present");
   assert.ok(catalog.catalogData.services.length>=4);
   for(const service of catalog.catalogData.services){
     for(const locale of ["zh","en"]){
@@ -108,7 +131,6 @@ test("services are bilingual, quotable and rendered into the service grid",()=>{
       assert.ok(service[locale].items.length>=3);
     }
   }
-  assert.ok(html.includes('data-quote="reliability"'));
   assert.ok(catalog.catalogData.services.some(service=>service.id==="reliability"));
 });
 test("buyer-facing catalog labels compute the total",()=>{
@@ -204,51 +226,38 @@ test("catalog parameters resolve to pinned sources and memory/timing retain evid
 test("hardware, algorithms, primitives, simulation, imagery and validation have unique destinations",()=>{
   const ids=Array.from(html.matchAll(/\bid="([^"]+)"/g),m=>m[1]);
   assert.equal(ids.length,new Set(ids).size,"Duplicate HTML id");
-  for(const id of ["services","products","algorithms","operators","radiation-platform","validation","sar-imaging"]){
+  for(const id of ["services","radiation","injection","boards","imaging","algorithms","cases","ip","solutions","license","downloads","about","inquiry"]){
     assert.ok(ids.includes(id),id);
+  }
+  for(const id of ["services","radiation","injection","boards","imaging","ip","license","about","inquiry"]){
     assert.ok(html.includes('href="#'+id+'"'),id);
   }
-  assert.ok(html.indexOf('id="validation"')<html.indexOf('class="validation-details"'));
-  assert.ok(html.indexOf('id="products"')<html.indexOf('id="algorithms"'));
-  assert.ok(html.indexOf('id="services"')<html.indexOf('id="products"'));
-  assert.match(html,/<meta property="og:image" content="https:\/\/juwadelone\.github\.io\/assets\/og-cover\.png">/);
-  assert.ok(fs.existsSync(path.join(root,"assets/og-cover.png")));
+  assert.ok(html.indexOf('id="services"')<html.indexOf('id="radiation"'));
+  assert.ok(html.indexOf('id="radiation"')<html.indexOf('id="injection"'));
+  assert.ok(html.indexOf('id="injection"')<html.indexOf('id="boards"'));
+  assert.ok(html.indexOf('id="ip"')<html.indexOf('id="license"'));
+  assert.match(html,/<meta property="og:image" content="https:\/\/juwadelone\.github\.io\/assets\/sar\/papers\/dubai-no-cfbp\.webp">/);
+  assert.ok(fs.existsSync(path.join(root,"assets/sar/papers/dubai-no-cfbp.webp")));
   const crypto=require("node:crypto");
   for(const [file,id] of [["orbit.webp","simulation-orbit"],["effects.png","simulation-effects"]]){
     const bytes=fs.readFileSync(path.join(root,"assets/simulation",file));
     assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),catalog.catalogSources[id].sha256);
   }
 });
-test("radiation views use native bilingual diagrams and remain readable without JavaScript",()=>{
-  const section=html.slice(html.indexOf('id="radiation-platform"'),html.indexOf('id="fault-injection"'));
-  assert.ok(html.indexOf('id="services"')<html.indexOf('id="radiation-platform"'),"Featured platform follows services");
-  assert.ok(section.includes('data-i18n="featureBadge"'));
-  const tabs=[...section.matchAll(/role="tab" id="([^"]+)" aria-controls="([^"]+)"/g)];
-  assert.equal(tabs.length,6);
-  for(const [,tab,panel] of tabs){
-    const attributes=section.match(new RegExp('<figure[^>]*id="'+panel+'"[^>]*>'))?.[0]||"";
-    assert.ok(attributes.includes('role="tabpanel"')&&attributes.includes('aria-labelledby="'+tab+'"'),panel);
-    assert.doesNotMatch(attributes,/\bhidden\b/,"Every diagram is readable before enhancement");
+test("radiation section keeps measured KPIs, the bit-strike demo and stated model limits",()=>{
+  const section=html.slice(html.indexOf('id="radiation"'),html.indexOf('id="injection"'));
+  assert.ok(html.indexOf('id="services"')<html.indexOf('id="radiation"'),"Featured platform follows services");
+  for(const text of ["46.2","≈ 31","&lt; 10%","&lt; 20%","Geant4","XC7VX690T","MEO 20200","20.8","25.3","0.09"]){
+    assert.ok(section.includes(text),text);
   }
-  assert.equal((section.match(/aria-selected="true"/g)||[]).length,1);
-  assert.match(section,/<div class="platform-tabs"[^>]* hidden>/,"Unavailable tab controls are hidden without JS");
-  assert.match(section,/data-strike-controls hidden/);
-  assert.match(section,/data-orbit-controls hidden/);
-  assert.doesNotMatch(section,/<(?:img|iframe|canvas)\b|assets\/simulation\//,"No raster or embedded simulator UI");
-  assert.equal((section.match(/<svg\b/g)||[]).length,5);
-  assert.match(section,/class="effects-list"/);
-  assert.match(section,/class="crosscheck-values"/);
-  assert.ok(section.includes("9.04 × 10")&&section.includes("9.54 × 10"),"Retain the existing Geant4 comparison");
-  assert.match(section,/data-i18n="strikeTiming"/);
-  assert.match(section,/data-i18n="orbitIndependent"/);
-  assert.match(section,/data-i18n="effectsNoZero"/);
-  assert.ok(section.includes("46.2")&&section.includes('data-quote="reliability"'));
+  assert.ok(section.includes('id="bits"')&&section.includes('id="strike"'),"bit-strike demo present");
+  for(const text of ["SPENVIS","Weibull","IGRF-13"])assert.ok(section.includes(text),text);
+  assert.doesNotMatch(section,/github\.com|Lee et al|doi\.org/);
   assert.ok(catalog.catalogData.services.find(service=>service.id==="reliability").featured);
-  assert.doesNotMatch(section,/github\.com|Lee et al/);
 });
 test("board-level injection data is internally consistent and matches the headline numbers",()=>{
   const data=vm.runInNewContext(fs.readFileSync(path.join(root,"assets/injection-data.js"),"utf8")+";injectionData");
-  const section=html.slice(html.indexOf('id="fault-injection"'),html.indexOf('id="products"'));
+  const section=html.slice(html.indexOf('id="injection"'),html.indexOf('id="boards"'));
   const wilson=(k,n)=>{const z=1.96,p=k/n,d=1+z*z/n,c=(p+z*z/(2*n))/d,h=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d;return[c-h,c+h];};
   const builds=data.chains.flatMap(chain=>chain.builds);
   assert.equal(builds.length,10);
@@ -268,15 +277,10 @@ test("board-level injection data is internally consistent and matches the headli
   assert.equal(Math.round(ratio(csa,"TMR17")),15);
   assert.equal(Math.round(ratio(bp,"P7C")),11);
   assert.equal(Math.round(ratio(csa,"GR17")),4);
-  assert.ok(section.includes("<strong>12,000</strong>")&&section.includes("<strong>15×</strong>")&&section.includes("<strong>11×</strong>"));
+  for(const text of ["12,000","588,206","TMR17","35,176","5.8%","6.9%","173","493"]){
+    assert.ok(section.includes(text),text);
+  }
   const bpSheet=JSON.parse(fs.readFileSync(path.join(root,"datasheets/bp.json"),"utf8"));
   for(const b of bp.builds)assert.ok(Math.abs(b.vuln-bpSheet.builds[b.id].failure.xsec)<1,b.id);
-  for(const locale of ["zh","en"]){
-    const t=catalog.translations[locale];
-    assert.ok(t.injFind1.includes("5.8%")&&t.injFind1.includes("6.9%"));
-    assert.ok(t.injFind2.includes("173")&&t.injFind2.includes("493"));
-  }
-  assert.ok(section.includes('data-quote="reliability"'));
-  assert.match(section,/github\.com\/juwadeLone\/xidian-csft\/tree\/[a-f0-9]{40}"/);
   for(const source of data.sources)assert.match(source.sha256,/^[a-f0-9]{64}$/);
 });
