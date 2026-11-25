@@ -84,6 +84,27 @@ test("Chinese and English inquiry drafts preserve Unicode and URL-reserved chara
   }
 });
 
+test("radiation lab ships real spectra, anchored rates and bilingual strings",()=>{
+  const lab=fs.readFileSync(path.join(root,"radiation-lab.html"),"utf8");
+  for(const page of [html,htmlEn])assert.ok(page.includes('href="radiation-lab.html"'),"homepage links the lab");
+  const spectra=JSON.parse(fs.readFileSync(path.join(root,"assets/radiation/spenvis_creme96_gcr_spectra.json"),"utf8"));
+  assert.deepEqual(Object.keys(spectra).sort(),["C","Fe","H","He","Mg","O","Si"]);
+  for(const pts of Object.values(spectra)){
+    assert.ok(pts.length>50,"dense LET grid");
+    for(const [l,f] of pts){assert.ok(l>0&&f>=0);}
+  }
+  const prov=JSON.parse(fs.readFileSync(path.join(root,"assets/radiation/provenance.json"),"utf8"));
+  assert.ok(prov.weibull_source.includes("10.1109/REDW.2014.7004595"));
+  for(const text of ["devRate:20.8","devRate:25.3","devRate:0.09","229878496","54190080","866400","3.34e-8","3.82e-8","1.47e-7"]){
+    assert.ok(lab.includes(text),text);
+  }
+  const zhBlock=lab.slice(lab.indexOf("zh:{"),lab.indexOf("\nen:{"));
+  const enBlock=lab.slice(lab.indexOf("\nen:{"),lab.indexOf("let lang"));
+  const keys=b=>[...b.matchAll(/^ {0,2}(\"?[a-z0-9\-]+\"?):/gm)].map(m=>m[1].replace(/"/g,"")).filter(k=>k!=="zh"&&k!=="en").sort();
+  assert.deepEqual(keys(enBlock),keys(zhBlock),"zh/en i18n keys must match");
+  assert.ok(lab.includes("autorun"),"autorun param for embedding/tests");
+});
+
 test("measured SAR figures keep file digests and show no citations on the page",()=>{
   const crypto=require("node:crypto");
   const folder=path.join(root,"assets/sar/papers");

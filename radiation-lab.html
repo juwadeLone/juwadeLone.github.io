@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>在轨辐射效应仿真实验室 · JuLone</title>
+<meta name="description" content="XC7VX690T 在轨单粒子效应 Monte Carlo 演示：真实 SPENVIS CREME96 LET 谱与 Lee 2014 实测 Weibull 截面，速率标定到 seu_platform 验证值。">
+<style>
+:root{--bg:#f6f4ef;--surface:#fff;--text:#1c1a16;--muted:#6b675e;--border:#e3ded3;--primary:#9a3f1f;--accent:#c96f3b;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--primary);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.top{position:sticky;top:0;z-index:50;background:rgba(246,244,239,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-top:12px;padding-bottom:12px}
+.brand{font-weight:700;font-size:17px}.brand span{color:var(--primary)}
+.top .sp{flex:1}
+.btn{display:inline-block;padding:8px 18px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--accent)}
+.btn-p{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-p:hover{background:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+header.hero{padding:36px 0 8px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:30px;margin:6px 0 8px;letter-spacing:-.01em}
+.lead{color:var(--muted);max-width:760px;font-size:15px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-top:18px}
+.ctrl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;align-items:end}
+.ctrl label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.ctrl select,.ctrl input[type=range]{width:100%}
+select{padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;color:var(--text)}
+input[type=range]{accent-color:var(--primary)}
+.stage{display:grid;grid-template-columns:1fr 300px;gap:18px;margin-top:18px}
+@media(max-width:900px){.stage{grid-template-columns:1fr}}
+.canvasbox{position:relative}
+canvas#grid{width:100%;display:block;background:#141210;border-radius:var(--radius)}
+canvas#chart{width:100%;display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:14px}
+.stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border);font-size:14px}
+.stat:last-child{border-bottom:none}
+.stat b{font-variant-numeric:tabular-nums;font-size:15px}
+.stat b.red{color:#c02525}.stat b.green{color:#1e7a3c}.stat b.amber{color:#b57a12}
+h3.sec{font-size:15px;margin:0 0 8px}
+.note{font-size:12.5px;color:var(--muted);line-height:1.7}
+.hit-info{margin-top:10px;font-size:13px;background:#fdf8f2;border:1px solid #edd9c4;border-radius:8px;padding:10px 12px;display:none}
+.hit-info.on{display:block}
+.hit-info b{color:var(--primary)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.modelnotes{margin:26px 0 50px;font-size:13px;color:var(--muted)}
+.modelnotes li{margin-bottom:6px}
+footer{border-top:1px solid var(--border);padding:20px 0 34px;font-size:13px;color:var(--muted)}
+#log{max-height:150px;overflow-y:auto;font-size:12px;font-family:ui-monospace,Menlo,monospace;color:var(--muted);margin-top:8px}
+#log div{padding:1px 0}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <a class="brand" href="index.html">JuLone<span>.</span></a>
+  <span class="note" data-i18n="crumb">在轨辐射效应仿真实验室</span>
+  <span class="sp"></span>
+  <button class="btn" id="langbtn">English</button>
+  <a class="btn" href="index.html#radiation" data-i18n="back">← 返回首页</a>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">Radiation Lab · Monte Carlo</div>
+  <h1 data-i18n="h1">在轨辐射效应仿真：看着比特翻转发生</h1>
+  <p class="lead" data-i18n="lead">Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳低年）· 100 mil 铝屏蔽。打击的离子种类与 LET 从真实 SPENVIS CREME96 谱抽样，截面用 Lee 2014 实测 Weibull 曲线，器件速率标定到平台验证值（CRAM 20.8 / BRAM 25.3 / FF 0.09 次每天）。</p>
+</div></header>
+
+<main class="wrap">
+  <div class="panel">
+    <div class="ctrl">
+      <div><label data-i18n="resource">资源类型</label>
+        <select id="sel-res">
+          <option value="CRAM">CRAM 配置存储 · 229.9 Mbit</option>
+          <option value="BRAM">BRAM 块存储 · 54.2 Mbit</option>
+          <option value="FF">FF 触发器 · 0.87 Mbit</option>
+        </select></div>
+      <div><label data-i18n="protect">加固方式</label>
+        <select id="sel-prot">
+          <option value="none" data-i18n="p-none">无加固</option>
+          <option value="scrub" selected data-i18n="p-scrub">周期擦洗</option>
+          <option value="secded" data-i18n="p-secded">SECDED + 擦洗</option>
+          <option value="tmr" data-i18n="p-tmr">TMR 三模冗余</option>
+        </select></div>
+      <div><label><span data-i18n="scrubint">擦洗周期（任务秒）</span> · <b id="scrub-v">5</b></label>
+        <input type="range" id="sel-scrub" min="0" max="3" step="1" value="1"></div>
+      <div><label><span data-i18n="warp">时间加速（任务天/秒）</span> · <b id="warp-v">0.3</b></label>
+        <input type="range" id="sel-warp" min="0" max="4" step="1" value="2"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-p" id="btn-run" data-i18n="run">▶ 运行</button>
+        <button class="btn" id="btn-reset" data-i18n="reset">重置</button>
+        <button class="btn" id="btn-one" data-i18n="one">打一发</button>
+      </div>
+    </div>
+    <div class="hit-info" id="hit-info"></div>
+  </div>
+
+  <div class="stage">
+    <div class="canvasbox">
+      <canvas id="grid" width="960" height="540"></canvas>
+      <div class="legend">
+        <span><i style="background:#e8b23a"></i><span data-i18n="lg-flip">活跃翻转</span></span>
+        <span><i style="background:#c02525"></i><span data-i18n="lg-due">不可纠正</span></span>
+        <span><i style="background:#5ee6ff"></i><span data-i18n="lg-strike">打击位置</span></span>
+      </div>
+      <canvas id="chart" width="960" height="240"></canvas>
+      <div class="legend">
+        <span><i style="background:#9a3f1f"></i><span data-i18n="lg-mc">Monte Carlo 实测累积</span></span>
+        <span><i style="background:#999"></i><span data-i18n="lg-model">模型预测（速率折叠）</span></span>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:0">
+      <h3 class="sec" data-i18n="telemetry">实时遥测</h3>
+      <div class="stat"><span data-i18n="t-time">任务时间</span><b id="st-time">0.00 天</b></div>
+      <div class="stat"><span data-i18n="t-strikes">有效打击数</span><b id="st-strikes">0</b></div>
+      <div class="stat"><span data-i18n="t-flips">比特翻转总数</span><b id="st-flips">0</b></div>
+      <div class="stat"><span data-i18n="t-active">当前活跃翻转</span><b class="amber" id="st-active">0</b></div>
+      <div class="stat"><span data-i18n="t-corr">已擦洗纠正</span><b class="green" id="st-corr">0</b></div>
+      <div class="stat"><span data-i18n="t-due">不可纠正 (DUE)</span><b class="red" id="st-due">0</b></div>
+      <div class="stat"><span data-i18n="t-rate">实测翻转率</span><b id="st-rate">—</b></div>
+      <div class="stat"><span data-i18n="t-pred">模型预测</span><b id="st-pred">—</b></div>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <div class="panel modelnotes">
+    <h3 class="sec" data-i18n="mn-h">模型说明与边界</h3>
+    <ul>
+      <li data-i18n="mn-1">速率真实：每资源器件级翻转率取平台在 MEO 20200 km 全链条（SPENVIS 环境 + Weibull 折叠）的验证值，与 Geant4 独立复核偏差 &lt; 20%。</li>
+      <li data-i18n="mn-2">打击抽样真实：离子种类与 LET 按 σ(LET)·φ(LET) 加权从 SPENVIS CREME96 谱抽取；σ 用 Lee 2014 实测 Weibull 参数。</li>
+      <li data-i18n="mn-3">教学简化：仅显示造成翻转的打击；打击率 = 比特翻转锚定率 ÷ 平均多重翻转数，MCU 多重翻转数与码距分布为示意模型；SECDED 按 39 位码字、TMR 按三副本同位多数表决近似。工程级逐位版图注入见完整平台。</li>
+    </ul>
+  </div>
+</main>
+
+<footer><div class="wrap">
+  <span data-i18n="foot">JuLone · 辐射效应评估与板级注入实测 — 完整平台支持布局级注入与功能影响分析。</span>
+  <a href="index.html#radiation" data-i18n="footlink">返回首页辐射平台 →</a>
+</div></footer>
+
+<script>
+const I18N={
+zh:{crumb:"在轨辐射效应仿真实验室",back:"← 返回首页",h1:"在轨辐射效应仿真：看着比特翻转发生",
+lead:"Virtex-7 XC7VX690T · MEO 20200 km / 55° · 银河宇宙线（太阳低年）· 100 mil 铝屏蔽。打击的离子种类与 LET 从真实 SPENVIS CREME96 谱抽样，截面用 Lee 2014 实测 Weibull 曲线，器件速率标定到平台验证值（CRAM 20.8 / BRAM 25.3 / FF 0.09 次每天）。",
+resource:"资源类型","p-none":"无加固","p-scrub":"周期擦洗","p-secded":"SECDED + 擦洗","p-tmr":"TMR 三模冗余",
+scrubint:"擦洗周期（任务秒）",warp:"时间加速（任务天/秒）",run:"▶ 运行",pause:"⏸ 暂停",reset:"重置",one:"打一发",
+"lg-flip":"活跃翻转","lg-due":"不可纠正","lg-strike":"打击位置","lg-mc":"Monte Carlo 实测累积","lg-model":"模型预测（速率折叠）",
+telemetry:"实时遥测","t-time":"任务时间","t-strikes":"有效打击数","t-flips":"比特翻转总数","t-active":"当前活跃翻转","t-corr":"已擦洗纠正","t-due":"不可纠正 (DUE)","t-rate":"实测翻转率","t-pred":"模型预测",
+"mn-h":"模型说明与边界",
+"mn-1":"速率真实：每资源器件级翻转率取平台在 MEO 20200 km 全链条（SPENVIS 环境 + Weibull 折叠）的验证值，与 Geant4 独立复核偏差 < 20%。",
+"mn-2":"打击抽样真实：离子种类与 LET 按 σ(LET)·φ(LET) 加权从 SPENVIS CREME96 谱抽取；σ 用 Lee 2014 实测 Weibull 参数。",
+"mn-3":"教学简化：仅显示造成翻转的打击；MCU 多重翻转数与码距分布为示意模型；SECDED 按 39 位码字、TMR 按三副本同位多数表决近似。工程级逐位版图注入见完整平台。",
+foot:"JuLone · 辐射效应评估与板级注入实测 — 完整平台支持布局级注入与功能影响分析。",footlink:"返回首页辐射平台 →",
+days:" 天",perday:" 次/天",hitpre:"单发打击",species:"离子",letx:"截面 σ",bitsf:"翻转比特",scrubbed:"擦洗纠正",due:"码字双错 DUE",tmrfail:"TMR 多数失效",
+logstart:"仿真运行中…",logstop:"已暂停"},
+en:{crumb:"In-orbit Radiation Effects Lab",back:"← Back to home",h1:"In-orbit radiation effects: watch the bits flip",
+lead:"Virtex-7 XC7VX690T · MEO 20200 km / 55° · GCR (solar minimum) · 100 mil Al shielding. Strike species and LET are sampled from the real SPENVIS CREME96 spectra, cross-sections use the measured Lee 2014 Weibull curves, and device rates are normalized to platform-validated values (CRAM 20.8 / BRAM 25.3 / FF 0.09 per day).",
+resource:"Resource","p-none":"Unprotected","p-scrub":"Periodic scrubbing","p-secded":"SECDED + scrubbing","p-tmr":"TMR",
+scrubint:"Scrub interval (mission s)",warp:"Time warp (mission days/s)",run:"▶ Run",pause:"⏸ Pause",reset:"Reset",one:"Fire one",
+"lg-flip":"Active upset","lg-due":"Uncorrectable","lg-strike":"Strike site","lg-mc":"Monte Carlo cumulative","lg-model":"Model prediction (rate folding)",
+telemetry:"Live telemetry","t-time":"Mission time","t-strikes":"Effective strikes","t-flips":"Total bit upsets","t-active":"Active upsets","t-corr":"Scrubbed correctable","t-due":"Uncorrectable (DUE)","t-rate":"Measured rate","t-pred":"Model prediction",
+"mn-h":"Model notes and limits",
+"mn-1":"Rates are real: per-resource device upset rates take the platform's validated MEO 20200 km full-chain values (SPENVIS environment + Weibull folding), within < 20% of the independent Geant4 cross-check.",
+"mn-2":"Strike sampling is real: species and LET are drawn from SPENVIS CREME96 spectra weighted by σ(LET)·φ(LET) with measured Lee 2014 Weibull parameters.",
+"mn-3":"Simplifications for teaching: only upset-causing strikes are shown; strike rate = bit-upset anchor rate ÷ mean multiplicity, and MCU multiplicity and inter-bit distances are illustrative; SECDED uses 39-bit codewords and TMR a three-replica majority approximation. Layout-level injection and functional impact analysis live in the full platform.",
+foot:"JuLone · Radiation assessment and board-level injection measurement — the full platform supports layout-level injection and functional impact analysis.",footlink:"Back to the radiation platform →",
+days:" d",perday:" /day",hitpre:"Single strike",species:"Species",letx:"Cross-section σ",bitsf:"bits flipped",scrubbed:"scrubbed correctable",due:"codeword double error DUE",tmrfail:"TMR majority failure",
+logstart:"Simulation running…",logstop:"Paused"}};
+let lang="zh";
+const T=k=>I18N[lang][k]||k;
+function applyLang(){
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(I18N[lang][k])el.textContent=I18N[lang][k];});
+  document.documentElement.lang=lang==="zh"?"zh-CN":"en";
+  document.getElementById("langbtn").textContent=lang==="zh"?"English":"中文";
+  document.title=(lang==="zh"?"在轨辐射效应仿真实验室 · JuLone":"In-orbit Radiation Effects Lab · JuLone");
+  updateStatic();
+}
+document.getElementById("langbtn").onclick=()=>{lang=lang==="zh"?"en":"zh";applyLang();};
+
+// ---- physics ----
+const DOM={
+ CRAM:{name:'CRAM',th:0.4,w:338.5,s:0.852,sat:3.34e-8,bits:229878496,devRate:20.8},
+ BRAM:{name:'BRAM',th:0.1,w:87.5,s:0.893,sat:3.82e-8,bits:54190080,devRate:25.3},
+ FF:{name:'FF',th:1.1,w:271.3,s:1.09,sat:1.47e-7,bits:866400,devRate:0.09}};
+const SCRUBS=[1,5,20,60];
+const WARPS=[0.05,0.15,0.3,1,3];
+const weibull=(L,p)=>L>p.th?p.sat*(1-Math.exp(-Math.pow((L-p.th)/p.w,p.s))):0;
+
+let SPECTRA=null,samplers={};
+async function loadSpectra(){
+  const r=await fetch("assets/radiation/spenvis_creme96_gcr_spectra.json");
+  SPECTRA=await r.json();
+  for(const dom of Object.keys(DOM))samplers[dom]=buildSampler(DOM[dom]);
+}
+function buildSampler(p){
+  // species weight = integral of sigma(L)*phi(L) dL; within species inverse-CDF over intervals
+  const per={};let total=0;
+  for(const [spc,pts] of Object.entries(SPECTRA)){
+    const l=pts.map(pt=>pt[0]);
+    const sig=pts.map(pt=>weibull(pt[0],p)*pt[1]);
+    // cdf[j] = cumulative mass through interval j (between l[j] and l[j+1])
+    const cdf=[];let acc=0;
+    for(let j=0;j<l.length-1;j++){
+      acc+=0.5*(sig[j]+sig[j+1])*(l[j+1]-l[j]);
+      cdf.push(acc);
+    }
+    if(acc>0){per[spc]={l,cdf,total:acc};total+=acc;}
+  }
+  return{per,total,pick(rng){
+    let x=rng()*total,chosen=null;
+    for(const spc of Object.keys(per)){x-=per[spc].total;if(x<=0){chosen=spc;break;}}
+    if(!chosen)chosen=Object.keys(per).pop();
+    const d=per[chosen];const x2=rng()*d.total;
+    let j=d.cdf.findIndex(c=>c>=x2);
+    if(j<0)j=d.cdf.length-1;
+    const c0=j>0?d.cdf[j-1]:0,c1=d.cdf[j],f=c1>c0?(x2-c0)/(c1-c0):0;
+    const L=d.l[j]+Math.min(1,Math.max(0,f))*(d.l[j+1]-d.l[j]);
+    return{species:chosen,let:L};
+  }};
+}
+
+// ---- visualization grid ----
+const COLS=120,ROWS=68,NCELLS=COLS*ROWS;
+const grid=document.getElementById("grid"),gx=grid.getContext("2d");
+const chart=document.getElementById("chart"),cx=chart.getContext("2d");
+// cell state: 0 empty,1 active upset,2 due permanent
+let cells=new Uint8Array(NCELLS);
+let cellCw=new Int32Array(NCELLS);   // codeword id per cell (for secded, abstract)
+let cellRep=new Uint8Array(NCELLS);  // replica mask for tmr
+let flashes=[];  // strike animations {x,y,t0,species}
+
+// ---- simulation state ----
+let sim=null;
+let activeUpsets=new Set();
+// mean MCU multiplicity per domain, estimated once from the same sampler the sim uses
+const meanKCache={};
+function meanK(dom){
+  if(meanKCache[dom.name])return meanKCache[dom.name];
+  const s=samplers[dom.name];if(!s)return 1;
+  let sum=0;const n=3000;
+  for(let i=0;i<n;i++)sum+=sampleK(s.pick(Math.random).let,Math.random);
+  return meanKCache[dom.name]=sum/n;
+}
+// strike rate: bit-upset anchor rate divided by mean multiplicity, so the
+// Monte Carlo bit-upset rate converges to the validated anchor on average
+function strikeRate(dom){return dom.devRate/meanK(dom);}
+function expWait(ratePerDay){return -Math.log(1-Math.random())/ratePerDay;}
+function newSim(){
+  return{running:false,t:0,strikes:0,flips:0,corr:0,due:0,nextStrike:null,lastScrub:0,
+   hist:[],cwActive:{},tmrActive:{},lastTs:0};
+}
+function reset(){
+  sim=newSim();cells.fill(0);cellRep.fill(0);flashes=[];activeUpsets=new Set();
+  for(const k of Object.keys(cellCw))cellCw[k]=0;
+  document.getElementById("log").innerHTML="";
+  updateStatic();draw();
+}
+function cfg(){
+  const res=document.getElementById("sel-res").value;
+  const prot=document.getElementById("sel-prot").value;
+  const scrubI=SCRUBS[+document.getElementById("sel-scrub").value];
+  const warp=WARPS[+document.getElementById("sel-warp").value];
+  return{res,prot,scrubI,warp,dom:DOM[res]};
+}
+function updateStatic(){
+  const c=cfg();
+  document.getElementById("scrub-v").textContent=c.scrubI;
+  document.getElementById("warp-v").textContent=c.warp;
+  document.getElementById("st-pred").textContent=c.dom.devRate+(T("perday"));
+  if(sim){
+    document.getElementById("st-time").textContent=sim.t.toFixed(2)+T("days");
+    document.getElementById("st-strikes").textContent=sim.strikes;
+    document.getElementById("st-flips").textContent=sim.flips;
+    document.getElementById("st-active").textContent=countActive();
+    document.getElementById("st-corr").textContent=sim.corr;
+    document.getElementById("st-due").textContent=sim.due;
+    document.getElementById("st-rate").textContent=sim.t>0.02?(sim.flips/sim.t).toFixed(1)+T("perday"):"—";
+  }
+}
+function countActive(){return activeUpsets.size;}
+function log(msg){
+  const el=document.getElementById("log");
+  const d=document.createElement("div");d.textContent=msg;el.prepend(d);
+  while(el.children.length>60)el.lastChild.remove();
+}
+
+// MCU multiplicity: illustrative — heavier ions flip more bits
+function sampleK(L,rng){
+  const mu=Math.min(3,L/25);
+  let k=1,x=rng();
+  // rough poisson-ish tail
+  let p=Math.exp(-mu),acc=p;
+  while(x>acc&&k<8){k++;p*=mu/(k-1||1);acc+=p;}
+  return Math.min(k,6);
+}
+
+function pickCell(rng){return Math.floor(rng()*NCELLS);}
+
+function applyFlip(cellIdx,info){
+  // returns 'active'|'due'|'corrected-soon'
+  if(cells[cellIdx]===2)return "active"; // already dead
+  cells[cellIdx]=1;
+  return "active";
+}
+
+function strikeOne(rng,verbose){
+  const c=cfg();const s=samplers[c.res].pick(rng);
+  const sig=weibull(s.let,c.dom);
+  const k=sampleK(s.let,rng);
+  sim.strikes++;
+  // The bulk fast-forward may have jumped the scrub clock past sim.t while
+  // nothing was active. This strike changes that: rewind to the last boundary
+  // at or before now so intervening scrubs are processed in order.
+  if(c.prot!=="none"){
+    const scrubDays=c.scrubI/86400;
+    if(scrubDays>0&&sim.lastScrub>sim.t)sim.lastScrub=Math.floor(sim.t/scrubDays)*scrubDays;
+  }
+  const fx=rng(),fy=rng();
+  flashes.push({x:fx,y:fy,t0:performance.now(),species:s.species});
+  let flipsHere=0;
+  for(let i=0;i<k;i++){
+    const idx=pickCell(rng);
+    if(cells[idx]!==2){
+      if(cells[idx]!==1)activeUpsets.add(idx);
+      cells[idx]=1;sim.flips++;flipsHere++;
+      // protection interactions
+      if(c.prot==="secded"){
+        const cw=Math.floor(idx/39);
+        if(sim.cwActive[cw]!==undefined){ // second upset in same codeword before scrub
+          cells[idx]=2;cells[sim.cwActive[cw]]=2;
+          activeUpsets.delete(idx);activeUpsets.delete(sim.cwActive[cw]);
+          sim.due+=2;delete sim.cwActive[cw];
+          log((lang==="zh"?"⚠ DUE: 码字双错 @t=":"⚠ DUE: codeword double error @t=")+sim.t.toFixed(2));
+        }else sim.cwActive[cw]=idx;
+      }else if(c.prot==="tmr"){
+        // failure when a second, different replica of the same cell flips before scrub
+        const rep=1<<(Math.floor(Math.random()*3));
+        if(cellRep[idx]!==0&&!(cellRep[idx]&rep)){
+          cells[idx]=2;activeUpsets.delete(idx);sim.due++;cellRep[idx]=0;
+          log((lang==="zh"?"⚠ TMR 多数失效 @t=":"⚠ TMR majority failure @t=")+sim.t.toFixed(2));
+        }else cellRep[idx]|=rep;
+      }
+    }
+  }
+  if(verbose){
+    const hi=document.getElementById("hit-info");
+    hi.className="hit-info on";
+    hi.innerHTML=`<b>${T("hitpre")}</b> · ${T("species")}: <b>${s.species}</b> · LET: <b>${s.let.toFixed(2)} MeV·cm²/mg</b> · ${T("letx")}: <b>${sig.toExponential(2)} cm²/bit</b> · ${T("bitsf")}: <b>${flipsHere}</b>`;
+  }
+  return{species:s.species,let:s.let,k:flipsHere};
+}
+
+function scrubPass(){
+  let n=0;
+  for(const idx of activeUpsets){if(cells[idx]===1){cells[idx]=0;n++;}}
+  activeUpsets.clear();
+  sim.corr+=n;sim.cwActive={};cellRep.fill(0);
+  if(n>0)log("⟳ "+T("scrubbed")+": "+n+" @t="+sim.t.toFixed(2));
+}
+
+// Exact event-driven engine: strikes are a Poisson process with exponential
+// inter-arrival times (frame-rate independent), scrub boundaries are processed
+// in mission-time order before any strike that arrives after them.
+function step(dtReal){
+  const c=cfg();
+  const tEnd=sim.t+dtReal*c.warp; // days
+  const rate=strikeRate(c.dom);
+  const scrubDays=c.scrubI/86400;
+  let guard=0;
+  while(guard++<3000){
+    if(sim.nextStrike===null)sim.nextStrike=sim.t+expWait(rate);
+    // no-op scrubs fast-forward: with nothing active, intervening scrub
+    // boundaries change nothing, so jump the scrub clock in bulk
+    if(c.prot!=="none"&&activeUpsets.size===0&&scrubDays>0){
+      const nskip=Math.floor((sim.nextStrike-sim.lastScrub)/scrubDays);
+      if(nskip>0)sim.lastScrub+=nskip*scrubDays;
+    }
+    let tNext=sim.nextStrike,isScrub=false;
+    if(c.prot!=="none"){
+      const tScrub=sim.lastScrub+scrubDays;
+      if(tScrub<tNext){tNext=tScrub;isScrub=true;}
+    }
+    if(tNext>tEnd)break;
+    sim.t=tNext;
+    if(isScrub){scrubPass();sim.lastScrub=tNext;}
+    else{strikeOne(Math.random,false);sim.nextStrike=null;}
+  }
+  if(guard>=3000){sim.nextStrike=null;sim.lastScrub=tEnd;}
+  sim.t=tEnd;
+  sim.hist.push({t:sim.t,f:sim.flips,due:sim.due});
+  if(sim.hist.length>600)sim.hist.splice(0,sim.hist.length-600);
+}
+
+// ---- drawing ----
+function draw(){
+  const w=grid.width,h=grid.height,cw=w/COLS,ch=h/ROWS;
+  gx.fillStyle="#141210";gx.fillRect(0,0,w,h);
+  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+    const st=cells[y*COLS+x];
+    if(st===1){gx.fillStyle="#e8b23a";gx.fillRect(x*cw+0.5,y*ch+0.5,cw-1,ch-1);}
+    else if(st===2){gx.fillStyle="#c02525";gx.fillRect(x*cw+0.5,y*ch+0.5,cw-1,ch-1);}
+  }
+  const now=performance.now();
+  flashes=flashes.filter(f=>now-f.t0<900);
+  for(const f of flashes){
+    const p=(now-f.t0)/900;
+    gx.beginPath();
+    gx.arc(f.x*w,f.y*h,4+p*60,0,7);
+    gx.strokeStyle=`rgba(94,230,255,${1-p})`;
+    gx.lineWidth=2;gx.stroke();
+    gx.fillStyle=`rgba(94,230,255,${0.9-p*0.9})`;
+    gx.fillRect(f.x*w-2,f.y*h-2,4,4);
+  }
+  // chart
+  const cw2=chart.width,chh=chart.height;
+  cx.fillStyle="#fff";cx.fillRect(0,0,cw2,chh);
+  cx.strokeStyle="#e3ded3";cx.strokeRect(0.5,0.5,cw2-1,chh-1);
+  if(sim&&sim.hist.length>1){
+    const c=cfg();
+    const tMax=sim.hist[sim.hist.length-1].t;
+    const fMax=Math.max(c.dom.devRate*tMax*1.15,sim.flips,1);
+    const X=t=>10+(t/tMax)*(cw2-20),Y=f=>chh-24-(f/fMax)*(chh-40);
+    // model line
+    cx.beginPath();cx.strokeStyle="#999";cx.setLineDash([5,4]);
+    cx.moveTo(X(0),Y(0));cx.lineTo(X(tMax),Y(c.dom.devRate*tMax));cx.stroke();
+    cx.setLineDash([]);
+    // MC cumulative
+    cx.beginPath();cx.strokeStyle="#9a3f1f";cx.lineWidth=1.8;
+    sim.hist.forEach((pt,i)=>{const x=X(pt.t),y=Y(pt.f);i?cx.lineTo(x,y):cx.moveTo(x,y);});
+    cx.stroke();
+    // DUE overlay
+    if(sim.due>0){
+      cx.beginPath();cx.strokeStyle="#c02525";cx.lineWidth=1.8;
+      let started=false;
+      sim.hist.forEach(pt=>{const x=X(pt.t),y=Y(pt.due);started?cx.lineTo(x,y):(cx.moveTo(x,y),started=true);});
+      cx.stroke();
+    }
+    cx.fillStyle="#6b675e";cx.font="11px sans-serif";
+    cx.fillText("t="+tMax.toFixed(1)+(lang==="zh"?" 天":" d"),cw2-70,14);
+    cx.fillText(fMax.toFixed(0),14,14);
+  }
+}
+
+function frame(ts){
+  if(sim&&sim.running){
+    const dt=sim.lastTs?Math.min(0.1,(ts-sim.lastTs)/1000):0.016;
+    sim.lastTs=ts;
+    step(dt);
+    updateStatic();
+  }else if(sim)sim.lastTs=0;
+  draw();
+  requestAnimationFrame(frame);
+}
+
+document.getElementById("btn-run").onclick=function(){
+  if(!SPECTRA)return;
+  sim.running=!sim.running;
+  this.textContent=sim.running?T("pause"):T("run");
+  log(sim.running?T("logstart"):T("logstop"));
+};
+document.getElementById("btn-reset").onclick=()=>{reset();document.getElementById("btn-run").textContent=T("run");};
+document.getElementById("btn-one").onclick=()=>{if(SPECTRA)strikeOne(Math.random,true);updateStatic();};
+for(const id of["sel-res","sel-prot","sel-scrub","sel-warp"])
+  document.getElementById(id).onchange=()=>{if(sim){sim.nextStrike=null;}updateStatic();};
+
+reset();
+loadSpectra().then(()=>{
+  updateStatic();
+  if(new URLSearchParams(location.search).has("autorun")&&!sim.running)document.getElementById("btn-run").click();
+});
+applyLang();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
