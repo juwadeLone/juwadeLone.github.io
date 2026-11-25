@@ -102,6 +102,9 @@ footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .qa summary::-webkit-details-marker{display:none}
 .qa summary:after{content:"+";color:var(--primary);font-size:20px;font-weight:400;flex-shrink:0}
 .qa[open] summary:after{content:"\2013"}
+.card figure.bimg{margin:-28px -28px 16px;border-radius:9px 9px 0 0;overflow:hidden;position:relative}
+.card figure.bimg img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover}
+.card figure.bimg figcaption{position:absolute;right:8px;bottom:8px;font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(12,20,30,.55);color:#fff;letter-spacing:.04em}
 .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;background:var(--dark);color:#fff;border-radius:var(--radius);padding:20px 24px;margin:20px 0 28px}
 .trust h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 5px}
 .trust p{font-size:13px;color:var(--dark-muted);margin:0;line-height:1.55}
@@ -565,13 +568,13 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
 <a href="#solutions"><span class="fno">1e</span>JESD204 射频直采、宽带收发系统<span class="fdots"></span><span class="fto">总线射频方案</span></a>
     </div>
     <div class="svc three">
-      <article class="card"><i class="no">A7</i><h3>Artix-7 板卡</h3><p class="tag">XC7A35T · FGG484-2 · 中小规模处理与算法原型</p>
+      <article class="card"><figure class="bimg"><img src="assets/boards/a7-render.webp" alt="A7 板卡渲染示意图" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure><i class="no">A7</i><h3>Artix-7 板卡</h3><p class="tag">XC7A35T · FGG484-2 · 中小规模处理与算法原型</p>
         <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>主机链路</td><td class="r">以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
         <div class="evidence"><b>在板实测：</b>CSA 256×256 成像，输出与定点模型逐点一致 · <a href="#cases">项目案例</a></div></article>
-      <article class="card"><i class="no">K7</i><h3>Kintex-7 板卡</h3><p class="tag">XC7K325T · FFG900-2 · 大规模 SAR 成像</p>
+      <article class="card"><figure class="bimg"><img src="assets/boards/k7-render.webp" alt="K7 板卡渲染示意图" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure><i class="no">K7</i><h3>Kintex-7 板卡</h3><p class="tag">XC7K325T · FFG900-2 · 大规模 SAR 成像</p>
         <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>主机链路</td><td class="r">千兆以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
         <div class="evidence"><b>在板实测：</b>CSA 2048×2048 跑通；12,000 次故障注入逐位比对 · <a href="#injection">注入实测</a></div></article>
-      <article class="card"><i class="no">V7</i><h3>Virtex-7 板卡</h3><p class="tag">XC7VX690T · FFG1927-2 · 超大规模成像</p>
+      <article class="card"><figure class="bimg"><img src="assets/boards/v7-render.webp" alt="V7 板卡渲染示意图" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure><i class="no">V7</i><h3>Virtex-7 板卡</h3><p class="tag">XC7VX690T · FFG1927-2 · 超大规模成像</p>
         <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>主机链路</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>辅助</td><td class="r">千兆以太网、JTAG</td></tr></table>
         <div class="evidence"><b>在板实测：</b>CSA 4096×4096 大规模成像，PCIe Gen2×8 高速收发 · <a href="#cases">项目案例</a></div></article>
     </div>

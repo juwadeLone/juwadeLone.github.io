@@ -102,6 +102,9 @@ footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .qa summary::-webkit-details-marker{display:none}
 .qa summary:after{content:"+";color:var(--primary);font-size:20px;font-weight:400;flex-shrink:0}
 .qa[open] summary:after{content:"\2013"}
+.card figure.bimg{margin:-28px -28px 16px;border-radius:9px 9px 0 0;overflow:hidden;position:relative}
+.card figure.bimg img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover}
+.card figure.bimg figcaption{position:absolute;right:8px;bottom:8px;font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(12,20,30,.55);color:#fff;letter-spacing:.04em}
 .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;background:var(--dark);color:#fff;border-radius:var(--radius);padding:20px 24px;margin:20px 0 28px}
 .trust h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 5px}
 .trust p{font-size:13px;color:var(--dark-muted);margin:0;line-height:1.55}
@@ -565,13 +568,13 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
 <a href="#solutions"><span class="fno">1e</span>JESD204 RF direct sampling, wideband transceivers<span class="fdots"></span><span class="fto">Bus &amp; RF solutions</span></a>
     </div>
     <div class="svc three">
-      <article class="card"><i class="no">A7</i><h3>Artix-7 Board</h3><p class="tag">XC7A35T · FGG484-2 · small/medium processing and prototyping</p>
+      <article class="card"><figure class="bimg"><img src="assets/boards/a7-render.webp" alt="A7 board illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure><i class="no">A7</i><h3>Artix-7 Board</h3><p class="tag">XC7A35T · FGG484-2 · small/medium processing and prototyping</p>
         <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>Host link</td><td class="r">Ethernet / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
         <div class="evidence"><b>Measured on board:</b> CSA 256×256 imaging, output bit-identical to the fixed-point model · <a href="#cases">case study</a></div></article>
-      <article class="card"><i class="no">K7</i><h3>Kintex-7 Board</h3><p class="tag">XC7K325T · FFG900-2 · large-scale SAR imaging</p>
+      <article class="card"><figure class="bimg"><img src="assets/boards/k7-render.webp" alt="K7 board illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure><i class="no">K7</i><h3>Kintex-7 Board</h3><p class="tag">XC7K325T · FFG900-2 · large-scale SAR imaging</p>
         <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>Host link</td><td class="r">GbE / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
         <div class="evidence"><b>Measured on board:</b> CSA 2048×2048 running; 12,000 fault injections compared bit by bit · <a href="#injection">injection data</a></div></article>
-      <article class="card"><i class="no">V7</i><h3>Virtex-7 Board</h3><p class="tag">XC7VX690T · FFG1927-2 · very large imaging</p>
+      <article class="card"><figure class="bimg"><img src="assets/boards/v7-render.webp" alt="V7 board illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure><i class="no">V7</i><h3>Virtex-7 Board</h3><p class="tag">XC7VX690T · FFG1927-2 · very large imaging</p>
         <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>Host link</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>Auxiliary</td><td class="r">GbE, JTAG</td></tr></table>
         <div class="evidence"><b>Measured on board:</b> CSA 4096×4096 large-scale imaging over PCIe Gen2 ×8 · <a href="#cases">case study</a></div></article>
     </div>
