@@ -102,6 +102,21 @@ footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .qa summary::-webkit-details-marker{display:none}
 .qa summary:after{content:"+";color:var(--primary);font-size:20px;font-weight:400;flex-shrink:0}
 .qa[open] summary:after{content:"\2013"}
+.card figure.bimg{margin:-28px -28px 16px;border-radius:9px 9px 0 0;overflow:hidden;position:relative}
+.card figure.bimg img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover}
+.card figure.bimg figcaption{position:absolute;right:8px;bottom:8px;font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(12,20,30,.55);color:#fff;letter-spacing:.04em}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;background:var(--dark);color:#fff;border-radius:var(--radius);padding:20px 24px;margin:20px 0 28px}
+.trust h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 5px}
+.trust p{font-size:13px;color:var(--dark-muted);margin:0;line-height:1.55}
+.finder{margin:0 0 26px;border-top:1px solid var(--border)}
+.finder a{display:flex;align-items:baseline;gap:10px;padding:10px 2px;border-bottom:1px solid var(--border);color:var(--text);text-decoration:none;font-size:15px}
+.finder a:hover{color:var(--primary)}
+.finder .fno{font-size:12px;color:var(--primary);font-weight:700;min-width:26px}
+.finder .fdots{flex:1;border-bottom:2px dotted var(--border);transform:translateY(-4px)}
+.finder .fto{font-weight:700;color:var(--primary);white-space:nowrap;font-size:13.5px}
+.evidence{margin-top:12px;padding:9px 11px;background:var(--pale);border-left:3px solid var(--primary);font-size:13px;color:var(--muted);border-radius:0 6px 6px 0;line-height:1.5}
+.evidence b{color:var(--text)}
+@media(max-width:900px){.trust{grid-template-columns:1fr}}
 .qa p{color:var(--muted);margin:10px 0 0;font-size:14.5px}
 @media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
 .kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}}
@@ -540,13 +555,28 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     <div class="idx">Hardware · 板卡平台</div>
     <h2>A7、K7、V7 板卡平台</h2>
     <p class="lead">从紧凑原型到超大规模成像，按数据规模与接口需求选型；接口、存储与器件可按项目定制。</p>
+    <div class="trust">
+      <div><h4>实测再上架</h4><p>页面的速率与成像数字全部在真实板卡上测得，并说明测量方法，不写理论峰值。</p></div>
+      <div><h4>交付前过测试</h4><p>每块板卡发货前通过接口与存储测试，箱内有什么、没有什么，按书面清单交付。</p></div>
+      <div><h4>边界写清楚</h4><p>哪些交付源码、哪些是网表或参考工程，合作之前一页写明白。</p></div>
+    </div>
+    <div class="finder">
+      <a href="#cases"><span class="fno">1a</span>验证 SAR 算法原型，规模与预算有限<span class="fdots"></span><span class="fto">A7 板卡</span></a>
+      <a href="#injection"><span class="fno">1b</span>2048×2048 全尺寸成像流水线，要加固证据<span class="fdots"></span><span class="fto">K7 板卡</span></a>
+      <a href="#cases"><span class="fno">1c</span>超大规模成像、多通道高速采集<span class="fdots"></span><span class="fto">V7 板卡</span></a>
+      <a href="#ip"><span class="fno">1d</span>100GbE / NVMe 高速接口与存储集成<span class="fdots"></span><span class="fto">IP 授权</span></a>
+<a href="#solutions"><span class="fno">1e</span>JESD204 射频直采、宽带收发系统<span class="fdots"></span><span class="fto">总线射频方案</span></a>
+    </div>
     <div class="svc three">
-      <article class="card"><i class="no">A7</i><h3>Artix-7 板卡</h3><p class="tag">XC7A35T · FGG484-2 · 中小规模处理与算法原型</p>
-        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>主机链路</td><td class="r">以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
-      <article class="card"><i class="no">K7</i><h3>Kintex-7 板卡</h3><p class="tag">XC7K325T · FFG900-2 · 大规模 SAR 成像</p>
-        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>主机链路</td><td class="r">千兆以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
-      <article class="card"><i class="no">V7</i><h3>Virtex-7 板卡</h3><p class="tag">XC7VX690T · FFG1927-2 · 超大规模成像</p>
-        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>主机链路</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>辅助</td><td class="r">千兆以太网、JTAG</td></tr></table></article>
+      <article class="card"><figure class="bimg"><img src="assets/boards/a7-render.webp" alt="A7 板卡渲染示意图" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure><i class="no">A7</i><h3>Artix-7 板卡</h3><p class="tag">XC7A35T · FGG484-2 · 中小规模处理与算法原型</p>
+        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>主机链路</td><td class="r">以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
+        <div class="evidence"><b>在板实测：</b>CSA 256×256 成像，输出与定点模型逐点一致 · <a href="#cases">项目案例</a></div></article>
+      <article class="card"><figure class="bimg"><img src="assets/boards/k7-render.webp" alt="K7 板卡渲染示意图" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure><i class="no">K7</i><h3>Kintex-7 板卡</h3><p class="tag">XC7K325T · FFG900-2 · 大规模 SAR 成像</p>
+        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>主机链路</td><td class="r">千兆以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
+        <div class="evidence"><b>在板实测：</b>CSA 2048×2048 跑通；12,000 次故障注入逐位比对 · <a href="#injection">注入实测</a></div></article>
+      <article class="card"><figure class="bimg"><img src="assets/boards/v7-render.webp" alt="V7 板卡渲染示意图" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure><i class="no">V7</i><h3>Virtex-7 板卡</h3><p class="tag">XC7VX690T · FFG1927-2 · 超大规模成像</p>
+        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>主机链路</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>辅助</td><td class="r">千兆以太网、JTAG</td></tr></table>
+        <div class="evidence"><b>在板实测：</b>CSA 4096×4096 大规模成像，PCIe Gen2×8 高速收发 · <a href="#cases">项目案例</a></div></article>
     </div>
   </div>
 </section>
@@ -614,6 +644,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     <p class="lead">全 RTL 自研、上板严苛压力测试，可交付网表或全套源码。</p>
 
     <article class="card">
+      <figure class="bimg"><img src="assets/boards/100gbe-render.webp" alt="验证平台示意渲染" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure>
       <h3>100GbE TCP/UDP 全硬件协议栈 IP</h3>
       <p class="tag">全 RTL 硬件线速处理，彻底卸载 CPU 协议栈负荷，赋能超低时延网络互联</p>
       <div class="value"><b>应用价值：</b>专为 AI 智算中心分布式互联、量化高频低时延交易及大规模数据中心流量线速捕获设计。零 CPU 开销，纳秒级微架构转发。</div>
@@ -638,6 +669,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     </article>
 
     <article class="card" id="nvme">
+      <figure class="bimg"><img src="assets/boards/nvme-render.webp" alt="验证平台示意渲染" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure>
       <h3>NVMe Host 高性能控制器 IP</h3>
       <p class="tag">自研原生 FPGA NVMe 主机控制器，突破雷达高速记录与大模型数据读取瓶颈</p>
       <div class="value"><b>应用价值：</b>专为宽带雷达无损数据记录、工业高速视觉采集及 NVMe-oF 存储加速节点设计，无需工控机介入即可直驱高速 NVMe SSD 阵列。</div>
@@ -710,6 +742,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     </article>
 
     <article class="card">
+      <figure class="bimg"><img src="assets/boards/rfsoc-render.webp" alt="验证平台示意渲染" loading="lazy"><figcaption>示意渲染 · 非实物</figcaption></figure>
       <h3>VU9P + RFSoC 超宽带脉冲发射与采集系统方案</h3>
       <div class="value"><b>系统级方案：</b>打通 2.4 GSPS 16bit 射频收发、Aurora 4×25G 互联与 9.6 GB/s 实时采集入库全链路。</div>
       <ul class="feat">

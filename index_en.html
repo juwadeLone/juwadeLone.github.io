@@ -102,6 +102,21 @@ footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .qa summary::-webkit-details-marker{display:none}
 .qa summary:after{content:"+";color:var(--primary);font-size:20px;font-weight:400;flex-shrink:0}
 .qa[open] summary:after{content:"\2013"}
+.card figure.bimg{margin:-28px -28px 16px;border-radius:9px 9px 0 0;overflow:hidden;position:relative}
+.card figure.bimg img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover}
+.card figure.bimg figcaption{position:absolute;right:8px;bottom:8px;font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(12,20,30,.55);color:#fff;letter-spacing:.04em}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;background:var(--dark);color:#fff;border-radius:var(--radius);padding:20px 24px;margin:20px 0 28px}
+.trust h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 5px}
+.trust p{font-size:13px;color:var(--dark-muted);margin:0;line-height:1.55}
+.finder{margin:0 0 26px;border-top:1px solid var(--border)}
+.finder a{display:flex;align-items:baseline;gap:10px;padding:10px 2px;border-bottom:1px solid var(--border);color:var(--text);text-decoration:none;font-size:15px}
+.finder a:hover{color:var(--primary)}
+.finder .fno{font-size:12px;color:var(--primary);font-weight:700;min-width:26px}
+.finder .fdots{flex:1;border-bottom:2px dotted var(--border);transform:translateY(-4px)}
+.finder .fto{font-weight:700;color:var(--primary);white-space:nowrap;font-size:13.5px}
+.evidence{margin-top:12px;padding:9px 11px;background:var(--pale);border-left:3px solid var(--primary);font-size:13px;color:var(--muted);border-radius:0 6px 6px 0;line-height:1.5}
+.evidence b{color:var(--text)}
+@media(max-width:900px){.trust{grid-template-columns:1fr}}
 .qa p{color:var(--muted);margin:10px 0 0;font-size:14.5px}
 @media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
 .kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}}
@@ -540,13 +555,28 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     <div class="idx">Hardware · Board Platforms</div>
     <h2>A7, K7 and V7 Board Platforms</h2>
     <p class="lead">From compact prototypes to very large imaging, chosen by data size and interface needs. Interfaces, memory and devices can be customized.</p>
+    <div class="trust">
+      <div><h4>Measured first</h4><p>Every speed and imaging figure on this page is measured on real boards, with the method stated — no theoretical peaks.</p></div>
+      <div><h4>Tested before shipping</h4><p>Each board passes its interface and memory tests before delivery; what is in the box and what is not is written down.</p></div>
+      <div><h4>Clear boundaries</h4><p>What ships as source, what as netlist or reference design — settled in writing before we start.</p></div>
+    </div>
+    <div class="finder">
+      <a href="#cases"><span class="fno">1a</span>Prototype a SAR algorithm on a budget<span class="fdots"></span><span class="fto">A7 board</span></a>
+      <a href="#injection"><span class="fno">1b</span>Full-size 2048×2048 imaging with hardening evidence<span class="fdots"></span><span class="fto">K7 board</span></a>
+      <a href="#cases"><span class="fno">1c</span>Very large imaging, multi-channel high-speed capture<span class="fdots"></span><span class="fto">V7 board</span></a>
+      <a href="#ip"><span class="fno">1d</span>100GbE / NVMe high-speed interface and storage<span class="fdots"></span><span class="fto">IP licensing</span></a>
+<a href="#solutions"><span class="fno">1e</span>JESD204 RF direct sampling, wideband transceivers<span class="fdots"></span><span class="fto">Bus &amp; RF solutions</span></a>
+    </div>
     <div class="svc three">
-      <article class="card"><i class="no">A7</i><h3>Artix-7 Board</h3><p class="tag">XC7A35T · FGG484-2 · small/medium processing and prototyping</p>
-        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>Host link</td><td class="r">Ethernet / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
-      <article class="card"><i class="no">K7</i><h3>Kintex-7 Board</h3><p class="tag">XC7K325T · FFG900-2 · large-scale SAR imaging</p>
-        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>Host link</td><td class="r">GbE / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
-      <article class="card"><i class="no">V7</i><h3>Virtex-7 Board</h3><p class="tag">XC7VX690T · FFG1927-2 · very large imaging</p>
-        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>Host link</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>Auxiliary</td><td class="r">GbE, JTAG</td></tr></table></article>
+      <article class="card"><figure class="bimg"><img src="assets/boards/a7-render.webp" alt="A7 board illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure><i class="no">A7</i><h3>Artix-7 Board</h3><p class="tag">XC7A35T · FGG484-2 · small/medium processing and prototyping</p>
+        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>Host link</td><td class="r">Ethernet / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
+        <div class="evidence"><b>Measured on board:</b> CSA 256×256 imaging, output bit-identical to the fixed-point model · <a href="#cases">case study</a></div></article>
+      <article class="card"><figure class="bimg"><img src="assets/boards/k7-render.webp" alt="K7 board illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure><i class="no">K7</i><h3>Kintex-7 Board</h3><p class="tag">XC7K325T · FFG900-2 · large-scale SAR imaging</p>
+        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>Host link</td><td class="r">GbE / UDP, UART</td></tr><tr><td>Config</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
+        <div class="evidence"><b>Measured on board:</b> CSA 2048×2048 running; 12,000 fault injections compared bit by bit · <a href="#injection">injection data</a></div></article>
+      <article class="card"><figure class="bimg"><img src="assets/boards/v7-render.webp" alt="V7 board illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure><i class="no">V7</i><h3>Virtex-7 Board</h3><p class="tag">XC7VX690T · FFG1927-2 · very large imaging</p>
+        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>Host link</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>Auxiliary</td><td class="r">GbE, JTAG</td></tr></table>
+        <div class="evidence"><b>Measured on board:</b> CSA 4096×4096 large-scale imaging over PCIe Gen2 ×8 · <a href="#cases">case study</a></div></article>
     </div>
   </div>
 </section>
@@ -614,6 +644,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     <p class="lead">Fully in-house RTL, stress-tested on real hardware, delivered as netlist or complete source.</p>
 
     <article class="card">
+      <figure class="bimg"><img src="assets/boards/100gbe-render.webp" alt="validation platform illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure>
       <h3>100GbE TCP/UDP Full-Hardware Protocol Stack IP</h3>
       <p class="tag">All-RTL line-rate processing completely offloading host CPU overhead with nanosecond-level latency</p>
       <div class="value"><b>Application Value:</b> Engineered for AI cluster interconnects, ultra-low latency algorithmic trading, and line-rate network monitoring. Delivers zero-CPU footprint and deterministic microsecond forwarding.</div>
@@ -638,6 +669,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     </article>
 
     <article class="card" id="nvme">
+      <figure class="bimg"><img src="assets/boards/nvme-render.webp" alt="validation platform illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure>
       <h3>NVMe Host High-Performance Controller IP</h3>
       <p class="tag">Native FPGA NVMe host controller removing host PC bottlenecks in high-speed data recording &amp; AI ingestion</p>
       <div class="value"><b>Application Value:</b> Tailored for lossless radar data logging, ultra-fast machine vision capture, and NVMe-over-Fabrics acceleration nodes. Directly controls NVMe SSD arrays without industrial PC intervention.</div>
@@ -710,6 +742,7 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     </article>
 
     <article class="card">
+      <figure class="bimg"><img src="assets/boards/rfsoc-render.webp" alt="validation platform illustrative render" loading="lazy"><figcaption>Illustrative render</figcaption></figure>
       <h3>VU9P + RFSoC Wideband Pulse Generation &amp; Capture System</h3>
       <div class="value"><b>Turnkey System Solution:</b> Seamless pipeline combining 2.4 GSPS 16-bit RF transceiver, 4×25G Aurora inter-board link, and 9.6 GB/s DDR capture.</div>
       <ul class="feat">
