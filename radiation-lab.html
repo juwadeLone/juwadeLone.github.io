@@ -310,6 +310,13 @@ function strikeOne(rng,verbose){
   const sig=weibull(s.let,c.dom);
   const k=sampleK(s.let,rng);
   sim.strikes++;
+  // The bulk fast-forward may have jumped the scrub clock past sim.t while
+  // nothing was active. This strike changes that: rewind to the last boundary
+  // at or before now so intervening scrubs are processed in order.
+  if(c.prot!=="none"){
+    const scrubDays=c.scrubI/86400;
+    if(scrubDays>0&&sim.lastScrub>sim.t)sim.lastScrub=Math.floor(sim.t/scrubDays)*scrubDays;
+  }
   const fx=rng(),fy=rng();
   flashes.push({x:fx,y:fy,t0:performance.now(),species:s.species});
   let flipsHere=0;
