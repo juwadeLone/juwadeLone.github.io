@@ -1,0 +1,43 @@
+{
+ "description": "Differential LET spectra, SPENVIS CREME96 GCR solar minimum, per species. col0 LET MeV*cm^2/mg, col1 omnidirectional differential flux 1/(cm^2 s (MeV*cm^2/mg)). Used in radiation-lab.html for strike species/LET sampling shape only; absolute upset rates are normalized to the seu_platform validated MEO 20200km device rates (CRAM 20.8, BRAM 25.3, FF 0.09 upsets/day, XC7VX690T, 100 mil Al).",
+ "source_repo": "https://github.com/juwadeLone/seu_platform",
+ "source_file": "showcase/spectra.json",
+ "weibull_source": "Lee, Wirthlin, Swift, Le, 2014 IEEE REDW, DOI 10.1109/REDW.2014.7004595 (measured, XC7K325T 28nm)",
+ "species": {
+  "H": {
+   "points": 57,
+   "let_min": 0.00166,
+   "let_max": 0.780011
+  },
+  "He": {
+   "points": 57,
+   "let_min": 0.006641,
+   "let_max": 3.120044
+  },
+  "C": {
+   "points": 57,
+   "let_min": 0.059765,
+   "let_max": 28.0804
+  },
+  "O": {
+   "points": 57,
+   "let_min": 0.106249,
+   "let_max": 49.9207
+  },
+  "Mg": {
+   "points": 57,
+   "let_min": 0.239061,
+   "let_max": 112.3216
+  },
+  "Si": {
+   "points": 57,
+   "let_min": 0.325388,
+   "let_max": 152.8822
+  },
+  "Fe": {
+   "points": 57,
+   "let_min": 1.122257,
+   "let_max": 527.2874
+  }
+ }
+}
