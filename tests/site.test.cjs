@@ -248,9 +248,9 @@ test("boards section carries trust band, task finder and measured evidence in bo
   for(const page of [html,htmlEn]){
     const section=page.slice(page.indexOf('id="boards"'),page.indexOf('id="imaging"'));
     assert.equal((section.match(/<div><h4>/g)||[]).length,3,"trust band items");
-    assert.equal((section.match(/class="fno"/g)||[]).length,4,"finder rows");
+    assert.equal((section.match(/class="fno"/g)||[]).length,5,"finder rows");
     assert.equal((section.match(/class="evidence"/g)||[]).length,3,"evidence strips");
-    for(const row of ["1a","1b","1c","1d"])assert.ok(section.includes(row),row);
+    for(const row of ["1a","1b","1c","1d","1e"])assert.ok(section.includes(row),row);
   }
   assert.ok((html.slice(html.indexOf('id="boards"'),html.indexOf('id="imaging"'))).includes("12,000"),"K7 evidence cites the injection campaign");
 });
