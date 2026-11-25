@@ -102,6 +102,18 @@ footer a{color:var(--dark-muted)}footer a:hover{color:#fff}
 .qa summary::-webkit-details-marker{display:none}
 .qa summary:after{content:"+";color:var(--primary);font-size:20px;font-weight:400;flex-shrink:0}
 .qa[open] summary:after{content:"\2013"}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;background:var(--dark);color:#fff;border-radius:var(--radius);padding:20px 24px;margin:20px 0 28px}
+.trust h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 5px}
+.trust p{font-size:13px;color:var(--dark-muted);margin:0;line-height:1.55}
+.finder{margin:0 0 26px;border-top:1px solid var(--border)}
+.finder a{display:flex;align-items:baseline;gap:10px;padding:10px 2px;border-bottom:1px solid var(--border);color:var(--text);text-decoration:none;font-size:15px}
+.finder a:hover{color:var(--primary)}
+.finder .fno{font-size:12px;color:var(--primary);font-weight:700;min-width:26px}
+.finder .fdots{flex:1;border-bottom:2px dotted var(--border);transform:translateY(-4px)}
+.finder .fto{font-weight:700;color:var(--primary);white-space:nowrap;font-size:13.5px}
+.evidence{margin-top:12px;padding:9px 11px;background:var(--pale);border-left:3px solid var(--primary);font-size:13px;color:var(--muted);border-radius:0 6px 6px 0;line-height:1.5}
+.evidence b{color:var(--text)}
+@media(max-width:900px){.trust{grid-template-columns:1fr}}
 .qa p{color:var(--muted);margin:10px 0 0;font-size:14.5px}
 @media(max-width:900px){.hero-g,.two,.contact,.fg{grid-template-columns:1fr}.hero h1{font-size:32px}
 .kpis{grid-template-columns:1fr 1fr}.feat,.steps,form{grid-template-columns:1fr}.chips{grid-template-columns:1fr}}
@@ -540,13 +552,27 @@ footer h4{color:#fff}footer a{color:#bdb8ad}
     <div class="idx">Hardware · 板卡平台</div>
     <h2>A7、K7、V7 板卡平台</h2>
     <p class="lead">从紧凑原型到超大规模成像，按数据规模与接口需求选型；接口、存储与器件可按项目定制。</p>
+    <div class="trust">
+      <div><h4>实测再上架</h4><p>页面的速率与成像数字全部在真实板卡上测得，并说明测量方法，不写理论峰值。</p></div>
+      <div><h4>交付前过测试</h4><p>每块板卡发货前通过接口与存储测试，箱内有什么、没有什么，按书面清单交付。</p></div>
+      <div><h4>边界写清楚</h4><p>哪些交付源码、哪些是网表或参考工程，合作之前一页写明白。</p></div>
+    </div>
+    <div class="finder">
+      <a href="#cases"><span class="fno">1a</span>验证 SAR 算法原型，规模与预算有限<span class="fdots"></span><span class="fto">A7 板卡</span></a>
+      <a href="#injection"><span class="fno">1b</span>2048×2048 全尺寸成像流水线，要加固证据<span class="fdots"></span><span class="fto">K7 板卡</span></a>
+      <a href="#cases"><span class="fno">1c</span>超大规模成像、多通道高速采集<span class="fdots"></span><span class="fto">V7 板卡</span></a>
+      <a href="#ip"><span class="fno">1d</span>100GbE / NVMe / JESD204 高速接口集成<span class="fdots"></span><span class="fto">IP 授权</span></a>
+    </div>
     <div class="svc three">
       <article class="card"><i class="no">A7</i><h3>Artix-7 板卡</h3><p class="tag">XC7A35T · FGG484-2 · 中小规模处理与算法原型</p>
-        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>主机链路</td><td class="r">以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
+        <table><tr><td>DDR3</td><td class="r">512 MiB · 16 bit</td></tr><tr><td>主机链路</td><td class="r">以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
+        <div class="evidence"><b>在板实测：</b>CSA 256×256 成像，输出与定点模型逐点一致 · <a href="#cases">项目案例</a></div></article>
       <article class="card"><i class="no">K7</i><h3>Kintex-7 板卡</h3><p class="tag">XC7K325T · FFG900-2 · 大规模 SAR 成像</p>
-        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>主机链路</td><td class="r">千兆以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table></article>
+        <table><tr><td>DDR3</td><td class="r">2 GiB · 64 bit</td></tr><tr><td>主机链路</td><td class="r">千兆以太网 / UDP、UART</td></tr><tr><td>配置</td><td class="r">JTAG · Vivado 2018.3</td></tr></table>
+        <div class="evidence"><b>在板实测：</b>CSA 2048×2048 跑通；12,000 次故障注入逐位比对 · <a href="#injection">注入实测</a></div></article>
       <article class="card"><i class="no">V7</i><h3>Virtex-7 板卡</h3><p class="tag">XC7VX690T · FFG1927-2 · 超大规模成像</p>
-        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>主机链路</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>辅助</td><td class="r">千兆以太网、JTAG</td></tr></table></article>
+        <table><tr><td>DDR3</td><td class="r">2 × 4 GiB · 2 × 64 bit</td></tr><tr><td>主机链路</td><td class="r">PCIe Gen2 ×8</td></tr><tr><td>辅助</td><td class="r">千兆以太网、JTAG</td></tr></table>
+        <div class="evidence"><b>在板实测：</b>BP 2048×2048 成像，PCIe 全速收发 · <a href="#cases">项目案例</a></div></article>
     </div>
   </div>
 </section>
